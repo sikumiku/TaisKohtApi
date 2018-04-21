@@ -20,7 +20,7 @@ namespace TaisKohtApi.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            return "test";
         }
 
         // POST api/values
