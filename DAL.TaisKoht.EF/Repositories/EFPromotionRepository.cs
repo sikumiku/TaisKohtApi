@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.TaisKoht.EF.Repositories
 {
-    public class EFPersonRepository : EFRepository<Promotion>, IPromotionRepository
+    public class EFPromotionRepository : EFRepository<Promotion>, IPromotionRepository
     {
-        public EFPersonRepository(DbContext dataContext) : base(dataContext)
+        public EFPromotionRepository(DbContext dataContext) : base(dataContext)
         {
         }
 

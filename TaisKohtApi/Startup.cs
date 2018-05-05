@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using DAL.Interfaces;
 using DAL.TaisKoht.EF;
+using DAL.TaisKoht.EF.Helpers;
+using DAL.TaisKoht.Interfaces;
+using DAL.TaisKoht.Interfaces.Helpers;
 using Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +18,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace TaisKohtApi
 {
@@ -36,7 +41,31 @@ namespace TaisKohtApi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
+            services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
+            services.AddScoped<IDataContext, ApplicationDbContext>();
+            services.AddScoped<ITaisKohtUnitOfWork, TaisKohtEFUnitOfWork>();
+
             services.AddMvc();
+
+            // Register the Swagger generator, defining one or more Swagger documents
+            #region Swagger Configuration
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "Täis Kõht API",
+                    Description = "An ASP.NET Core API for Täis Kõht",
+                    TermsOfService = "None",
+                    License = new License
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://example.com/license"
+                    }
+                });
+            });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +81,12 @@ namespace TaisKohtApi
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseStaticFiles();
 

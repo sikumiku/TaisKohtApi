@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using BusinessLogic.DTO;
 using BusinessLogic.Factories;
+using DAL.TaisKoht.Interfaces;
 using Domain;
 
 namespace BusinessLogic.Services
 {
     public class PromotionService : IPromotionService
     {
-        private readonly IAppUnitOfWork _uow; 
+        private readonly ITaisKohtUnitOfWork _uow; 
         private readonly IPromotionFactory _promotionFactory;
 
-        public PromotionService(IAppUnitOfWork uow, IPromotionFactory promotionFactory)
+        public PromotionService(ITaisKohtUnitOfWork uow, IPromotionFactory promotionFactory)
         {
             _uow = uow;
             _promotionFactory = promotionFactory;

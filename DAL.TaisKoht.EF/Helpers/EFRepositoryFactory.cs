@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DAL.EF;
 using DAL.Interfaces;
+using DAL.TaisKoht.EF.Repositories;
 using DAL.TaisKoht.Interfaces.Helpers;
 using DAL.TaisKoht.Interfaces.Repositories;
 
