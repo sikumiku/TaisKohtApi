@@ -28,6 +28,8 @@ namespace DAL.TaisKoht.EF
         public IPromotionRepository Promotions => GetCustomRepository<IPromotionRepository>();
         public IRestaurantRepository Restaurants => GetCustomRepository<IRestaurantRepository>();
 
+        public IDishRepository Dishes => GetCustomRepository<IDishRepository>();
+
         public void SaveChanges()
         {
             _applicationDbContext.SaveChanges();

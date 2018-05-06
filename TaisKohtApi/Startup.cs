@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using BusinessLogic.Factories;
 using BusinessLogic.Services;
+using BusinessLogic.Factories;
 using DAL.Interfaces;
 using DAL.TaisKoht.EF;
 using DAL.TaisKoht.EF.Helpers;
@@ -52,6 +52,11 @@ namespace TaisKohtApi
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
             services.AddScoped<ITaisKohtUnitOfWork, TaisKohtEFUnitOfWork>();
+
+            services.AddScoped<IDishService, DishService>();
+            services.AddScoped<IDishFactory, DishFactory>();
+            services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IPromotionFactory, PromotionFactory>();
 
             services.AddMvc();
 

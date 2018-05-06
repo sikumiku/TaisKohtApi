@@ -19,7 +19,8 @@ namespace DAL.TaisKoht.EF.Helpers
             return new Dictionary<Type, Func<IDataContext, object>>()
             {
                 {typeof(IPromotionRepository), (dataContext) => new EFPromotionRepository(dataContext as ApplicationDbContext) },
-                {typeof(IRestaurantRepository), (dataContext) => new EFRestaurantRepository(dataContext as ApplicationDbContext) }
+                {typeof(IRestaurantRepository), (dataContext) => new EFRestaurantRepository(dataContext as ApplicationDbContext) },
+                {typeof(IDishRepository), (dataContext) => new EFDishRepository(dataContext as ApplicationDbContext) },
             };
         }
 
