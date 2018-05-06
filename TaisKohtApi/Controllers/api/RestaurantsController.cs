@@ -43,26 +43,26 @@ namespace TaisKohtApi.Controllers.api
         /// </summary>
         /// <param name="id">ID of restaurant to return</param>
         /// <response code="200">Successful operation</response>
-        /// <response code="404">Promotion not found</response>
+        /// <response code="404">Restaurant not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants/5
-        [HttpGet("{id}", Name = "RestaurantGet")]
+        [HttpGet("{id}", Name = "GetRestaurant")]
         [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Get(int id)
         {
-            var p = _restaurantService.GetRestaurantById(id);
-            if (p == null) return NotFound();
-            return Ok(p);
+            var r = _restaurantService.GetRestaurantById(id);
+            if (r == null) return NotFound();
+            return Ok(r);
         }
 
         /// <summary>
         /// Creates a restaurant
         /// </summary>
-        /// <param name="restaurant">Restaurant object to be added</param>
+        /// <param name="restaurantDTO">Restaurant object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
@@ -83,24 +83,24 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]RestaurantDTO restaurant)
+        public IActionResult Post([FromBody]RestaurantDTO restaurantDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var newRestaurant = _restaurantService.AddNewRestaurant(restaurant);
+            var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO);
 
-            return CreatedAtAction("Get", new { id = newRestaurant.RestaurantId }, newRestaurant);
+            return CreatedAtAction("GetRestaurant", new { id = newRestaurant.RestaurantId }, newRestaurant);
         }
 
         /// <summary>
         /// Update an existing restaurant
         /// </summary>
         /// <param name="id">ID of restaurant to update</param>
-        /// <param name="restaurant">Updated object</param>
+        /// <param name="restaurantDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/Restaurants/{id}
+        ///     PUT api/v1/Restaurants/{id}
         ///     {
         ///         ...
         ///     }
@@ -116,13 +116,13 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]RestaurantDTO restaurant)
+        public IActionResult Put(int id, [FromBody]RestaurantDTO restaurantDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var p = _restaurantService.GetRestaurantById(id);
+            var r = _restaurantService.GetRestaurantById(id);
 
-            if (p == null) return NotFound();
-            _restaurantService.UpdateRestaurant(id, restaurant);
+            if (r == null) return NotFound();
+            _restaurantService.UpdateRestaurant(id, restaurantDTO);
 
             return NoContent();
         }
@@ -141,8 +141,8 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var p = _restaurantService.GetRestaurantById(id);
-            if (p == null) return NotFound();
+            var r = _restaurantService.GetRestaurantById(id);
+            if (r == null) return NotFound();
             _restaurantService.DeleteRestaurant(id);
             return NoContent();
         }

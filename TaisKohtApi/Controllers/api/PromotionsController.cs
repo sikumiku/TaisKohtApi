@@ -47,7 +47,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Promotions/5
-        [HttpGet("{id}", Name = "PromotionGet")]
+        [HttpGet("{id}", Name = "GetPromotion")]
         [ProducesResponseType(typeof(PromotionDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
@@ -62,11 +62,11 @@ namespace TaisKohtApi.Controllers.api
         /// <summary>
         /// Creates a promotion
         /// </summary>
-        /// <param name="promotion">Promotion object to be added</param>
+        /// <param name="promotionDTO">Promotion object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/Promotions
+        ///     POST api/v1/Promotions
         ///     {
         ///         "name": "Chicken Sandvich",
         ///         "description": "Tender chicken sandvich with Marinara sauce between",
@@ -86,24 +86,24 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]PromotionDTO promotion)
+        public IActionResult Post([FromBody]PromotionDTO promotionDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var newPromotion = _promotionService.AddNewPromotion(promotion);
+            var newPromotion = _promotionService.AddNewPromotion(promotionDTO);
 
-            return CreatedAtAction("Get", new { id = newPromotion.PromotionId }, newPromotion);
+            return CreatedAtAction("GetPromotion", new { id = newPromotion.PromotionId }, newPromotion);
         }
 
         /// <summary>
         /// Update an existing promotion
         /// </summary>
         /// <param name="id">ID of promotion to update</param>
-        /// <param name="promotion">Updated object</param>
+        /// <param name="promotionDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/Promotions/{id}
+        ///     PUT api/v1/Promotions/{id}
         ///     {
         ///         "name": "Pasta Carbonara",
         ///         "description": "Classic pasta Carbonara with bacon and cheese",
@@ -122,13 +122,13 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PromotionDTO promotion)
+        public IActionResult Put(int id, [FromBody]PromotionDTO promotionDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
             var p = _promotionService.GetPromotionById(id);
 
             if (p == null) return NotFound();
-            _promotionService.UpdatePromotion(id, promotion);
+            _promotionService.UpdatePromotion(id, promotionDTO);
 
             return NoContent();
         }

@@ -140,13 +140,21 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
+                    b.Property<string>("AmountUnit");
+
                     b.Property<string>("Description");
 
                     b.Property<string>("Name");
 
                     b.Property<DateTime>("UpdateTime");
 
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
+
                     b.HasKey("IngredientId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Ingredients");
                 });
@@ -569,6 +577,14 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.HasOne("Domain.Menu")
                         .WithMany("DishIngredients")
                         .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Domain.Ingredient", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

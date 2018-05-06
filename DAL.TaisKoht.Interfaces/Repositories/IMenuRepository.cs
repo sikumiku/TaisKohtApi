@@ -6,12 +6,12 @@ using Domain;
 
 namespace DAL.TaisKoht.Interfaces.Repositories
 {
-    public interface IRestaurantRepository : IRepository<Restaurant>
+    public interface IMenuRepository : IRepository<Menu>
     {
         /// <summary>
         /// Check for entity existance by PK value
         /// </summary>
-        /// <param name="id">Restaurant PK value</param>
+        /// <param name="id">Menu PK value</param>
         /// <returns></returns>
         bool Exists(int id);
     }

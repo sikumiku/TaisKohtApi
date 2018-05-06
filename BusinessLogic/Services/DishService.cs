@@ -42,11 +42,22 @@ namespace BusinessLogic.Services
             return _dishFactory.Create(dish);
         }
 
-        public void UpdateDish(int id, DishDTO updatedDish)
+        public void UpdateDish(int id, DishDTO updatedDishDTO)
         {
             Dish dish = _uow.Dishes.Find(id);
-            dish.Title = updatedDish.Title;
-            dish.Description = updatedDish.Description;
+            dish.Title = updatedDishDTO.Title;
+            dish.Description = updatedDishDTO.Description;
+            dish.AvailableFrom = updatedDishDTO.AvailableFrom;
+            dish.AvailableTo = updatedDishDTO.AvailableTo;
+            dish.ServeTime = updatedDishDTO.ServeTime;
+            dish.Vegan = updatedDishDTO.Vegan;
+            dish.Lactose = updatedDishDTO.Lactose;
+            dish.Gluten = updatedDishDTO.Gluten;
+            dish.Kcal = updatedDishDTO.Kcal;
+            dish.WeightG = updatedDishDTO.WeightG;
+            dish.Price = updatedDishDTO.Price;
+            dish.DailyPrice = updatedDishDTO.DailyPrice;
+            dish.Daily = updatedDishDTO.Daily;
             _uow.Dishes.Update(dish);
             _uow.SaveChanges();
         }

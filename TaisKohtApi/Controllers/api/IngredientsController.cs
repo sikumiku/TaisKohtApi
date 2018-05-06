@@ -10,140 +10,140 @@ using Microsoft.AspNetCore.Mvc;
 namespace TaisKohtApi.Controllers.api
 {
     [Produces("application/json")]
-    [Route("api/v1/Dishes")]
-    public class DishesController : Controller
+    [Route("api/v1/Ingredients")]
+    public class IngredientsController : Controller
     {
-        private readonly IDishService _dishService;
+        private readonly IIngredientService _ingredientService;
 
-        public DishesController(IDishService dishService)
+        public IngredientsController(IIngredientService ingredientService)
         {
-            _dishService = dishService;
+            _ingredientService = ingredientService;
         }
 
         /// <summary>
-        /// Gets all dishes as a list
+        /// Gets all ingredients as a list
         /// </summary>
         /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no dishes can be found</response>
+        /// <response code="404">If no ingredients can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes
+        // GET: api/v1/Ingredients
         [HttpGet]
-        [ProducesResponseType(typeof(List<DishDTO>), 200)]
+        [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Get()
         {
-            return Ok(_dishService.GetAllDishes());
+            return Ok(_ingredientService.GetAllIngredients());
         }
 
         /// <summary>
-        /// Find dish by ID
+        /// Find ingredient by ID
         /// </summary>
-        /// <param name="id">ID of dish to return</param>
+        /// <param name="id">ID of ingredient to return</param>
         /// <response code="200">Successful operation</response>
-        /// <response code="404">Dish not found</response>
+        /// <response code="404">Ingredient not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/5
-        [HttpGet("{id}", Name = "GetDish")]
-        [ProducesResponseType(typeof(DishDTO), 200)]
+        // GET: api/v1/Ingredients/5
+        [HttpGet("{id}", Name = "GetIngredient")]
+        [ProducesResponseType(typeof(IngredientDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Get(int id)
         {
-            var d = _dishService.GetDishById(id);
-            if (d == null) return NotFound();
-            return Ok(d);
+            var i = _ingredientService.GetIngredientById(id);
+            if (i == null) return NotFound();
+            return Ok(i);
         }
 
         /// <summary>
-        /// Creates a dish
+        /// Creates a ingredient
         /// </summary>
-        /// <param name="dishDTO">Dish object to be added</param>
+        /// <param name="ingredientDTO">Ingredient object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Dishes
+        ///     POST api/v1/Ingredients
         ///     {
         ///         ...
         ///     }
         ///
         /// </remarks>
-        /// <returns>A newly created dish</returns>
-        /// <response code="201">Returns the newly created dish</response>
+        /// <returns>A newly created ingredient</returns>
+        /// <response code="201">Returns the newly created ingredient</response>
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Dishes
+        // POST: api/v1/Ingredients
         [HttpPost]
-        [ProducesResponseType(typeof(DishDTO), 201)]
+        [ProducesResponseType(typeof(IngredientDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]DishDTO dishDTO)
+        public IActionResult Post([FromBody]IngredientDTO ingredientDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var newDish = _dishService.AddNewDish(dishDTO);
+            var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO);
 
-            return CreatedAtAction("GetDish", new { id = newDish.DishId }, newDish);
+            return CreatedAtAction("GetIngredient", new { id = newIngredient.IngredientId }, newIngredient);
         }
 
         /// <summary>
-        /// Update an existing dish
+        /// Update an existing ingredient
         /// </summary>
-        /// <param name="id">ID of dish to update</param>
-        /// <param name="dishDTO">Updated object</param>
+        /// <param name="id">ID of ingredient to update</param>
+        /// <param name="ingredientDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Dishes/{id}
+        ///     PUT api/v1/Ingredients/{id}
         ///     {
         ///         ...
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Dish was successfully updated, no content to be returned</response>
+        /// <response code="204">Ingredient was successfully updated, no content to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Dishes/5
+        // PUT: api/v1/Ingredients/5
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]DishDTO dishDTO)
+        public IActionResult Put(int id, [FromBody]IngredientDTO ingredientDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var d = _dishService.GetDishById(id);
+            var i = _ingredientService.GetIngredientById(id);
 
-            if (d == null) return NotFound();
-            _dishService.UpdateDish(id, dishDTO);
+            if (i == null) return NotFound();
+            _ingredientService.UpdateIngredient(id, ingredientDTO);
 
             return NoContent();
         }
 
         /// <summary>
-        /// Deletes a dish by id.
+        /// Deletes a ingredient by id.
         /// </summary>
-        /// <param name="id">ID of dish to delete</param>
-        /// <response code="204">Dish was successfully deleted, no content to be returned</response>
-        /// <response code="404">Dish not found by given ID</response>
+        /// <param name="id">ID of ingredient to delete</param>
+        /// <response code="204">Ingredient was successfully deleted, no content to be returned</response>
+        /// <response code="404">Ingredient not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Dishes/5
+        // DELETE: api/v1/Ingredients/5
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var d = _dishService.GetDishById(id);
-            if (d == null) return NotFound();
-            _dishService.DeleteDish(id);
+            var i = _ingredientService.GetIngredientById(id);
+            if (i == null) return NotFound();
+            _ingredientService.DeleteIngredient(id);
             return NoContent();
         }
     }

@@ -25,10 +25,11 @@ namespace DAL.TaisKoht.EF
             }
         }
 
+        public IDishRepository Dishes => GetCustomRepository<IDishRepository>();
+        public IIngredientRepository Ingredients => GetCustomRepository<IIngredientRepository>();
+        public IMenuRepository Menus => GetCustomRepository<IMenuRepository>();
         public IPromotionRepository Promotions => GetCustomRepository<IPromotionRepository>();
         public IRestaurantRepository Restaurants => GetCustomRepository<IRestaurantRepository>();
-
-        public IDishRepository Dishes => GetCustomRepository<IDishRepository>();
 
         public void SaveChanges()
         {
