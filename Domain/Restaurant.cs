@@ -20,6 +20,7 @@ namespace Domain
         public Address Address { get; set; }
         //OneToMany
         public List<Dish> Dishes { get; set; }
+        public List<Menu> Menus { get; set; }
         public List<RestaurantUser> RestaurantUsers { get; set; }
         public List<RequestLog> RequestLogs { get; set; }
         //foreign keys

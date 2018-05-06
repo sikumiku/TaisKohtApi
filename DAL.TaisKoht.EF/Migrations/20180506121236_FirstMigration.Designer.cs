@@ -11,9 +11,10 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180506121236_FirstMigration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +76,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<int>("PromotionId");
 
                     b.Property<int>("RestaurantId");
-
-                    b.Property<DateTime>("ServeTime");
 
                     b.Property<string>("Title");
 

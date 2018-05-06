@@ -15,6 +15,7 @@ namespace BusinessLogic.DTO
         public string Name { get; set; }
         [MaxLength(200)]
         public string Description { get; set; }
+        [MaxLength(10)]
         public string Type { get; set; }
         public DateTime ValidTo { get; set; }
         public DateTime AddTime { get; set; }

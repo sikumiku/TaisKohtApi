@@ -10,146 +10,140 @@ using Microsoft.AspNetCore.Mvc;
 namespace TaisKohtApi.Controllers.api
 {
     [Produces("application/json")]
-    [Route("api/v1/Promotions")]
-    public class PromotionsController : Controller
+    [Route("api/v1/Restaurants")]
+    public class RestaurantsController : Controller
     {
-        private readonly IPromotionService _promotionService;
+        private readonly IRestaurantService _restaurantService;
 
-        public PromotionsController(IPromotionService promotionService)
+        public RestaurantsController(IRestaurantService restaurantService)
         {
-            _promotionService = promotionService;
+            _restaurantService = restaurantService;
         }
 
         /// <summary>
-        /// Gets all promotions as a list
+        /// Gets all restaurants as a list
         /// </summary>
-        /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no promotions can be found</response>
+        /// <response code="200">Successful restaurant</response> 
+        /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Promotions
+        // GET: api/v1/Restaurants
         [HttpGet]
-        [ProducesResponseType(typeof(List<PromotionDTO>), 200)]
+        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Get()
         {
-            return Ok(_promotionService.GetAllPromotions());
+            return Ok(_restaurantService.GetAllRestaurants());
         }
 
         /// <summary>
-        /// Find promotion by ID
+        /// Find restaurant by ID
         /// </summary>
-        /// <param name="id">ID of promotion to return</param>
+        /// <param name="id">ID of restaurant to return</param>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Promotion not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Promotions/5
-        [HttpGet("{id}", Name = "PromotionGet")]
-        [ProducesResponseType(typeof(PromotionDTO), 200)]
+        // GET: api/v1/Restaurants/5
+        [HttpGet("{id}", Name = "RestaurantGet")]
+        [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Get(int id)
         {
-            var p = _promotionService.GetPromotionById(id);
+            var p = _restaurantService.GetRestaurantById(id);
             if (p == null) return NotFound();
             return Ok(p);
         }
 
         /// <summary>
-        /// Creates a promotion
+        /// Creates a restaurant
         /// </summary>
-        /// <param name="promotion">Promotion object to be added</param>
+        /// <param name="restaurant">Restaurant object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/Promotions
+        ///     POST api/v1/Restaurants
         ///     {
-        ///         "name": "Chicken Sandvich",
-        ///         "description": "Tender chicken sandvich with Marinara sauce between",
-        ///         "type": "daily",
-        ///         "validTo": "12/05/2018"
+        ///        ......
         ///     }
         ///
         /// </remarks>
-        /// <returns>A newly created promotion</returns>
-        /// <response code="201">Returns the newly created promotion</response>
+        /// <returns>A newly created restaurant</returns>
+        /// <response code="201">Returns the newly created restaurant</response>
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Promotions
+        // POST: api/v1/Restaurants
         [HttpPost]
-        [ProducesResponseType(typeof(PromotionDTO), 201)]
+        [ProducesResponseType(typeof(RestaurantDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]PromotionDTO promotion)
+        public IActionResult Post([FromBody]RestaurantDTO restaurant)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var newPromotion = _promotionService.AddNewPromotion(promotion);
+            var newRestaurant = _restaurantService.AddNewRestaurant(restaurant);
 
-            return CreatedAtAction("Get", new { id = newPromotion.PromotionId }, newPromotion);
+            return CreatedAtAction("Get", new { id = newRestaurant.RestaurantId }, newRestaurant);
         }
 
         /// <summary>
-        /// Update an existing promotion
+        /// Update an existing restaurant
         /// </summary>
-        /// <param name="id">ID of promotion to update</param>
-        /// <param name="promotion">Updated object</param>
+        /// <param name="id">ID of restaurant to update</param>
+        /// <param name="restaurant">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/Promotions/{id}
+        ///     PUT api/Restaurants/{id}
         ///     {
-        ///         "name": "Pasta Carbonara",
-        ///         "description": "Classic pasta Carbonara with bacon and cheese",
-        ///         "type": "weekly",
-        ///         "validTo": "24/05/2018"
+        ///         ...
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Promotion was successfully updated, no content to be returned</response>
+        /// <response code="204">Restaurant was successfully updated, no content to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Promotions/5
+        // PUT: api/v1/Restaurants/5
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PromotionDTO promotion)
+        public IActionResult Put(int id, [FromBody]RestaurantDTO restaurant)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var p = _promotionService.GetPromotionById(id);
+            var p = _restaurantService.GetRestaurantById(id);
 
             if (p == null) return NotFound();
-            _promotionService.UpdatePromotion(id, promotion);
+            _restaurantService.UpdateRestaurant(id, restaurant);
 
             return NoContent();
         }
 
         /// <summary>
-        /// Deletes a promotion by id.
+        /// Deletes a restaurant by id.
         /// </summary>
-        /// <param name="id">ID of promotion to delete</param>
-        /// <response code="204">Promotion was successfully deleted, no content to be returned</response>
-        /// <response code="404">Promotion not found by given ID</response>
+        /// <param name="id">ID of restaurant to delete</param>
+        /// <response code="204">Restaurant was successfully deleted, no content to be returned</response>
+        /// <response code="404">Restaurant not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Promotions/5
+        // DELETE: api/v1/Restaurants/5
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var p = _promotionService.GetPromotionById(id);
+            var p = _restaurantService.GetRestaurantById(id);
             if (p == null) return NotFound();
-            _promotionService.DeletePromotion(id);
+            _restaurantService.DeleteRestaurant(id);
             return NoContent();
         }
     }
