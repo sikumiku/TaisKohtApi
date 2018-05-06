@@ -11,6 +11,7 @@ namespace Domain
         public string Description { get; set; }
         public DateTime AvailableFrom { get; set; }
         public DateTime AvailableTo { get; set; }
+        public DateTime ServeTime { get; set; }
         public bool Vegan { get; set; }
         public bool Lactose { get; set; }
         public bool Gluten { get; set; }
