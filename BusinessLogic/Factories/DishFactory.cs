@@ -16,7 +16,7 @@ namespace BusinessLogic.Factories
     {
         public DishDTO Create(Dish dish)
         {
-            return DishDTO.CreateFromDomainWithAssociatedTables(dish);
+            return DishDTO.CreateFromDomain(dish);
         }
 
         public Dish Create(DishDTO dishDTO)

@@ -24,23 +24,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ingredients",
-                columns: table => new
-                {
-                    IngredientId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Promotions",
                 columns: table => new
                 {
@@ -329,6 +312,32 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    IngredientId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    AmountUnit = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
+                    table.ForeignKey(
+                        name: "FK_Ingredients_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Menus",
                 columns: table => new
                 {
@@ -599,6 +608,11 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "IX_DishIngredients_MenuId",
                 table: "DishIngredients",
                 column: "MenuId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ingredients_UserId1",
+                table: "Ingredients",
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuDishes_DishId",

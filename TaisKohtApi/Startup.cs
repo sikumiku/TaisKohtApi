@@ -44,18 +44,21 @@ namespace TaisKohtApi
                 .AddDefaultTokenProviders();
 
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
-            
+
+            services.AddScoped<IDishService, DishService>();
+            services.AddScoped<IDishFactory, DishFactory>();
+            services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IIngredientFactory, IngredientFactory>();
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IMenuFactory, MenuFactory>();
+            services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IPromotionFactory, PromotionFactory>();
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantFactory, RestaurantFactory>();
 
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
             services.AddScoped<ITaisKohtUnitOfWork, TaisKohtEFUnitOfWork>();
-
-            services.AddScoped<IDishService, DishService>();
-            services.AddScoped<IDishFactory, DishFactory>();
-            services.AddScoped<IPromotionService, PromotionService>();
-            services.AddScoped<IPromotionFactory, PromotionFactory>();
 
             services.AddMvc();
 

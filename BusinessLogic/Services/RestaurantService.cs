@@ -42,17 +42,18 @@ namespace BusinessLogic.Services
             return _restaurantFactory.Create(restaurant);
         }
 
-        public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurant)
+        public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)
         {
             Restaurant restaurant = _uow.Restaurants.Find(id);
-            restaurant.RestaurantId = updatedRestaurant.RestaurantId;
-            restaurant.Name = updatedRestaurant.Name;
-            restaurant.LocationLongitude = updatedRestaurant.LocationLongitude;
-            restaurant.LocationLatitude = updatedRestaurant.LocationLatitude;
-            restaurant.Url = updatedRestaurant.Url;
-            restaurant.ContactNumber = updatedRestaurant.ContactNumber;
-            restaurant.Email = updatedRestaurant.Email;
-            //restaurant.Address = updatedRestaurant.Address;
+            //Id'd ei peaks vist muuta saama? See tekib automaatselt andmebaasis.
+            restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
+            restaurant.Name = updatedRestaurantDTO.Name;
+            restaurant.LocationLongitude = updatedRestaurantDTO.LocationLongitude;
+            restaurant.LocationLatitude = updatedRestaurantDTO.LocationLatitude;
+            restaurant.Url = updatedRestaurantDTO.Url;
+            restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
+            restaurant.Email = updatedRestaurantDTO.Email;
+            //restaurant.Address = updatedRestaurantDTO.Address;
             _uow.Restaurants.Update(restaurant);
             _uow.SaveChanges();
         }

@@ -16,7 +16,7 @@ namespace BusinessLogic.Factories
     {
         public PromotionDTO Create(Promotion promotion)
         {
-            return PromotionDTO.CreateFromDomainWithAssociatedTables(promotion);
+            return PromotionDTO.CreateFromDomain(promotion);
         }
 
         public Promotion Create(PromotionDTO promotionDTO)

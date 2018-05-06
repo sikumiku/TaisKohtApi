@@ -42,11 +42,13 @@ namespace BusinessLogic.Services
             return _promotionFactory.Create(promotion);
         }
 
-        public void UpdatePromotion(int id, PromotionDTO updatedPromotion)
+        public void UpdatePromotion(int id, PromotionDTO updatedPromotionDTO)
         {
             Promotion promotion = _uow.Promotions.Find(id);
-            promotion.Name = updatedPromotion.Name;
-            promotion.Description = updatedPromotion.Description;
+            promotion.Name = updatedPromotionDTO.Name;
+            promotion.Description = updatedPromotionDTO.Description;
+            promotion.Type = updatedPromotionDTO.Type;
+            promotion.ValidTo = updatedPromotionDTO.ValidTo;
             _uow.Promotions.Update(promotion);
             _uow.SaveChanges();
         }
