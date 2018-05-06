@@ -44,8 +44,7 @@ namespace TaisKohtApi
                 .AddDefaultTokenProviders();
 
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
-            services.AddScoped<IPromotionService, PromotionService>();
-            services.AddScoped<IPromotionFactory, PromotionFactory>();
+            
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantFactory, RestaurantFactory>();
 
