@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TaisKohtApi.Controllers.api
 {
     [Produces("application/json")]
-    [Route("api/Dishes")]
+    [Route("api/v1/Dishes")]
     public class DishesController : Controller
     {
         private readonly IDishService _dishService;
@@ -27,7 +27,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/Dishes
+        // GET: api/v1/Dishes
         [HttpGet]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
         [ProducesResponseType(404)]
@@ -46,7 +46,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Dish not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/Dishes/5
+        // GET: api/v1/Dishes/5
         [HttpGet("{id}", Name = "GetDish")]
         [ProducesResponseType(typeof(DishDTO), 200)]
         [ProducesResponseType(404)]
@@ -77,7 +77,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/Dishes
+        // POST: api/v1/Dishes
         [HttpPost]
         [ProducesResponseType(typeof(DishDTO), 201)]
         [ProducesResponseType(400)]
@@ -113,7 +113,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/Promotions/5
+        // PUT: api/v1/Dishes/5
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -137,7 +137,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Promotion was successfully deleted, no content to be returned</response>
         /// <response code="404">Promotion not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/Promotions/5
+        // DELETE: api/v1/Promotions/5
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
