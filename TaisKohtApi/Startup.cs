@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using BusinessLogic.Factories;
+using BusinessLogic.Services;
 using DAL.Interfaces;
 using DAL.TaisKoht.EF;
 using DAL.TaisKoht.EF.Helpers;
@@ -42,6 +44,11 @@ namespace TaisKohtApi
                 .AddDefaultTokenProviders();
 
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
+            services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IPromotionFactory, PromotionFactory>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
+            services.AddScoped<IRestaurantFactory, RestaurantFactory>();
+
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
             services.AddScoped<ITaisKohtUnitOfWork, TaisKohtEFUnitOfWork>();

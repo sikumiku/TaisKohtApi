@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
+using BusinessLogic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/Restaurants
+        // GET: api/v1/Restaurants
         [HttpGet]
         [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
         [ProducesResponseType(404)]
@@ -46,7 +47,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "RestaurantGet")]
         [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
@@ -115,7 +116,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PromotionDTO restaurant)
+        public IActionResult Put(int id, [FromBody]RestaurantDTO restaurant)
         {
             if (!ModelState.IsValid) return BadRequest();
             var p = _restaurantService.GetRestaurantById(id);

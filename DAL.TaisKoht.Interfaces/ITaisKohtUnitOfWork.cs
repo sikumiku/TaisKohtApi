@@ -9,5 +9,7 @@ namespace DAL.TaisKoht.Interfaces
         //2 erinevat tüüpi reposid, peopleites on midagi sisse lisatud, all olevates ei ole.
         IPromotionRepository Promotions { get; }
 
+        IRestaurantRepository Restaurants { get; }
+
     }
 }
