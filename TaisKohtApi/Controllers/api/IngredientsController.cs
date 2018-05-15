@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +13,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Produces("application/json")]
     [Route("api/v1/Ingredients")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] //spetsifitseerime authenticationschemei, siis ei toimu reroutingut
     public class IngredientsController : Controller
     {
         private readonly IIngredientService _ingredientService;
@@ -29,6 +32,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ingredients
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
@@ -85,6 +89,8 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Post([FromBody]IngredientDTO ingredientDTO)
         {
+            //ingredientDTO.UserId; //objekti k2est v6tta id, ManyToMany puhul kuidas teha?
+            //User.Identity.GetUserId(); //id saamine useri k2est
             if (!ModelState.IsValid) return BadRequest();
 
             var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO);
