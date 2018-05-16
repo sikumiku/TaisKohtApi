@@ -65,11 +65,11 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<bool>("Gluten");
+                    b.Property<bool>("GlutenFree");
 
                     b.Property<decimal>("Kcal");
 
-                    b.Property<bool>("Lactose");
+                    b.Property<bool>("LactoseFree");
 
                     b.Property<decimal>("Price");
 

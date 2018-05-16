@@ -9,6 +9,7 @@ namespace Domain
         public int RequestLogId { get; set; }
         public DateTime AddTime { get; set; }
         public string Query { get; set; }
+
         //foreign keys
         public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }

@@ -9,11 +9,11 @@ namespace Domain
         public DateTime ActiveFrom { get; set; }
         public DateTime ActiveTo { get; set; }
         public int RepetitionInterval { get; set; }
-        public DateTime AddTime { get; set; }
-        public DateTime UpdateTime { get; set; }
+        public DateTime AddTime { get; set; } = DateTime.UtcNow;
+        public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
         public bool Active { get; set; }
         //OneToMany
-        public List<DishIngredient> DishIngredients { get; set; }
+        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
         //foreign keys
         public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }

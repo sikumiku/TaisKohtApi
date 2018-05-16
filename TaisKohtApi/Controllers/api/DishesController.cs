@@ -78,7 +78,8 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Dishes
-        [HttpPost]
+
+        [HttpPost(Name = "PostDish")]
         [ProducesResponseType(typeof(DishDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
@@ -89,7 +90,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newDish = _dishService.AddNewDish(dishDTO);
 
-            return CreatedAtAction("GetDish", new { id = newDish.DishId }, newDish);
+            return CreatedAtAction("PostDish", new { id = newDish.DishId }, newDish);
         }
 
         /// <summary>

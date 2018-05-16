@@ -12,18 +12,14 @@ namespace BusinessLogic.DTO
         public int RestaurantId { get; set; }
         public int UserId { get; set; }
         public int PromotionId { get; set; }
-
-        [MinLength(3)]
-        [MaxLength(40)]
         public string Title { get; set; }
-        [MaxLength(200)]
         public string Description { get; set; }
         public DateTime AvailableFrom { get; set; }
         public DateTime AvailableTo { get; set; }
         public DateTime ServeTime { get; set; }
         public bool Vegan { get; set; }
-        public bool Lactose { get; set; }
-        public bool Gluten { get; set; }
+        public bool LactoseFree { get; set; }
+        public bool GlutenFree { get; set; }
         public Decimal Kcal { get; set; }
         public Decimal WeightG { get; set; }
         public Decimal Price { get; set; }
@@ -52,8 +48,8 @@ namespace BusinessLogic.DTO
                 AvailableTo = dish.AvailableTo,
                 ServeTime = dish.ServeTime,
                 Vegan = dish.Vegan,
-                Lactose = dish.Lactose,
-                Gluten = dish.Gluten,
+                LactoseFree = dish.LactoseFree,
+                GlutenFree = dish.GlutenFree,
                 Kcal = dish.Kcal,
                 WeightG = dish.WeightG,
                 Price = dish.Price,

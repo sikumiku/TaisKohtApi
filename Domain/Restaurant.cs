@@ -16,8 +16,7 @@ namespace Domain
         public DateTime AddTime { get; set; }
         public DateTime UpdateTime { get; set; }
         public bool Active { get; set; }
-        //OneToOne
-        public Address Address { get; set; }
+
         //OneToMany
         public List<Dish> Dishes { get; set; }
         public List<Menu> Menus { get; set; }
@@ -26,5 +25,7 @@ namespace Domain
         //foreign keys
         public int PromotionId { get; set; }
         public Promotion Promotion { get; set; }
+        public int AddressId { get; set; }
+        public Address Address { get; set; }
     }
 }

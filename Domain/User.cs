@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
@@ -9,19 +8,22 @@ namespace Domain
     public class User : IdentityUser
     {
         public int UserId { get; set; }
+        [MaxLength(50)]
         public string FirstName { get; set; }
+        [MaxLength(50)]
         public string LastName { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        [MaxLength(101)]
+        public string FirstLastName => $"{FirstName} {LastName}";
         public DateTime AddTime { get; set; }
         public DateTime UpdateTime { get; set; }
-        public string FirstLastName => $"{FirstName} {LastName}";
+        public bool Active { get; set; }
+
         //OneToMany
-        public List<Menu> Menus { get; set; }
-        public List<Dish> Dishes { get; set; }
-        public List<RequestLog> RequestLogs { get; set; }
-        public List<RestaurantUser> RestaurantUsers { get; set; }
+        public List<Menu> Menus { get; set; } = new List<Menu>();
+        public List<Dish> Dishes { get; set; } = new List<Dish>();
+        public List<RequestLog> RequestLogs { get; set; } = new List<RequestLog>();
+        public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
+
         //foreign keys
         public int PromotionId { get; set; }
         public Promotion Promotion { get; set; }

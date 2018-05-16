@@ -11,6 +11,7 @@ namespace Domain
         public DateTime AddTime { get; set; }
         public DateTime UpdateTime { get; set; }
         public bool Active { get; set; }
+
         //foreign keys
         public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }

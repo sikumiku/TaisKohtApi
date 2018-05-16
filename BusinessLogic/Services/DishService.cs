@@ -51,8 +51,8 @@ namespace BusinessLogic.Services
             dish.AvailableTo = updatedDishDTO.AvailableTo;
             dish.ServeTime = updatedDishDTO.ServeTime;
             dish.Vegan = updatedDishDTO.Vegan;
-            dish.Lactose = updatedDishDTO.Lactose;
-            dish.Gluten = updatedDishDTO.Gluten;
+            dish.LactoseFree = updatedDishDTO.LactoseFree;
+            dish.GlutenFree = updatedDishDTO.GlutenFree;
             dish.Kcal = updatedDishDTO.Kcal;
             dish.WeightG = updatedDishDTO.WeightG;
             dish.Price = updatedDishDTO.Price;

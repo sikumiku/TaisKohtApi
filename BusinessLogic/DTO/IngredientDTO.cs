@@ -10,14 +10,8 @@ namespace BusinessLogic.DTO
     {
         public int IngredientId { get; set; }
         public int UserId { get; set; }
-
-        [MinLength(3)]
-        [MaxLength(40)]
         public string Name { get; set; }
-        [MaxLength(200)]
         public string Description { get; set; }
-        [MinLength(3)]
-        [MaxLength(10)]
         public string AmountUnit { get; set; }
         public DateTime AddTime { get; set; }
         public DateTime UpdateTime { get; set; }
