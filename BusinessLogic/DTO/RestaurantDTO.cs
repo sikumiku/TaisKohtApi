@@ -23,7 +23,7 @@ namespace BusinessLogic.DTO
         public List<Dish> Dishes { get; set; } = new List<Dish>();
         public List<Menu> Menus { get; set; } = new List<Menu>();
         public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
-        public List<RatingLog> RequestLogs { get; set; } = new List<RatingLog>();
+        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         //foreign keys
         public int? PromotionId { get; set; }
         public Promotion Promotion { get; set; }

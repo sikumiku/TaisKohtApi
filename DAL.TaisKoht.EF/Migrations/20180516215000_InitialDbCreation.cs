@@ -35,8 +35,14 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
+                    AccessLevel = table.Column<string>(maxLength: 50, nullable: true),
+                    Active = table.Column<bool>(nullable: true),
+                    AddTime = table.Column<DateTime>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: true),
+                    UserRoleId = table.Column<int>(nullable: true),
                     Id = table.Column<string>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
                 },
@@ -65,23 +71,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    UserRoleId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccessLevel = table.Column<string>(maxLength: 50, nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    RoleName = table.Column<string>(maxLength: 50, nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => x.UserRoleId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -100,6 +89,52 @@ namespace DAL.TaisKoht.EF.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(maxLength: 50, nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    PromotionId = table.Column<int>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    UserRoleId = table.Column<int>(nullable: true),
+                    UserRoleId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Promotions_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotions",
+                        principalColumn: "PromotionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_AspNetRoles_UserRoleId1",
+                        column: x => x.UserRoleId1,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,51 +167,6 @@ namespace DAL.TaisKoht.EF.Migrations
                         column: x => x.PromotionId,
                         principalTable: "Promotions",
                         principalColumn: "PromotionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(maxLength: 50, nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    PromotionId = table.Column<int>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    UserRoleId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Promotions_PromotionId",
-                        column: x => x.PromotionId,
-                        principalTable: "Promotions",
-                        principalColumn: "PromotionId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_UserRoles_UserRoleId",
-                        column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "UserRoleId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -266,6 +256,32 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    IngredientId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    AmountUnit = table.Column<string>(maxLength: 10, nullable: true),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
+                    table.ForeignKey(
+                        name: "FK_Ingredients_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Dishes",
                 columns: table => new
                 {
@@ -309,32 +325,6 @@ namespace DAL.TaisKoht.EF.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Dishes_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ingredients",
-                columns: table => new
-                {
-                    IngredientId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    AmountUnit = table.Column<string>(maxLength: 10, nullable: true),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
-                    table.ForeignKey(
-                        name: "FK_Ingredients_AspNetUsers_UserId1",
                         column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -394,7 +384,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     UserId1 = table.Column<string>(nullable: true),
-                    UserRoleId = table.Column<int>(nullable: true)
+                    UserRoleId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -412,10 +402,10 @@ namespace DAL.TaisKoht.EF.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RestaurantUsers_UserRoles_UserRoleId",
+                        name: "FK_RestaurantUsers_AspNetRoles_UserRoleId",
                         column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "UserRoleId",
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -486,7 +476,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequestLogs",
+                name: "RatingLogs",
                 columns: table => new
                 {
                     RatingLogId = table.Column<int>(nullable: false)
@@ -503,27 +493,27 @@ namespace DAL.TaisKoht.EF.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RequestLogs", x => x.RatingLogId);
+                    table.PrimaryKey("PK_RatingLogs", x => x.RatingLogId);
                     table.ForeignKey(
-                        name: "FK_RequestLogs_Dishes_DishId",
+                        name: "FK_RatingLogs_Dishes_DishId",
                         column: x => x.DishId,
                         principalTable: "Dishes",
                         principalColumn: "DishId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RequestLogs_Menus_MenuId",
+                        name: "FK_RatingLogs_Menus_MenuId",
                         column: x => x.MenuId,
                         principalTable: "Menus",
                         principalColumn: "MenuId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RequestLogs_Restaurants_RestaurantId",
+                        name: "FK_RatingLogs_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "RestaurantId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RequestLogs_AspNetUsers_UserId1",
+                        name: "FK_RatingLogs_AspNetUsers_UserId1",
                         column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -575,9 +565,9 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "PromotionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_UserRoleId",
+                name: "IX_AspNetUsers_UserRoleId1",
                 table: "AspNetUsers",
-                column: "UserRoleId");
+                column: "UserRoleId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dishes_PromotionId",
@@ -640,23 +630,23 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "UserId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestLogs_DishId",
-                table: "RequestLogs",
+                name: "IX_RatingLogs_DishId",
+                table: "RatingLogs",
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestLogs_MenuId",
-                table: "RequestLogs",
+                name: "IX_RatingLogs_MenuId",
+                table: "RatingLogs",
                 column: "MenuId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestLogs_RestaurantId",
-                table: "RequestLogs",
+                name: "IX_RatingLogs_RestaurantId",
+                table: "RatingLogs",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestLogs_UserId1",
-                table: "RequestLogs",
+                name: "IX_RatingLogs_UserId1",
+                table: "RatingLogs",
                 column: "UserId1");
 
             migrationBuilder.CreateIndex(
@@ -709,13 +699,10 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "MenuDishes");
 
             migrationBuilder.DropTable(
-                name: "RequestLogs");
+                name: "RatingLogs");
 
             migrationBuilder.DropTable(
                 name: "RestaurantUsers");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
@@ -739,7 +726,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "Promotions");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "AspNetRoles");
         }
     }
 }

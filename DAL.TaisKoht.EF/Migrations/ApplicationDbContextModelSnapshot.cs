@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 
 namespace DAL.TaisKoht.EF.Migrations
@@ -302,7 +303,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("RequestLogs");
+                    b.ToTable("RatingLogs");
                 });
 
             modelBuilder.Entity("Domain.Restaurant", b =>
@@ -361,7 +362,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("UserId1");
 
-                    b.Property<int?>("UserRoleId");
+                    b.Property<string>("UserRoleId");
 
                     b.HasKey("RestaurantUserId");
 
@@ -430,6 +431,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("UserRoleId");
 
+                    b.Property<string>("UserRoleId1");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -442,33 +445,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasIndex("PromotionId");
 
-                    b.HasIndex("UserRoleId");
+                    b.HasIndex("UserRoleId1");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Domain.UserRole", b =>
-                {
-                    b.Property<int>("UserRoleId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AccessLevel")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("AddTime");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("UpdateTime");
-
-                    b.HasKey("UserRoleId");
-
-                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -478,6 +457,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<string>("Name")
                         .HasMaxLength(256);
@@ -493,6 +475,8 @@ namespace DAL.TaisKoht.EF.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -579,6 +563,27 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Domain.UserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("AccessLevel")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime");
+
+                    b.Property<DateTime>("UpdateTime");
+
+                    b.Property<int>("UserRoleId");
+
+                    b.ToTable("UserRole");
+
+                    b.HasDiscriminator().HasValue("UserRole");
+                });
+
             modelBuilder.Entity("Domain.Dish", b =>
                 {
                     b.HasOne("Domain.Promotion", "Promotion")
@@ -657,7 +662,7 @@ namespace DAL.TaisKoht.EF.Migrations
             modelBuilder.Entity("Domain.RatingLog", b =>
                 {
                     b.HasOne("Domain.Dish", "Dish")
-                        .WithMany("RequestLogs")
+                        .WithMany("RatingLogs")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -667,12 +672,12 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Restaurant", "Restaurant")
-                        .WithMany("RequestLogs")
+                        .WithMany("RatingLogs")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.User", "User")
-                        .WithMany("RequestLogs")
+                        .WithMany("RatingLogs")
                         .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -717,7 +722,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.UserRole", "UserRole")
                         .WithMany("Users")
-                        .HasForeignKey("UserRoleId")
+                        .HasForeignKey("UserRoleId1")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

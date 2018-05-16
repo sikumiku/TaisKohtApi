@@ -33,7 +33,7 @@ namespace BusinessLogic.DTO
         //OneToMany
         public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
         public List<MenuDish> MenuDishes { get; set; } = new List<MenuDish>();
-        public List<RatingLog> RequestLogs { get; set; } = new List<RatingLog>();
+        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }

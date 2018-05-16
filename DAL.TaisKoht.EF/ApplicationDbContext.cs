@@ -33,7 +33,7 @@ namespace DAL.TaisKoht.EF
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuDish> MenuDishes { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<RatingLog> RequestLogs { get; set; }
+        public DbSet<RatingLog> RatingLogs { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<RestaurantUser> RestaurantUsers { get; set; }
         public new DbSet<User> Users { get; set; }
