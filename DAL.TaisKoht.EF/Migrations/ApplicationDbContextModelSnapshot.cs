@@ -17,7 +17,7 @@ namespace DAL.TaisKoht.EF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
+                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Domain.Address", b =>
@@ -25,22 +25,34 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AddressFirstLine");
+                    b.Property<bool>("Active");
 
-                    b.Property<string>("Country");
+                    b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("Locality");
+                    b.Property<string>("AddressFirstLine")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("PostCode");
+                    b.Property<string>("Country")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Region");
+                    b.Property<string>("Locality")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("RestaurantId");
+                    b.Property<decimal?>("LocationLatitude")
+                        .HasColumnType("decimal(9, 6)");
+
+                    b.Property<decimal?>("LocationLongitude")
+                        .HasColumnType("decimal(9, 6)");
+
+                    b.Property<string>("PostCode")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("Region")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("AddressId");
-
-                    b.HasIndex("RestaurantId")
-                        .IsUnique();
 
                     b.ToTable("Addresses");
                 });
@@ -54,31 +66,36 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<DateTime>("AvailableFrom");
+                    b.Property<DateTime?>("AvailableFrom");
 
-                    b.Property<DateTime>("AvailableTo");
+                    b.Property<DateTime?>("AvailableTo");
 
-                    b.Property<bool>("Daily");
+                    b.Property<bool?>("Daily");
 
-                    b.Property<decimal>("DailyPrice");
+                    b.Property<decimal?>("DailyPrice")
+                        .HasColumnType("decimal(8, 2)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
 
-                    b.Property<bool>("GlutenFree");
+                    b.Property<bool?>("GlutenFree");
 
-                    b.Property<decimal>("Kcal");
+                    b.Property<decimal?>("Kcal")
+                        .HasColumnType("decimal(8, 2)");
 
-                    b.Property<bool>("LactoseFree");
+                    b.Property<bool?>("LactoseFree");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(8, 2)");
 
-                    b.Property<int>("PromotionId");
+                    b.Property<int?>("PromotionId");
 
                     b.Property<int>("RestaurantId");
 
-                    b.Property<DateTime>("ServeTime");
+                    b.Property<DateTime?>("ServeTime");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .HasMaxLength(40);
 
                     b.Property<DateTime>("UpdateTime");
 
@@ -86,9 +103,10 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("UserId1");
 
-                    b.Property<bool>("Vegan");
+                    b.Property<bool?>("Vegan");
 
-                    b.Property<decimal>("WeightG");
+                    b.Property<decimal?>("WeightG")
+                        .HasColumnType("decimal(8, 2)");
 
                     b.HasKey("DishId");
 
@@ -110,7 +128,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("Amount");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<int>("DishId");
 
@@ -140,11 +159,15 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("AmountUnit");
+                    b.Property<string>("AmountUnit")
+                        .HasMaxLength(10);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(255);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdateTime");
 
@@ -166,15 +189,15 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("ActiveFrom");
+                    b.Property<DateTime?>("ActiveFrom");
 
-                    b.Property<DateTime>("ActiveTo");
+                    b.Property<DateTime?>("ActiveTo");
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("PromotionId");
+                    b.Property<int?>("PromotionId");
 
-                    b.Property<int>("RepetitionInterval");
+                    b.Property<int?>("RepetitionInterval");
 
                     b.Property<int>("RestaurantId");
 
@@ -228,11 +251,14 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(255);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdateTime");
 
@@ -243,26 +269,34 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("Promotions");
                 });
 
-            modelBuilder.Entity("Domain.RequestLog", b =>
+            modelBuilder.Entity("Domain.RatingLog", b =>
                 {
-                    b.Property<int>("RequestLogId")
+                    b.Property<int>("RatingLogId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("DishId");
+                    b.Property<int?>("DishId");
 
-                    b.Property<string>("Query");
+                    b.Property<int?>("MenuId");
 
-                    b.Property<int>("RestaurantId");
+                    b.Property<int>("Rating");
+
+                    b.Property<int?>("RestaurantId");
+
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<int>("UserId");
 
                     b.Property<string>("UserId1");
 
-                    b.HasKey("RequestLogId");
+                    b.HasKey("RatingLogId");
 
                     b.HasIndex("DishId");
+
+                    b.HasIndex("MenuId");
 
                     b.HasIndex("RestaurantId");
 
@@ -280,23 +314,28 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("ContactNumber");
+                    b.Property<int?>("AddressId");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("ContactNumber")
+                        .HasMaxLength(50);
 
-                    b.Property<decimal>("LocationLatitude");
+                    b.Property<string>("Email")
+                        .HasMaxLength(50);
 
-                    b.Property<decimal>("LocationLongitude");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Name");
-
-                    b.Property<int>("PromotionId");
+                    b.Property<int?>("PromotionId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<string>("Url");
+                    b.Property<string>("Url")
+                        .HasMaxLength(255);
 
                     b.HasKey("RestaurantId");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("PromotionId");
 
@@ -312,11 +351,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("DishId");
-
                     b.Property<int>("RestaurantId");
 
-                    b.Property<DateTime>("StartedAt");
+                    b.Property<DateTime?>("StartedAt");
 
                     b.Property<DateTime>("UpdateTime");
 
@@ -327,8 +364,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<int?>("UserRoleId");
 
                     b.HasKey("RestaurantUserId");
-
-                    b.HasIndex("DishId");
 
                     b.HasIndex("RestaurantId");
 
@@ -346,6 +381,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<bool>("Active");
+
                     b.Property<DateTime>("AddTime");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -356,9 +393,11 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -376,7 +415,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("PromotionId");
+                    b.Property<int?>("PromotionId");
 
                     b.Property<string>("SecurityStamp");
 
@@ -389,7 +428,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<int>("UserRoleId");
+                    b.Property<int?>("UserRoleId");
 
                     b.HasKey("Id");
 
@@ -413,13 +452,17 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<int>("UserRoleId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AccessLevel");
+                    b.Property<string>("AccessLevel")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<bool>("Active");
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("RoleName");
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdateTime");
 
@@ -536,14 +579,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Domain.Address", b =>
-                {
-                    b.HasOne("Domain.Restaurant", "Restaurant")
-                        .WithOne("Address")
-                        .HasForeignKey("Domain.Address", "RestaurantId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Domain.Dish", b =>
                 {
                     b.HasOne("Domain.Promotion", "Promotion")
@@ -619,11 +654,16 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Domain.RequestLog", b =>
+            modelBuilder.Entity("Domain.RatingLog", b =>
                 {
                     b.HasOne("Domain.Dish", "Dish")
                         .WithMany("RequestLogs")
                         .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Menu", "Menu")
+                        .WithMany("RatingLogs")
+                        .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Restaurant", "Restaurant")
@@ -639,6 +679,11 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.Restaurant", b =>
                 {
+                    b.HasOne("Domain.Address", "Address")
+                        .WithMany("Restaurant")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Domain.Promotion", "Promotion")
                         .WithMany("Restaurants")
                         .HasForeignKey("PromotionId")
@@ -647,11 +692,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.RestaurantUser", b =>
                 {
-                    b.HasOne("Domain.Dish", "Dish")
-                        .WithMany()
-                        .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Domain.Restaurant", "Restaurant")
                         .WithMany("RestaurantUsers")
                         .HasForeignKey("RestaurantId")

@@ -40,9 +40,9 @@ namespace BusinessLogic.Factories
                 Price = dishDTO.Price,
                 DailyPrice = dishDTO.DailyPrice,
                 Daily = dishDTO.Daily,
-                AddTime = dishDTO.AddTime,
-                UpdateTime = dishDTO.UpdateTime,
-                Active = dishDTO.Active
+                AddTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow,
+                Active = true
             };
         }
     }

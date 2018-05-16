@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Domain.Helpers;
 
 namespace Domain
 {
-    public class Dish
+    public class Dish : EssentialEntityBase
     {
         public int DishId { get; set; }
         [MinLength(3)]
@@ -29,19 +30,15 @@ namespace Domain
         [Column(TypeName = "decimal(8, 2)")]
         public Decimal? DailyPrice { get; set; }
         public bool? Daily { get; set; }
-        public DateTime? AddTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
-        public bool Active { get; set; }
-
         //OneToMany
         public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
         public List<MenuDish> MenuDishes { get; set; } = new List<MenuDish>();
-        public List<RequestLog> RequestLogs { get; set; } = new List<RequestLog>();
-
+        public List<RatingLog> RequestLogs { get; set; } = new List<RatingLog>();
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }
+        [Required]
         public int UserId { get; set; }
         public User User { get; set; }
         public int? PromotionId { get; set; }

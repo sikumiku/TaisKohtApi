@@ -1,31 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Domain.Helpers;
 
 namespace Domain
 {
-    public class Restaurant
+    public class Restaurant : EssentialEntityBase
     {
         public int RestaurantId { get; set; }
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
-        public decimal LocationLongitude { get; set; }
-        public decimal LocationLatitude { get; set; }
+        [MaxLength(255)]
         public string Url { get; set; }
+        [MaxLength(50)]
         public string ContactNumber { get; set; }
+        [EmailAddress]
+        [MaxLength(50)]
         public string Email { get; set; }
-        public DateTime AddTime { get; set; }
-        public DateTime UpdateTime { get; set; }
-        public bool Active { get; set; }
-
         //OneToMany
-        public List<Dish> Dishes { get; set; }
-        public List<Menu> Menus { get; set; }
-        public List<RestaurantUser> RestaurantUsers { get; set; }
-        public List<RequestLog> RequestLogs { get; set; }
+        public List<Dish> Dishes { get; set; } = new List<Dish>();
+        public List<Menu> Menus { get; set; } = new List<Menu>();
+        public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
+        public List<RatingLog> RequestLogs { get; set; } = new List<RatingLog>();
         //foreign keys
-        public int PromotionId { get; set; }
+        public int? PromotionId { get; set; }
         public Promotion Promotion { get; set; }
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
         public Address Address { get; set; }
     }
 }

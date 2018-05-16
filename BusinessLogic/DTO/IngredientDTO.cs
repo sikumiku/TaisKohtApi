@@ -9,29 +9,32 @@ namespace BusinessLogic.DTO
     public class IngredientDTO
     {
         public int IngredientId { get; set; }
-        public int UserId { get; set; }
+        [Required]
+        [MinLength(3)]
+        [MaxLength(50)]
         public string Name { get; set; }
+        [MaxLength(255)]
         public string Description { get; set; }
+        [MinLength(1)]
+        [MaxLength(10)]
         public string AmountUnit { get; set; }
-        public DateTime AddTime { get; set; }
-        public DateTime UpdateTime { get; set; }
-        public bool Active { get; set; }
-
-        public List<DishIngredient> DishIngredients { get; set; }
+        //OneToMany
+        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
+        //foreign keys
+        [Required]
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         public static IngredientDTO CreateFromDomain(Ingredient ingredient)
         {
-            if (ingredient == null) { return null; }
+            if (ingredient == null || !ingredient.Active) { return null; }
             return new IngredientDTO()
             {
                 IngredientId = ingredient.IngredientId,
-                UserId = ingredient.UserId,
                 Name = ingredient.Name,
                 Description = ingredient.Description,
                 AmountUnit = ingredient.AmountUnit,
-                AddTime = ingredient.AddTime,
-                UpdateTime = ingredient.UpdateTime,
-                Active = ingredient.Active
+                UserId = ingredient.UserId
             };
         }
 

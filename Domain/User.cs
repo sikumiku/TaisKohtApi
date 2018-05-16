@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
@@ -12,22 +13,21 @@ namespace Domain
         public string FirstName { get; set; }
         [MaxLength(50)]
         public string LastName { get; set; }
+        [NotMapped]
         [MaxLength(101)]
         public string FirstLastName => $"{FirstName} {LastName}";
-        public DateTime AddTime { get; set; }
-        public DateTime UpdateTime { get; set; }
-        public bool Active { get; set; }
-
+        public DateTime AddTime { get; set; } = DateTime.UtcNow;
+        public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
+        public bool Active { get; set; } = true;
         //OneToMany
         public List<Menu> Menus { get; set; } = new List<Menu>();
         public List<Dish> Dishes { get; set; } = new List<Dish>();
-        public List<RequestLog> RequestLogs { get; set; } = new List<RequestLog>();
+        public List<RatingLog> RequestLogs { get; set; } = new List<RatingLog>();
         public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
-
         //foreign keys
-        public int PromotionId { get; set; }
+        public int? PromotionId { get; set; }
         public Promotion Promotion { get; set; }
-        public int UserRoleId { get; set; }
+        public int? UserRoleId { get; set; }
         public UserRole UserRole { get; set; }
     }
 }

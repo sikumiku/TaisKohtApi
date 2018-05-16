@@ -5,10 +5,32 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Create : Migration
+    public partial class InitialDbCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    AddressId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    AddressFirstLine = table.Column<string>(maxLength: 50, nullable: true),
+                    Country = table.Column<string>(maxLength: 50, nullable: true),
+                    Locality = table.Column<string>(maxLength: 50, nullable: true),
+                    LocationLatitude = table.Column<decimal>(type: "decimal(9, 6)", nullable: true),
+                    LocationLongitude = table.Column<decimal>(type: "decimal(9, 6)", nullable: true),
+                    PostCode = table.Column<string>(maxLength: 20, nullable: true),
+                    Region = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -31,9 +53,9 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
+                    Type = table.Column<string>(maxLength: 50, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     ValidTo = table.Column<DateTime>(nullable: false)
                 },
@@ -48,10 +70,10 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     UserRoleId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccessLevel = table.Column<string>(nullable: true),
+                    AccessLevel = table.Column<string>(maxLength: 50, nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    RoleName = table.Column<string>(nullable: true),
+                    RoleName = table.Column<string>(maxLength: 50, nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -88,18 +110,23 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    ContactNumber = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    LocationLatitude = table.Column<decimal>(nullable: false),
-                    LocationLongitude = table.Column<decimal>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    PromotionId = table.Column<int>(nullable: false),
+                    AddressId = table.Column<int>(nullable: true),
+                    ContactNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    Email = table.Column<string>(maxLength: 50, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    PromotionId = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    Url = table.Column<string>(nullable: true)
+                    Url = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Restaurants", x => x.RestaurantId);
+                    table.ForeignKey(
+                        name: "FK_Restaurants_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Restaurants_Promotions_PromotionId",
                         column: x => x.PromotionId,
@@ -114,12 +141,13 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(maxLength: 50, nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
@@ -127,13 +155,13 @@ namespace DAL.TaisKoht.EF.Migrations
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    PromotionId = table.Column<int>(nullable: false),
+                    PromotionId = table.Column<int>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    UserRoleId = table.Column<int>(nullable: false)
+                    UserRoleId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -149,30 +177,6 @@ namespace DAL.TaisKoht.EF.Migrations
                         column: x => x.UserRoleId,
                         principalTable: "UserRoles",
                         principalColumn: "UserRoleId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Addresses",
-                columns: table => new
-                {
-                    AddressId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AddressFirstLine = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true),
-                    Locality = table.Column<string>(nullable: true),
-                    PostCode = table.Column<string>(nullable: true),
-                    Region = table.Column<string>(nullable: true),
-                    RestaurantId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
-                    table.ForeignKey(
-                        name: "FK_Addresses_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -269,24 +273,24 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    AvailableFrom = table.Column<DateTime>(nullable: false),
-                    AvailableTo = table.Column<DateTime>(nullable: false),
-                    Daily = table.Column<bool>(nullable: false),
-                    DailyPrice = table.Column<decimal>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    GlutenFree = table.Column<bool>(nullable: false),
-                    Kcal = table.Column<decimal>(nullable: false),
-                    LactoseFree = table.Column<bool>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
-                    PromotionId = table.Column<int>(nullable: false),
+                    AvailableFrom = table.Column<DateTime>(nullable: true),
+                    AvailableTo = table.Column<DateTime>(nullable: true),
+                    Daily = table.Column<bool>(nullable: true),
+                    DailyPrice = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
+                    GlutenFree = table.Column<bool>(nullable: true),
+                    Kcal = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    LactoseFree = table.Column<bool>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    PromotionId = table.Column<int>(nullable: true),
                     RestaurantId = table.Column<int>(nullable: false),
-                    ServeTime = table.Column<DateTime>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
+                    ServeTime = table.Column<DateTime>(nullable: true),
+                    Title = table.Column<string>(maxLength: 40, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     UserId1 = table.Column<string>(nullable: true),
-                    Vegan = table.Column<bool>(nullable: false),
-                    WeightG = table.Column<decimal>(nullable: false)
+                    Vegan = table.Column<bool>(nullable: true),
+                    WeightG = table.Column<decimal>(type: "decimal(8, 2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -319,9 +323,9 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    AmountUnit = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    AmountUnit = table.Column<string>(maxLength: 10, nullable: true),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     UserId1 = table.Column<string>(nullable: true)
@@ -344,11 +348,11 @@ namespace DAL.TaisKoht.EF.Migrations
                     MenuId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    ActiveFrom = table.Column<DateTime>(nullable: false),
-                    ActiveTo = table.Column<DateTime>(nullable: false),
+                    ActiveFrom = table.Column<DateTime>(nullable: true),
+                    ActiveTo = table.Column<DateTime>(nullable: true),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    PromotionId = table.Column<int>(nullable: false),
-                    RepetitionInterval = table.Column<int>(nullable: false),
+                    PromotionId = table.Column<int>(nullable: true),
+                    RepetitionInterval = table.Column<int>(nullable: true),
                     RestaurantId = table.Column<int>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
@@ -378,42 +382,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequestLogs",
-                columns: table => new
-                {
-                    RequestLogId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    DishId = table.Column<int>(nullable: false),
-                    Query = table.Column<string>(nullable: true),
-                    RestaurantId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RequestLogs", x => x.RequestLogId);
-                    table.ForeignKey(
-                        name: "FK_RequestLogs_Dishes_DishId",
-                        column: x => x.DishId,
-                        principalTable: "Dishes",
-                        principalColumn: "DishId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RequestLogs_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RequestLogs_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RestaurantUsers",
                 columns: table => new
                 {
@@ -421,9 +389,8 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    DishId = table.Column<int>(nullable: false),
                     RestaurantId = table.Column<int>(nullable: false),
-                    StartedAt = table.Column<DateTime>(nullable: false),
+                    StartedAt = table.Column<DateTime>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     UserId1 = table.Column<string>(nullable: true),
@@ -432,12 +399,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RestaurantUsers", x => x.RestaurantUserId);
-                    table.ForeignKey(
-                        name: "FK_RestaurantUsers_Dishes_DishId",
-                        column: x => x.DishId,
-                        principalTable: "Dishes",
-                        principalColumn: "DishId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RestaurantUsers_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
@@ -466,7 +427,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    Amount = table.Column<int>(nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
                     DishId = table.Column<int>(nullable: false),
                     IngredientId = table.Column<int>(nullable: false),
                     MenuId = table.Column<int>(nullable: true),
@@ -524,11 +485,50 @@ namespace DAL.TaisKoht.EF.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_RestaurantId",
-                table: "Addresses",
-                column: "RestaurantId",
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "RequestLogs",
+                columns: table => new
+                {
+                    RatingLogId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    DishId = table.Column<int>(nullable: true),
+                    MenuId = table.Column<int>(nullable: true),
+                    Rating = table.Column<int>(nullable: false),
+                    RestaurantId = table.Column<int>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestLogs", x => x.RatingLogId);
+                    table.ForeignKey(
+                        name: "FK_RequestLogs_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "DishId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RequestLogs_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "MenuId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RequestLogs_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RequestLogs_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -645,6 +645,11 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RequestLogs_MenuId",
+                table: "RequestLogs",
+                column: "MenuId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RequestLogs_RestaurantId",
                 table: "RequestLogs",
                 column: "RestaurantId");
@@ -655,14 +660,14 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "UserId1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Restaurants_AddressId",
+                table: "Restaurants",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Restaurants_PromotionId",
                 table: "Restaurants",
                 column: "PromotionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RestaurantUsers_DishId",
-                table: "RestaurantUsers",
-                column: "DishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RestaurantUsers_RestaurantId",
@@ -682,9 +687,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Addresses");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -719,16 +721,19 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "Ingredients");
 
             migrationBuilder.DropTable(
-                name: "Menus");
+                name: "Dishes");
 
             migrationBuilder.DropTable(
-                name: "Dishes");
+                name: "Menus");
 
             migrationBuilder.DropTable(
                 name: "Restaurants");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "Promotions");

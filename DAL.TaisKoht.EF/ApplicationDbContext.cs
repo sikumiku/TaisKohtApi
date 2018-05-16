@@ -33,10 +33,10 @@ namespace DAL.TaisKoht.EF
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuDish> MenuDishes { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<RequestLog> RequestLogs { get; set; }
+        public DbSet<RatingLog> RequestLogs { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<RestaurantUser> RestaurantUsers { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
+        public new DbSet<User> Users { get; set; }
+        public new DbSet<UserRole> UserRoles { get; set; }
     }
 }
