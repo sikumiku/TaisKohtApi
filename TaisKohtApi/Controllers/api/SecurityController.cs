@@ -42,26 +42,10 @@ namespace TaisKohtApi.Controllers.api
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginViewModel.Password, false);
                 if (result.Succeeded)
                 {
-                    var options = new IdentityOptions();
-                    var claims = new List<Claim>
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Email), // sub on subject
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // jti on random string
-                        new Claim(options.ClaimsIdentity.UserIdClaimType, user.Email),
-                        new Claim(options.ClaimsIdentity.UserNameClaimType, user.UserName)
-                    };
-                    var userClaims = await _userManager.GetClaimsAsync(user); // igaks juhuks lisada k6ik claimid
+                    var claims = createClaims(user);
+                    var userClaims = await _userManager.GetClaimsAsync(user); 
                     claims.AddRange(userClaims);
-
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
-                    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    var token = new JwtSecurityToken(
-                        _configuration["Token:Issuer"],
-                        _configuration["Token:Issuer"],
-                        claims,
-                        expires: DateTime.Now.AddMinutes(30),
-                        signingCredentials: credentials
-                        );
+                    var token = createToken(claims);
                     return Ok(
                         new
                         {
@@ -71,7 +55,60 @@ namespace TaisKohtApi.Controllers.api
                 }
             }
 
-            return BadRequest("Could not create token");
+            return BadRequest("Could not create token.");
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> GetToken([FromBody] RegisterViewModel registerViewModel)
+        {
+            var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
+            if (user == null)
+            {
+                var newUser = new User {UserName = registerViewModel.Email, Email = registerViewModel.Email};
+                var result = await _userManager.CreateAsync(newUser, registerViewModel.Password);
+                if (result.Succeeded)
+                {
+                    var claims = createClaims(user);
+                    var userClaims = await _userManager.GetClaimsAsync(user);
+                    claims.AddRange(userClaims);
+                    var token = createToken(claims);
+                    return Ok(
+                        new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(token)
+                        }
+                    );
+
+                }
+            }
+            return BadRequest("This user already exists.");
+        }
+
+
+        private List<Claim> createClaims(User user)
+        {
+            var options = new IdentityOptions();
+            return new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email), // sub on subject
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // jti on random string
+                new Claim(options.ClaimsIdentity.UserIdClaimType, user.Email),
+                new Claim(options.ClaimsIdentity.UserNameClaimType, user.UserName)
+            };
+        }
+
+        private JwtSecurityToken createToken(List<Claim> claims)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            return new JwtSecurityToken(
+                _configuration["Token:Issuer"],
+                _configuration["Token:Issuer"],
+                claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credentials
+            );
         }
     }
 }
