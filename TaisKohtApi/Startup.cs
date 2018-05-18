@@ -93,6 +93,7 @@ namespace TaisKohtApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            #region Error Handler registration
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -103,13 +104,15 @@ namespace TaisKohtApi
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            #endregion
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TäisKõht API V1");
             });
 
+            #region React App
             // Initialise ReactJS.NET. Must be before static files.
             app.UseReact(config =>
             {
@@ -129,6 +132,7 @@ namespace TaisKohtApi
                 //  .SetLoadBabel(false)
                 //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
             });
+            #endregion
 
             app.UseStaticFiles();
 
