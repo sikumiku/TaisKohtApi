@@ -9,44 +9,39 @@ namespace BusinessLogic.DTO
     public class RestaurantDTO
     {
         public int RestaurantId { get; set; }
-        [MinLength(3)]
-        [MaxLength(40)]
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
-        public decimal LocationLongitude { get; set; }
-        public decimal LocationLatitude { get; set; }
-        [MinLength(5)]
-        [MaxLength(100)]
+        [MaxLength(255)]
         public string Url { get; set; }
-        [MinLength(5)]
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string ContactNumber { get; set; }
-        [MinLength(10)]
-        [MaxLength(40)]
+        [EmailAddress]
+        [MaxLength(50)]
         public string Email { get; set; }
-        public DateTime AddTime { get; set; }
-        public DateTime UpdateTime { get; set; }
-        public bool Active { get; set; }
-        //OneToOne
-        public Address Address { get; set; }
         //OneToMany
-        public List<Dish> Dishes { get; set; }
-        public List<Menu> Menus { get; set; }
-        public List<RestaurantUser> RestaurantUsers { get; set; }
-        public List<RequestLog> RequestLogs { get; set; }
+        public List<Dish> Dishes { get; set; } = new List<Dish>();
+        public List<Menu> Menus { get; set; } = new List<Menu>();
+        public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
+        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
+        //foreign keys
+        public int? PromotionId { get; set; }
+        public Promotion Promotion { get; set; }
+        public int? AddressId { get; set; }
+        public Address Address { get; set; }
 
         public static RestaurantDTO CreateFromDomain(Restaurant restaurant)
         {
-            if (restaurant == null) { return null; }
+            if (restaurant == null || !restaurant.Active) { return null; }
             return new RestaurantDTO()
             {
                 RestaurantId = restaurant.RestaurantId,
                 Name = restaurant.Name,
-                LocationLongitude = restaurant.LocationLongitude,
-                LocationLatitude = restaurant.LocationLatitude,
                 Url = restaurant.Url,
                 ContactNumber = restaurant.ContactNumber,
                 Email = restaurant.Email,
-                Address = restaurant.Address
+                Address = restaurant.Address,
+                Promotion = restaurant.Promotion
             };
         }
 

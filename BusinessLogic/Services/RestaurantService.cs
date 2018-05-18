@@ -48,8 +48,6 @@ namespace BusinessLogic.Services
             //Id'd ei peaks vist muuta saama? See tekib automaatselt andmebaasis.
             restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
             restaurant.Name = updatedRestaurantDTO.Name;
-            restaurant.LocationLongitude = updatedRestaurantDTO.LocationLongitude;
-            restaurant.LocationLatitude = updatedRestaurantDTO.LocationLatitude;
             restaurant.Url = updatedRestaurantDTO.Url;
             restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
             restaurant.Email = updatedRestaurantDTO.Email;

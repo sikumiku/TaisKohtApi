@@ -9,35 +9,36 @@ namespace BusinessLogic.DTO
     public class MenuDTO
     {
         public int MenuId { get; set; }
+        public DateTime? ActiveFrom { get; set; }
+        public DateTime? ActiveTo { get; set; }
+        [Range(1, 365)]
+        public int? RepetitionInterval { get; set; }
+        //OneToMany
+        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
+        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
+        //foreign keys
+        [Required]
         public int RestaurantId { get; set; }
+        public Restaurant Restaurant { get; set; }
+        [Required]
         public int UserId { get; set; }
-        public int PromotionId { get; set; }
+        public User User { get; set; }
+        public int? PromotionId { get; set; }
+        public Promotion Promotion { get; set; }
 
-        public DateTime ActiveFrom { get; set; }
-        public DateTime ActiveTo { get; set; }
-        public int RepetitionInterval { get; set; }
-        public DateTime AddTime { get; set; }
-        public DateTime UpdateTime { get; set; }
-        public bool Active { get; set; }
-
-        public List<DishIngredient> DishIngredient { get; set; }
-        
 
         public static MenuDTO CreateFromDomain(Menu menu)
         {
-            if (menu == null) { return null; }
+            if (menu == null || !menu.Active) { return null; }
             return new MenuDTO()
             {
                 MenuId = menu.MenuId,
-                RestaurantId = menu.RestaurantId,
-                UserId = menu.UserId,
-                PromotionId = menu.PromotionId,
                 ActiveFrom = menu.ActiveFrom,
                 ActiveTo = menu.ActiveTo,
                 RepetitionInterval = menu.RepetitionInterval,
-                AddTime = menu.AddTime,
-                UpdateTime = menu.UpdateTime,
-                Active = menu.Active
+                RestaurantId = menu.RestaurantId,
+                UserId = menu.UserId,
+                PromotionId = menu.PromotionId
             };
         }
 

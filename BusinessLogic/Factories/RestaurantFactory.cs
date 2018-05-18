@@ -25,12 +25,13 @@ namespace BusinessLogic.Factories
             {
                 RestaurantId = restaurantDTO.RestaurantId,
                 Name = restaurantDTO.Name,
-                LocationLongitude = restaurantDTO.LocationLongitude,
-                LocationLatitude = restaurantDTO.LocationLatitude,
                 Url = restaurantDTO.Url,
                 ContactNumber = restaurantDTO.ContactNumber,
                 Email = restaurantDTO.Email,
-                Address = restaurantDTO.Address
+                Address = restaurantDTO.Address,
+                AddTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow,
+                Active = true
             };
         }
     }
