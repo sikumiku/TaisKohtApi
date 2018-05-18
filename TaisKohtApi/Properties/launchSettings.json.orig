@@ -1,0 +1,37 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:64376/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+<<<<<<< HEAD
+      "launchUrl": "",
+=======
+      "launchUrl": "swagger/v1/swagger.json",
+>>>>>>> fddd00487562c177e134fe0c1e0452780feab5b9
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "TaisKohtApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+<<<<<<< HEAD
+      "launchUrl": "",
+=======
+      "launchUrl": "swagger/v1/swagger.json",
+>>>>>>> fddd00487562c177e134fe0c1e0452780feab5b9
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:64377/"
+    }
+  }
+}
