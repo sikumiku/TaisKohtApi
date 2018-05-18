@@ -5,11 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TaisKohtApi.csproj.orig" />
+    <Compile Remove="wwwroot\App\**" />
+    <Content Remove="wwwroot\App\**" />
+    <EmbeddedResource Remove="wwwroot\App\**" />
+    <None Remove="wwwroot\App\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Remove="TaisKohtApi.csproj.orig" />
   </ItemGroup>
 
   <ItemGroup>
