@@ -47,7 +47,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Menus/5
-        [HttpGet("{id}", Name = "GetMenu")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
@@ -78,7 +78,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Menus
-        [HttpPost]
+        [HttpPost(Name = "PostMenu")]
         [ProducesResponseType(typeof(MenuDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
@@ -89,7 +89,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newMenu = _menuService.AddNewMenu(menuDTO);
 
-            return CreatedAtAction("GetMenu", new { id = newMenu.MenuId }, newMenu);
+            return CreatedAtAction("PostMenu", new { id = newMenu.MenuId }, newMenu);
         }
 
         /// <summary>

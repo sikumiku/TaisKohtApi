@@ -30,9 +30,9 @@ namespace BusinessLogic.Factories
                 ActiveFrom = menuDTO.ActiveFrom,
                 ActiveTo = menuDTO.ActiveTo,
                 RepetitionInterval = menuDTO.RepetitionInterval,
-                AddTime = menuDTO.AddTime,
-                UpdateTime = menuDTO.UpdateTime,
-                Active = menuDTO.Active
+                AddTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow,
+                Active = true
             };
         }
     }

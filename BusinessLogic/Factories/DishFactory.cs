@@ -33,16 +33,16 @@ namespace BusinessLogic.Factories
                 AvailableTo = dishDTO.AvailableTo,
                 ServeTime = dishDTO.ServeTime,
                 Vegan = dishDTO.Vegan,
-                Lactose = dishDTO.Lactose,
-                Gluten = dishDTO.Gluten,
+                LactoseFree = dishDTO.LactoseFree,
+                GlutenFree = dishDTO.GlutenFree,
                 Kcal = dishDTO.Kcal,
                 WeightG = dishDTO.WeightG,
                 Price = dishDTO.Price,
                 DailyPrice = dishDTO.DailyPrice,
                 Daily = dishDTO.Daily,
-                AddTime = dishDTO.AddTime,
-                UpdateTime = dishDTO.UpdateTime,
-                Active = dishDTO.Active
+                AddTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow,
+                Active = true
             };
         }
     }

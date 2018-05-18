@@ -28,9 +28,9 @@ namespace BusinessLogic.Factories
                 Description = promotionDTO.Description,
                 Type = promotionDTO.Type,
                 ValidTo = promotionDTO.ValidTo,
-                AddTime = promotionDTO.AddTime,
-                UpdateTime = promotionDTO.UpdateTime,
-                Active = promotionDTO.Active
+                AddTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow,
+                Active = true
             };
         }
     }
