@@ -13,6 +13,7 @@ using DAL.TaisKoht.EF.Helpers;
 using DAL.TaisKoht.Interfaces;
 using DAL.TaisKoht.Interfaces.Helpers;
 using Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -62,6 +63,22 @@ namespace TaisKohtApi
                             Encoding.UTF8.GetBytes(Configuration["Token:Key"])
                         )
                     };
+
+                    #region JwtToken Life Cycle
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async (context) =>
+                        {
+                            var userManager = context.HttpContext.RequestServices.GetService<UserManager<User>>();
+                            var user = await userManager.FindByEmailAsync(context.Principal.Identity.Name);
+                            if (user == null || user.LockoutEnd > DateTime.Now)
+                            {
+                                context.Response.StatusCode = 401;
+                            }
+                        }
+                    };
+                    #endregion
+
                 });
 
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
