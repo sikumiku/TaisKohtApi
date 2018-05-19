@@ -18,10 +18,9 @@ namespace BusinessLogic.DTO
         public string Type { get; set; }
         public DateTime ValidTo { get; set; }
         //OneToMany
-        public List<Menu> Menus { get; set; } = new List<Menu>();
-        public List<Dish> Dishes { get; set; } = new List<Dish>();
-        public List<User> Users { get; set; } = new List<User>();
-        public List<Restaurant> Restaurants { get; set; } = new List<Restaurant>();
+        public List<MenuDTO> MenuDTOs { get; set; } = new List<MenuDTO>();
+        public List<DishDTO> DishDTOs { get; set; } = new List<DishDTO>();
+        public List<RestaurantDTO> RestaurantDTOs { get; set; } = new List<RestaurantDTO>();
 
         public static PromotionDTO CreateFromDomain(Promotion promotion)
         {

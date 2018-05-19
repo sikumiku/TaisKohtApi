@@ -30,14 +30,14 @@ namespace BusinessLogic.Services
 
         public IEnumerable<PromotionDTO> GetAllPromotions()
         {
-            return _uow.Promotions.All()
+            return _uow.Promotions.All().Where(x => x.Active)
                 .Select(promotion => _promotionFactory.Create(promotion));
         }
 
         public PromotionDTO GetPromotionById(int id)
         {
             var promotion = _uow.Promotions.Find(id);
-            if (promotion == null) return null;
+            if (promotion == null || !promotion.Active) return null;
 
             return _promotionFactory.Create(promotion);
         }
@@ -49,6 +49,7 @@ namespace BusinessLogic.Services
             promotion.Description = updatedPromotionDTO.Description;
             promotion.Type = updatedPromotionDTO.Type;
             promotion.ValidTo = updatedPromotionDTO.ValidTo;
+            promotion.UpdateTime = DateTime.UtcNow;
             _uow.Promotions.Update(promotion);
             _uow.SaveChanges();
         }
@@ -56,7 +57,9 @@ namespace BusinessLogic.Services
         public void DeletePromotion(int id)
         {
             Promotion promotion = _uow.Promotions.Find(id);
-            _uow.Promotions.Remove(promotion);
+            promotion.UpdateTime = DateTime.UtcNow;
+            promotion.Active = false;
+            _uow.Promotions.Update(promotion);
             _uow.SaveChanges();
         }
     }

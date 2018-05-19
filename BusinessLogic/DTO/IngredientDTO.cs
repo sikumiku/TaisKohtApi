@@ -18,8 +18,6 @@ namespace BusinessLogic.DTO
         [MinLength(1)]
         [MaxLength(10)]
         public string AmountUnit { get; set; }
-        //OneToMany
-        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
         //foreign keys
         [Required]
         public int UserId { get; set; }
