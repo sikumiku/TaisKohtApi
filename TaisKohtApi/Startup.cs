@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using BusinessLogic.Services;
 using BusinessLogic.Factories;
@@ -12,6 +13,7 @@ using DAL.TaisKoht.EF.Helpers;
 using DAL.TaisKoht.Interfaces;
 using DAL.TaisKoht.Interfaces.Helpers;
 using Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Http;
 using React.AspNet;
@@ -44,6 +47,39 @@ namespace TaisKohtApi
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication()
+                .AddCookie(options => { options.SlidingExpiration = true; })
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["Token:Issuer"],
+                        ValidAudience = Configuration["Token:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration["Token:Key"])
+                        )
+                    };
+
+                    #region JwtToken Life Cycle
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async (context) =>
+                        {
+                            var userManager = context.HttpContext.RequestServices.GetService<UserManager<User>>();
+                            var user = await userManager.FindByEmailAsync(context.Principal.Identity.Name);
+                            if (user == null || user.LockoutEnd > DateTime.Now)
+                            {
+                                context.Response.StatusCode = 401;
+                            }
+                        }
+                    };
+                    #endregion
+
+                });
 
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
