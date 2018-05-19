@@ -11,5 +11,6 @@ namespace DAL.TaisKoht.Interfaces
         IMenuRepository Menus { get; }
         IPromotionRepository Promotions { get; }
         IRestaurantRepository Restaurants { get; }
+        IRatingLogRepository RatingLogs { get; }
     }
 }
