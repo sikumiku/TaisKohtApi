@@ -483,6 +483,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
+                    Comment = table.Column<string>(maxLength: 2000, nullable: true),
                     DishId = table.Column<int>(nullable: true),
                     MenuId = table.Column<int>(nullable: true),
                     Rating = table.Column<int>(nullable: false),

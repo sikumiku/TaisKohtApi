@@ -279,6 +279,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
+                    b.Property<string>("Comment")
+                        .HasMaxLength(2000);
+
                     b.Property<int?>("DishId");
 
                     b.Property<int?>("MenuId");
