@@ -16,5 +16,9 @@ namespace BusinessLogic.Services
         void UpdateDish(int id, DishDTO dto);
 
         void DeleteDish(int id);
+
+        IEnumerable<DishDTO> SearchDishByTitle(string title);
+        IEnumerable<DishDTO> SearchDishByPriceLimit(decimal dishPrice);
+
     }
 }

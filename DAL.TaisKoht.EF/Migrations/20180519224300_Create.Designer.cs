@@ -12,8 +12,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180518220337_InitialDbCreation")]
-    partial class InitialDbCreation
+    [Migration("20180519224300_Create")]
+    partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -285,8 +285,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("DishId");
 
-                    b.Property<int?>("MenuId");
-
                     b.Property<int>("Rating");
 
                     b.Property<int?>("RestaurantId");
@@ -300,8 +298,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.HasKey("RatingLogId");
 
                     b.HasIndex("DishId");
-
-                    b.HasIndex("MenuId");
 
                     b.HasIndex("RestaurantId");
 
@@ -668,11 +664,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.HasOne("Domain.Dish", "Dish")
                         .WithMany("RatingLogs")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.Menu", "Menu")
-                        .WithMany("RatingLogs")
-                        .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Restaurant", "Restaurant")
