@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractCSS = new ExtractTextPlugin('allstyles.css');
 
 module.exports = {
-    entry: { 'main': './wwwroot/source/app.js' },
+    entry: { 'main': './wwwroot/source/index.js' },
     output: {
         path: path.resolve(__dirname, 'wwwroot/dist'),
         filename: 'bundle.js',

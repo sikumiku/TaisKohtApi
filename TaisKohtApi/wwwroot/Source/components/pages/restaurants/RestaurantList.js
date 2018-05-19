@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import 'es6-promise';
 import 'isomorphic-fetch';
-export default class FetchData extends React.Component {
+export default class RestaurantList extends React.Component {
     constructor() {
         super();
         this.state = { restos: [], loading: true };
@@ -13,7 +13,7 @@ export default class FetchData extends React.Component {
     }
     render() {
         let contents = this.state.loading ? <p><em>Loading...</em></p>
-            : FetchData.renderRestoTable(this.state.restos);
+            : RestaurantList.renderRestoTable(this.state.restos);
 
         return <div>
             <h1>Resto List</h1>
