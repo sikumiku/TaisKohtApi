@@ -23,6 +23,8 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Http;
 using React.AspNet;
+using Microsoft.AspNetCore.SpaServices.Webpack;
+
 
 
 namespace TaisKohtApi
@@ -98,6 +100,9 @@ namespace TaisKohtApi
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+                    HotModuleReplacement = true
+                });
             }
             else
             {
