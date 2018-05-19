@@ -11,37 +11,41 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using TaisKohtApi.Models.AccountViewModels;
 
 namespace TaisKohtApi.Controllers.api
 {
     [Produces("application/json")]
-    [Route("api/Security")]
+    [Route("api/account/")]
     [AllowAnonymous]
     public class SecurityController : Controller
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
-        public SecurityController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration)
+        public SecurityController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, ILogger<SecurityController> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _configuration = configuration;
+            _logger = logger;
         }
 
         [HttpPost]
-        [Route("getToken")]
-        public async Task<IActionResult> GetToken([FromBody] LoginViewModel loginViewModel)
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                var result = await _signInManager.CheckPasswordSignInAsync(user, loginViewModel.Password, false);
+                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation(1, "User logged in.");
                     var claims = createClaims(user);
                     var userClaims = await _userManager.GetClaimsAsync(user); 
                     claims.AddRange(userClaims);
@@ -53,6 +57,15 @@ namespace TaisKohtApi.Controllers.api
                         }
                     );
                 }
+                if (result.IsLockedOut)
+                {
+                    _logger.LogWarning(2, "User account locked out.");
+                    return BadRequest("Too many login attempts, try again later.");
+                }
+                else
+                {
+                    return BadRequest("Invalid login attempt, errors: " + result);
+                }
             }
 
             return BadRequest("Could not create token.");
@@ -60,17 +73,19 @@ namespace TaisKohtApi.Controllers.api
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> GetToken([FromBody] RegisterViewModel registerViewModel)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel registerViewModel)
         {
             var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
-            if (user == null)
+            if (user == null && ModelState.IsValid)
             {
                 var newUser = new User {UserName = registerViewModel.Email, Email = registerViewModel.Email};
                 var result = await _userManager.CreateAsync(newUser, registerViewModel.Password);
                 if (result.Succeeded)
                 {
-                    var claims = createClaims(user);
-                    var userClaims = await _userManager.GetClaimsAsync(user);
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+                    _logger.LogInformation(3, "User create a new account with password.");
+                    var claims = createClaims(newUser);
+                    var userClaims = await _userManager.GetClaimsAsync(newUser);
                     claims.AddRange(userClaims);
                     var token = createToken(claims);
                     return Ok(
@@ -81,8 +96,22 @@ namespace TaisKohtApi.Controllers.api
                     );
 
                 }
+                else
+                {
+                    return BadRequest("Invalid registration, error: " + result.Errors.First().Description);
+                }
+                //return failure reasons to frontend
             }
             return BadRequest("This user already exists.");
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation(4, "User logged out.");
+            return Ok("User successfully logged out.");
         }
 
 
