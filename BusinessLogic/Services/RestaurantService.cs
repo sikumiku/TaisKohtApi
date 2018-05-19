@@ -30,14 +30,14 @@ namespace BusinessLogic.Services
 
         public IEnumerable<RestaurantDTO> GetAllRestaurants()
         {
-            return _uow.Restaurants.All()
+            return _uow.Restaurants.All().Where(x => x.Active)
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
         }
 
         public RestaurantDTO GetRestaurantById(int id)
         {
             var restaurant = _uow.Restaurants.Find(id);
-            if (restaurant == null) return null;
+            if (restaurant == null || restaurant.Active) return null;
 
             return _restaurantFactory.Create(restaurant);
         }
@@ -45,13 +45,13 @@ namespace BusinessLogic.Services
         public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)
         {
             Restaurant restaurant = _uow.Restaurants.Find(id);
-            //Id'd ei peaks vist muuta saama? See tekib automaatselt andmebaasis.
             restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
             restaurant.Name = updatedRestaurantDTO.Name;
             restaurant.Url = updatedRestaurantDTO.Url;
             restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
             restaurant.Email = updatedRestaurantDTO.Email;
             //restaurant.Address = updatedRestaurantDTO.Address;
+            restaurant.UpdateTime = DateTime.UtcNow;
             _uow.Restaurants.Update(restaurant);
             _uow.SaveChanges();
         }
@@ -59,7 +59,9 @@ namespace BusinessLogic.Services
         public void DeleteRestaurant(int id)
         {
             Restaurant restaurant = _uow.Restaurants.Find(id);
-            _uow.Restaurants.Remove(restaurant);
+            restaurant.UpdateTime = DateTime.UtcNow;
+            restaurant.Active = false;
+            _uow.Restaurants.Update(restaurant);
             _uow.SaveChanges();
         }
     }

@@ -30,14 +30,14 @@ namespace BusinessLogic.Services
 
         public IEnumerable<DishDTO> GetAllDishes()
         {
-            return _uow.Dishes.All()
+            return _uow.Dishes.All().Where(x => x.Active)
                 .Select(dish => _dishFactory.Create(dish));
         }
 
         public DishDTO GetDishById(int id)
         {
             var dish = _uow.Dishes.Find(id);
-            if (dish == null) return null;
+            if (dish == null || !dish.Active) return null;
 
             return _dishFactory.Create(dish);
         }
@@ -58,6 +58,7 @@ namespace BusinessLogic.Services
             dish.Price = updatedDishDTO.Price;
             dish.DailyPrice = updatedDishDTO.DailyPrice;
             dish.Daily = updatedDishDTO.Daily;
+            dish.UpdateTime = DateTime.UtcNow;
             _uow.Dishes.Update(dish);
             _uow.SaveChanges();
         }
@@ -65,7 +66,9 @@ namespace BusinessLogic.Services
         public void DeleteDish(int id)
         {
             Dish dish = _uow.Dishes.Find(id);
-            _uow.Dishes.Remove(dish);
+            dish.UpdateTime = DateTime.UtcNow;
+            dish.Active = false;
+            _uow.Dishes.Update(dish);
             _uow.SaveChanges();
         }
     }

@@ -29,10 +29,7 @@ namespace BusinessLogic.Factories
                 PromotionId = menuDTO.PromotionId,
                 ActiveFrom = menuDTO.ActiveFrom,
                 ActiveTo = menuDTO.ActiveTo,
-                RepetitionInterval = menuDTO.RepetitionInterval,
-                AddTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow,
-                Active = true
+                RepetitionInterval = menuDTO.RepetitionInterval
             };
         }
     }

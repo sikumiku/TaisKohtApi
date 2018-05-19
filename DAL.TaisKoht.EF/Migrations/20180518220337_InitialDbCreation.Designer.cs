@@ -12,7 +12,7 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180516215000_InitialDbCreation")]
+    [Migration("20180518220337_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -279,6 +279,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<bool>("Active");
 
                     b.Property<DateTime>("AddTime");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(2000);
 
                     b.Property<int?>("DishId");
 
