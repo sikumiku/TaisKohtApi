@@ -15,14 +15,11 @@ namespace BusinessLogic.DTO
         public int? RepetitionInterval { get; set; }
         //OneToMany
         public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
-        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
-        public Restaurant Restaurant { get; set; }
         [Required]
         public int UserId { get; set; }
-        public User User { get; set; }
         public int? PromotionId { get; set; }
         public Promotion Promotion { get; set; }
 

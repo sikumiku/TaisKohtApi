@@ -27,10 +27,7 @@ namespace BusinessLogic.Factories
                 UserId = ingredientDTO.UserId,
                 Name = ingredientDTO.Name,
                 Description = ingredientDTO.Description,
-                AmountUnit = ingredientDTO.AmountUnit,
-                AddTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow,
-                Active = true
+                AmountUnit = ingredientDTO.AmountUnit
             };
         }
     }

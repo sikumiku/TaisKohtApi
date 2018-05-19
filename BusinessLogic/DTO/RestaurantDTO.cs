@@ -20,9 +20,7 @@ namespace BusinessLogic.DTO
         [MaxLength(50)]
         public string Email { get; set; }
         //OneToMany
-        public List<Dish> Dishes { get; set; } = new List<Dish>();
-        public List<Menu> Menus { get; set; } = new List<Menu>();
-        public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
+        public List<MenuDTO> MenusDTOs { get; set; } = new List<MenuDTO>();
         public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         //foreign keys
         public int? PromotionId { get; set; }

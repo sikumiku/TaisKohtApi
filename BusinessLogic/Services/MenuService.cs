@@ -31,14 +31,14 @@ namespace BusinessLogic.Services
 
         public IEnumerable<MenuDTO> GetAllMenus()
         {
-            return _uow.Menus.All()
+            return _uow.Menus.All().Where(x => x.Active)
                 .Select(menu => _menuFactory.Create(menu));
         }
 
         public MenuDTO GetMenuById(int id)
         {
             var menu = _uow.Menus.Find(id);
-            if (menu == null) return null;
+            if (menu == null || !menu.Active) return null;
 
             return _menuFactory.Create(menu);
         }
@@ -49,6 +49,7 @@ namespace BusinessLogic.Services
             menu.ActiveFrom = updatedMenuDTO.ActiveFrom;
             menu.ActiveTo = updatedMenuDTO.ActiveTo;
             menu.RepetitionInterval = updatedMenuDTO.RepetitionInterval;
+            menu.UpdateTime = DateTime.UtcNow;
             _uow.Menus.Update(menu);
             _uow.SaveChanges();
         }
@@ -56,7 +57,9 @@ namespace BusinessLogic.Services
         public void DeleteMenu(int id)
         {
             Menu menu = _uow.Menus.Find(id);
-            _uow.Menus.Remove(menu);
+            menu.UpdateTime = DateTime.UtcNow;
+            menu.Active = false;
+            _uow.Menus.Update(menu);
             _uow.SaveChanges();
         }
     }

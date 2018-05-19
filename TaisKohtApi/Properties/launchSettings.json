@@ -16,8 +16,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TaisKohtApi": {
-      "commandName": "API Swagger",
+    "Api Swagger": {
+      "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

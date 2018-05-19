@@ -30,19 +30,13 @@ namespace BusinessLogic.DTO
         [Column(TypeName = "decimal(8, 2)")]
         public Decimal? DailyPrice { get; set; }
         public bool? Daily { get; set; }
-        //OneToMany
-        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
-        public List<MenuDish> MenuDishes { get; set; } = new List<MenuDish>();
-        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
-        public Restaurant Restaurant { get; set; }
         [Required]
         public int UserId { get; set; }
-        public User User { get; set; }
         public int? PromotionId { get; set; }
-        public Promotion Promotion { get; set; }
+        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
 
         public static DishDTO CreateFromDomain(Dish dish)
         {

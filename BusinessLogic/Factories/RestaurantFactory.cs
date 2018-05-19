@@ -28,34 +28,8 @@ namespace BusinessLogic.Factories
                 Url = restaurantDTO.Url,
                 ContactNumber = restaurantDTO.ContactNumber,
                 Email = restaurantDTO.Email,
-                Address = restaurantDTO.Address,
-                AddTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow,
-                Active = true
+                Address = restaurantDTO.Address
             };
         }
     }
-
-    //public class PromotionFactory : IPromotionFactory
-    //{
-    //    public PromotionDTO Create(Promotion promotion)
-    //    {
-    //        return PromotionDTO.CreateFromDomainWithAssociatedTables(promotion);
-    //    }
-
-    //    public Promotion Create(PromotionDTO promotionDTO)
-    //    {
-    //        return new Promotion
-    //        {
-    //            PromotionId = promotionDTO.PromotionId,
-    //            Name = promotionDTO.Name,
-    //            Description = promotionDTO.Description,
-    //            Type = promotionDTO.Type,
-    //            ValidTo = promotionDTO.ValidTo,
-    //            AddTime = promotionDTO.AddTime,
-    //            UpdateTime = promotionDTO.UpdateTime,
-    //            Active = promotionDTO.Active
-    //        };
-    //    }
-    //}
 }
