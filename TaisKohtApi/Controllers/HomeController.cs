@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers
 {
-    [Route("/")]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [Route("/")]
     public class HomeController : Controller
     {
         public IActionResult Index()

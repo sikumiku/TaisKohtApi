@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/v1/Restaurants")]
     public class RestaurantsController : Controller
@@ -36,6 +38,30 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult Get()
         {
             return Ok(_restaurantService.GetAllRestaurants());
+        }
+
+        /// <summary>
+        /// Gets searched restaurants as a list
+        /// </summary>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no restaurants can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Restaurants/search?name=th
+        [HttpGet("Search")]
+        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult Search(string name)
+        {
+            var result = _restaurantService.SearchRestaurantByName(name);
+            if (!result.Any())
+            {
+                return NotFound(name);
+            }
+
+            return Ok(result);
         }
 
         /// <summary>

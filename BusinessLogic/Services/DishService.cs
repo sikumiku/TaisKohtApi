@@ -71,5 +71,22 @@ namespace BusinessLogic.Services
             _uow.Dishes.Update(dish);
             _uow.SaveChanges();
         }
+
+        public IEnumerable<DishDTO> SearchDishByTitle(string title)
+        {
+            if (String.IsNullOrEmpty(title)) return null;
+
+            return _uow.Dishes.All().Where(x => x.Title.Contains(title))
+                .Select(dish => _dishFactory.Create(dish));
+        }
+
+        public IEnumerable<DishDTO> SearchDishByPriceLimit(decimal dishPrice)
+        {
+            decimal price;
+            if (!decimal.TryParse(dishPrice.ToString(), out price)) return null;
+
+            return _uow.Dishes.All().Where(x => x.Price <= dishPrice)
+                .Select(dish => _dishFactory.Create(dish));
+        }
     }
 }

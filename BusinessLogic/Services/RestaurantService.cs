@@ -64,5 +64,14 @@ namespace BusinessLogic.Services
             _uow.Restaurants.Update(restaurant);
             _uow.SaveChanges();
         }
+
+        public IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName)
+        {
+
+            if (String.IsNullOrEmpty(restaurantName)) return null;
+            
+            return _uow.Restaurants.All().Where(x => x.Name.Contains(restaurantName))
+                .Select(restaurant => _restaurantFactory.Create(restaurant));
+        }
     }
 }
