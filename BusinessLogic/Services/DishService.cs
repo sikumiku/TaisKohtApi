@@ -25,7 +25,7 @@ namespace BusinessLogic.Services
             var newDish = _dishFactory.Create(dishDTO);
             _uow.Dishes.Add(newDish);
             _uow.SaveChanges();
-            return _dishFactory.Create(newDish);
+            return _dishFactory.CreateComplex(newDish);
         }
 
         public IEnumerable<DishDTO> GetAllDishes()
@@ -39,7 +39,7 @@ namespace BusinessLogic.Services
             var dish = _uow.Dishes.Find(id);
             if (dish == null || !dish.Active) return null;
 
-            return _dishFactory.Create(dish);
+            return _dishFactory.CreateComplex(dish);
         }
 
         public void UpdateDish(int id, DishDTO updatedDishDTO)

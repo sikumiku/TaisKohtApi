@@ -25,7 +25,7 @@ namespace BusinessLogic.Services
             var newRestaurant = _restaurantFactory.Create(restaurantDTO);
             _uow.Restaurants.Add(newRestaurant);
             _uow.SaveChanges();
-            return _restaurantFactory.Create(newRestaurant);
+            return _restaurantFactory.CreateComplex(newRestaurant);
         }
 
         public IEnumerable<RestaurantDTO> GetAllRestaurants()
@@ -39,7 +39,7 @@ namespace BusinessLogic.Services
             var restaurant = _uow.Restaurants.Find(id);
             if (restaurant == null || restaurant.Active) return null;
 
-            return _restaurantFactory.Create(restaurant);
+            return _restaurantFactory.CreateComplex(restaurant);
         }
 
         public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)

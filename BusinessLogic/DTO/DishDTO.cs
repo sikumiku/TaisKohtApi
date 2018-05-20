@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using BusinessLogic.Factories;
+using BusinessLogic.Helpers;
+using BusinessLogic.Services;
 using Domain;
 
 namespace BusinessLogic.DTO
@@ -36,7 +40,9 @@ namespace BusinessLogic.DTO
         [Required]
         public int UserId { get; set; }
         public int? PromotionId { get; set; }
-        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
+        public PromotionDTO Promotion { get; set; }
+        public List<IngredientDTO> Ingredients { get; set; } = new List<IngredientDTO>();
+        public Rating Rating { get; set; }
 
         public static DishDTO CreateFromDomain(Dish dish)
         {
@@ -59,15 +65,29 @@ namespace BusinessLogic.DTO
                 WeightG = dish.WeightG,
                 Price = dish.Price,
                 DailyPrice = dish.DailyPrice,
-                Daily = dish.Daily
-            };
+                Daily = dish.Daily,
+                Promotion = PromotionDTO.CreateFromDomain(dish.Promotion),
+                Rating = dish.RatingLogs.Any() ? Rating.Create(dish.RatingLogs) : null
+        };
+        }
+
+        public static DishDTO CreateFromMenuDish(MenuDish md)
+        {
+            if (md == null || !md.Active) { return null; }
+
+            var dish = CreateFromDomain(md.Dish);
+
+            return dish;
         }
 
         public static DishDTO CreateFromDomainWithAssociatedTables(Dish d)
         {
+            var dish = CreateFromDomain(d);
+            if (dish == null) { return null; }
 
-            throw new NotImplementedException();
-            
+            dish.Ingredients = d.DishIngredients.Select(IngredientDTO.CreateFromDishIngredientDomain).ToList();
+            dish.Rating = d.RatingLogs.Any() ? Rating.CreateWithComments(d.RatingLogs) : null;
+            return dish;
         }
     }
 }

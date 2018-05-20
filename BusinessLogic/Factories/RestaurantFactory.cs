@@ -10,6 +10,7 @@ namespace BusinessLogic.Factories
     {
         RestaurantDTO Create(Restaurant promotion);
         Restaurant Create(RestaurantDTO restaurantDTO);
+        RestaurantDTO CreateComplex(Restaurant restaurant);
     }
 
     public class RestaurantFactory : IRestaurantFactory
@@ -27,9 +28,14 @@ namespace BusinessLogic.Factories
                 Name = restaurantDTO.Name,
                 Url = restaurantDTO.Url,
                 ContactNumber = restaurantDTO.ContactNumber,
-                Email = restaurantDTO.Email,
-                Address = restaurantDTO.Address
+                Email = restaurantDTO.Email
             };
+        }
+
+        public RestaurantDTO CreateComplex(Restaurant restaurant)
+        {
+            return RestaurantDTO.CreateFromDomainWithMenus(restaurant);
         }
     }
 }
+

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 using Domain;
 
@@ -13,16 +14,14 @@ namespace BusinessLogic.DTO
         public DateTime? ActiveTo { get; set; }
         [Range(1, 365)]
         public int? RepetitionInterval { get; set; }
-        //OneToMany
-        public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
         [Required]
         public int UserId { get; set; }
         public int? PromotionId { get; set; }
-        public Promotion Promotion { get; set; }
-
+        public PromotionDTO Promotion { get; set; }
+        public List<DishDTO> Dishes { get; set; } = new List<DishDTO>();
 
         public static MenuDTO CreateFromDomain(Menu menu)
         {
@@ -35,15 +34,19 @@ namespace BusinessLogic.DTO
                 RepetitionInterval = menu.RepetitionInterval,
                 RestaurantId = menu.RestaurantId,
                 UserId = menu.UserId,
-                PromotionId = menu.PromotionId
+                PromotionId = menu.PromotionId,
+                Promotion = PromotionDTO.CreateFromDomain(menu.Promotion)
             };
         }
 
         public static MenuDTO CreateFromDomainWithAssociatedTables(Menu m)
         {
 
-            throw new NotImplementedException();
+            var menu = CreateFromDomain(m);
+            if (menu == null) { return null; }
             
+            menu.Dishes = m.MenuDishes.Select(DishDTO.CreateFromMenuDish).ToList();
+            return menu;
         }
     }
 }

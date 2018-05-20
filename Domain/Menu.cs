@@ -14,6 +14,7 @@ namespace Domain
         public int? RepetitionInterval { get; set; }
         //OneToMany
         public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
+        public List<MenuDish> MenuDishes { get; set; } = new List<MenuDish>();
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
