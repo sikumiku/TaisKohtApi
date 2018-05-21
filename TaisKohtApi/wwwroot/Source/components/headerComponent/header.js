@@ -7,29 +7,27 @@ class Header extends Component {
     render() {
         return (
             <header>
-                <Navbar inverse collapseOnSelect>
+                <nav class="navbar navbar-inverse">
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href="#brand">Tais Kõht</a>
+                            <a class="navbar-brand" href="#brand">Tais Kõht</a>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
                     <Navbar.Collapse>
-                        <Nav>
+                        <ul class="nav navbar-nav navbar-right">
                             <LinkContainer to="/">
-                                <NavItem eventKey={1}>Home</NavItem>
+                                <NavItem eventKey={1}>PÄEVAPAKKUMISED</NavItem>
                             </LinkContainer>
                             <LinkContainer to="/restaurants">
-                                <NavItem eventKey={1}>Restaurants</NavItem>
+                                <NavItem eventKey={1}>RESTORANID</NavItem>
                             </LinkContainer>
-                        </Nav>
-                        <Nav pullRight>
                             <LinkContainer to="/login">
-                                <NavItem eventKey={1}>Login</NavItem>
+                                <NavItem eventKey={1}>SISENE</NavItem>
                             </LinkContainer>
-                        </Nav>
+                        </ul>
                     </Navbar.Collapse>
-                </Navbar>
+                </nav>
             </header>
         );
     }
