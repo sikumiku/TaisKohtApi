@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -50,7 +51,14 @@ namespace TaisKohtApi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication()
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddCookie(options => { options.SlidingExpiration = true; })
                 .AddJwtBearer(options =>
                 {
@@ -95,6 +103,7 @@ namespace TaisKohtApi
             services.AddScoped<IPromotionFactory, PromotionFactory>();
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantFactory, RestaurantFactory>();
+            services.AddScoped<IUserFactory, UserFactory>();
 
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
@@ -129,7 +138,7 @@ namespace TaisKohtApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
         {
             #region Error Handler registration
             if (env.IsDevelopment())
@@ -180,6 +189,38 @@ namespace TaisKohtApi
             app.UseAuthentication();
 
             app.UseMvc();
+
+            CreateUserRoles(services).Wait();
+        }
+
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+            var roleCheck1 = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck1)
+            {
+                await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            var roleCheck2 = await RoleManager.RoleExistsAsync("normalUser");
+            if (!roleCheck2)
+            {
+                await RoleManager.CreateAsync(new IdentityRole("normalUser"));
+            }
+            var roleCheck3 = await RoleManager.RoleExistsAsync("premiumUser");
+            if (!roleCheck3)
+            {
+                await RoleManager.CreateAsync(new IdentityRole("premiumUser"));
+            }
+            var admin = new User { UserName = "admin", Email = "admin@gmail.com" };
+            var result = await UserManager.FindByEmailAsync(admin.Email);
+            if (result == null)
+            {
+                await UserManager.CreateAsync(admin, "Aa123456789.");
+                var currentUser = await UserManager.FindByEmailAsync(admin.Email);
+                await UserManager.AddToRoleAsync(currentUser, "Admin");
+            }
         }
     }
 }

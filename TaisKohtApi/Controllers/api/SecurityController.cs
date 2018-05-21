@@ -47,6 +47,20 @@ namespace TaisKohtApi.Controllers.api
                 {
                     _logger.LogInformation(1, "User logged in.");
                     var claims = createClaims(user);
+                    var userRoles = await _userManager.GetRolesAsync(user);
+                    foreach (var userRole in userRoles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, userRole));
+                        var role = await _userManager.FindByNameAsync(userRole);
+                        if (role != null)
+                        {
+                            var roleClaims = await _userManager.GetClaimsAsync(role);
+                            foreach (Claim roleClaim in roleClaims)
+                            {
+                                claims.Add(roleClaim);
+                            }
+                        }
+                    }
                     var userClaims = await _userManager.GetClaimsAsync(user); 
                     claims.AddRange(userClaims);
                     var token = createToken(claims);
@@ -82,9 +96,12 @@ namespace TaisKohtApi.Controllers.api
                 var result = await _userManager.CreateAsync(newUser, registerViewModel.Password);
                 if (result.Succeeded)
                 {
+                    var currentUser = await _userManager.FindByEmailAsync(newUser.Email);
+                    var currentRole = await _userManager.AddToRoleAsync(currentUser, "normalUser");
                     await _signInManager.SignInAsync(newUser, isPersistent: false);
                     _logger.LogInformation(3, "User create a new account with password.");
                     var claims = createClaims(newUser);
+                    claims.Add(new Claim(ClaimTypes.Role, "normalUser"));
                     var userClaims = await _userManager.GetClaimsAsync(newUser);
                     claims.AddRange(userClaims);
                     var token = createToken(claims);
@@ -118,6 +135,8 @@ namespace TaisKohtApi.Controllers.api
         private List<Claim> createClaims(User user)
         {
             var options = new IdentityOptions();
+           
+            //find user from db, if they dont exist, add normalRole, if yes, check for Role, if null, add Normalrole, otherwise add specific role
             return new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email), // sub on subject

@@ -22,6 +22,7 @@ namespace BusinessLogic.DTO
         [EmailAddress]
         [MaxLength(50)]
         public string Email { get; set; }
+        public List<User> Users { get; set; }
         //OneToMany
         public List<MenuDTO> Menus { get; set; } = new List<MenuDTO>();
         //foreign keys
@@ -56,5 +57,11 @@ namespace BusinessLogic.DTO
             restaurant.Rating = r.RatingLogs.Any() ? Rating.CreateWithComments(r.RatingLogs) : null;
             return restaurant;
         }
+
+        //public static RestaurantDTO CreateFromDomainWithUsers(Restaurant restaurant)
+        //{
+        //    var restaurantWithUser = CreateFromDomain(restaurant);
+             
+        //}
     }
 }

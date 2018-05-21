@@ -32,6 +32,8 @@ namespace DAL.TaisKoht.EF
         public IPromotionRepository Promotions => GetCustomRepository<IPromotionRepository>();
         public IRestaurantRepository Restaurants => GetCustomRepository<IRestaurantRepository>();
         public IRatingLogRepository RatingLogs => GetCustomRepository<IRatingLogRepository>();
+        public IRestaurantUserRepository RestaurantUsers => GetCustomRepository<IRestaurantUserRepository>();
+        public IUserRepository Users => GetCustomRepository<IUserRepository>();
 
         public void SaveChanges()
         {

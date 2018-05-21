@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Domain;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers.api
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/Restaurants")]
     public class RestaurantsController : Controller
@@ -30,6 +35,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpGet]
         [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
         [ProducesResponseType(404)]
@@ -37,7 +43,14 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Get()
         {
-            return Ok(_restaurantService.GetAllRestaurants());
+            List<String> types = new List<string>();
+            foreach (var claim in User.Claims)
+            {
+                types.Add("Type:" + claim.Type);
+                types.Add("Value:" + claim.Value);
+            }
+            //return Ok(_restaurantService.GetAllRestaurants());
+            return Ok(types);
         }
 
         /// <summary>
@@ -48,6 +61,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants/search?name=th
+        [AllowAnonymous]
         [HttpGet("Search")]
         [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
         [ProducesResponseType(404)]
@@ -73,6 +87,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants/5
+        [AllowAnonymous]
         [HttpGet("{id}", Name = "GetRestaurant")]
         [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(404)]
@@ -104,6 +119,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Restaurants
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [ProducesResponseType(typeof(RestaurantDTO), 201)]
         [ProducesResponseType(400)]
@@ -115,7 +131,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO);
 
-            return CreatedAtAction("GetRestaurant", new { id = newRestaurant.RestaurantId }, newRestaurant);
+            return CreatedAtAction("Get", new { id = newRestaurant.RestaurantId }, newRestaurant);
         }
 
         /// <summary>
@@ -137,6 +153,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Restaurants/5
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -144,12 +161,19 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Put(int id, [FromBody]RestaurantDTO restaurantDTO)
         {
+
             if (!ModelState.IsValid) return BadRequest();
-            var r = _restaurantService.GetRestaurantById(id);
+            var restaurant = _restaurantService.GetRestaurantById(id);
 
-            if (r == null) return NotFound();
-            _restaurantService.UpdateRestaurant(id, restaurantDTO);
-
+            if (restaurant == null) return NotFound();
+            if (IsAuthorized(restaurant))
+            {
+                _restaurantService.UpdateRestaurant(id, restaurantDTO);
+            }
+            else
+            {
+                return StatusCode(403, Json("This action is forbidden to unauthorized user."));
+            }
             return NoContent();
         }
 
@@ -161,16 +185,32 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Restaurant not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
         // DELETE: api/v1/Restaurants/5
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var r = _restaurantService.GetRestaurantById(id);
-            if (r == null) return NotFound();
-            _restaurantService.DeleteRestaurant(id);
+            var restaurant = _restaurantService.GetRestaurantById(id);
+            if (restaurant == null) return NotFound();
+            if (IsAuthorized(restaurant))
+            {
+                _restaurantService.DeleteRestaurant(id);
+            }
+            else
+            {
+                return StatusCode(403, Json("This action is forbidden to unauthorized user."));
+            }
             return NoContent();
+        }
+
+        private Boolean IsAuthorized(RestaurantDTO restaurant)
+        {
+            var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);
+            var userIds = new ArrayList();
+            users.ForEach(u => userIds.Add(u.UserId));
+            return User.IsInRole("admin") || userIds.Contains(User.Identity.GetUserId());
         }
     }
 }
