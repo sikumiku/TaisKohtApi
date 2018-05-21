@@ -24,9 +24,9 @@ class Header extends Component {
                             </LinkContainer>
                         </Nav>
                         <Nav pullRight>
-                            <NavItem eventKey={2} href="#">
-                                Login
-      </NavItem>
+                            <LinkContainer to="/login">
+                                <NavItem eventKey={1}>Login</NavItem>
+                            </LinkContainer>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
