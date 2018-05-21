@@ -23,6 +23,8 @@ namespace DAL.TaisKoht.EF.Helpers
                 {typeof(IMenuRepository), (dataContext) => new EFMenuRepository(dataContext as ApplicationDbContext) },
                 {typeof(IPromotionRepository), (dataContext) => new EFPromotionRepository(dataContext as ApplicationDbContext) },
                 {typeof(IRestaurantRepository), (dataContext) => new EFRestaurantRepository(dataContext as ApplicationDbContext) },
+                {typeof(IRestaurantUserRepository), (dataContext) => new EFRestaurantUserRepository(dataContext as ApplicationDbContext) },
+                {typeof(IUserRepository), (dataContext) => new EFUserRepository(dataContext as ApplicationDbContext) },
             };
         }
 

@@ -6,6 +6,7 @@ using BusinessLogic.DTO;
 using BusinessLogic.Factories;
 using DAL.TaisKoht.Interfaces;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace BusinessLogic.Services
 {
@@ -13,11 +14,15 @@ namespace BusinessLogic.Services
     {
         private readonly ITaisKohtUnitOfWork _uow;
         private readonly IRestaurantFactory _restaurantFactory;
+        private readonly IUserFactory _userFactory;
+        private readonly UserManager<User> _userManager;
 
-        public RestaurantService(ITaisKohtUnitOfWork uow, IRestaurantFactory restaurantFactory)
+        public RestaurantService(ITaisKohtUnitOfWork uow, IRestaurantFactory restaurantFactory, IUserFactory userFactory, UserManager<User> userManager)
         {
             _uow = uow;
             _restaurantFactory = restaurantFactory;
+            _userFactory = userFactory;
+            _userManager = userManager;
         }
 
         public RestaurantDTO AddNewRestaurant(RestaurantDTO restaurantDTO)
@@ -37,9 +42,28 @@ namespace BusinessLogic.Services
         public RestaurantDTO GetRestaurantById(int id)
         {
             var restaurant = _uow.Restaurants.Find(id);
-            if (restaurant == null || restaurant.Active) return null;
+            if (restaurant == null || !restaurant.Active) return null;
 
             return _restaurantFactory.CreateComplex(restaurant);
+        }
+        public List<UserDTO> GetRestaurantUsersById(int restaurantId)
+        {
+            var restaurant = _uow.Restaurants.Find(restaurantId);
+            var restaurantUsers = _uow.RestaurantUsers.FindAll(restaurant.RestaurantId);
+            if (restaurantUsers == null || restaurant.Active) return null;
+            List<UserDTO> users = new List<UserDTO>();
+            //find all users by restaurantUsers
+            foreach (var restaurantUser in restaurantUsers)
+            {
+                //UserId should be string or should use id
+                var user = _uow.Users.Find(restaurantUser.UserId);
+                if (user != null)
+                {
+                    var userObject = _userFactory.Create(user);
+                    users.Add(userObject);
+                }
+            }
+            return users;
         }
 
         public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)

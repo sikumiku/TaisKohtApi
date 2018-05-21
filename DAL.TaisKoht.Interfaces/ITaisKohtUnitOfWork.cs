@@ -12,5 +12,8 @@ namespace DAL.TaisKoht.Interfaces
         IPromotionRepository Promotions { get; }
         IRestaurantRepository Restaurants { get; }
         IRatingLogRepository RatingLogs { get; }
+        IRestaurantUserRepository RestaurantUsers { get; }
+        IUserRepository Users { get; }
     }
+    
 }

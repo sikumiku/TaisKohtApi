@@ -6,6 +6,7 @@ using DAL.Interfaces;
 using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace DAL.TaisKoht.EF
 {
@@ -18,6 +19,9 @@ namespace DAL.TaisKoht.EF
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
+            modelbuilder.Entity<RestaurantUser>()
+                .HasKey(x => new {x.RestaurantId, x.UserId});
+
             foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
