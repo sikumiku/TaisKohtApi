@@ -9,6 +9,7 @@ namespace BusinessLogic.Factories
     public interface IDishFactory
     {
         DishDTO Create(Dish dish);
+        DishDTO CreateComplex(Dish dish);
         Dish Create(DishDTO dishDTO);
     }
 
@@ -17,6 +18,11 @@ namespace BusinessLogic.Factories
         public DishDTO Create(Dish dish)
         {
             return DishDTO.CreateFromDomain(dish);
+        }
+
+        public DishDTO CreateComplex(Dish dish)
+        {
+            return DishDTO.CreateFromDomainWithAssociatedTables(dish);
         }
 
         public Dish Create(DishDTO dishDTO)

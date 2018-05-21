@@ -26,7 +26,7 @@ namespace BusinessLogic.Services
             var newMenu = _menuFactory.Create(menuDTO);
             _uow.Menus.Add(newMenu);
             _uow.SaveChanges();
-            return _menuFactory.Create(newMenu);
+            return _menuFactory.CreateComplex(newMenu);
         }
 
         public IEnumerable<MenuDTO> GetAllMenus()
@@ -40,7 +40,7 @@ namespace BusinessLogic.Services
             var menu = _uow.Menus.Find(id);
             if (menu == null || !menu.Active) return null;
 
-            return _menuFactory.Create(menu);
+            return _menuFactory.CreateComplex(menu);
         }
 
         public void UpdateMenu(int id, MenuDTO updatedMenuDTO)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace BusinessLogic.DTO
@@ -18,10 +19,10 @@ namespace BusinessLogic.DTO
         [MinLength(1)]
         [MaxLength(10)]
         public string AmountUnit { get; set; }
+        public Decimal? Amount { get; set; }
         //foreign keys
         [Required]
         public int UserId { get; set; }
-        public User User { get; set; }
 
         public static IngredientDTO CreateFromDomain(Ingredient ingredient)
         {
@@ -36,11 +37,14 @@ namespace BusinessLogic.DTO
             };
         }
 
-        public static IngredientDTO CreateFromDomainWithAssociatedTables(Ingredient i)
+        public static IngredientDTO CreateFromDishIngredientDomain(DishIngredient di)
         {
+            if (di == null || !di.Active) { return null; }
 
-            throw new NotImplementedException();
+            var ingredient = CreateFromDomain(di.Ingredient);
+            ingredient.Amount = di.Amount;
 
+            return ingredient;
         }
     }
 }

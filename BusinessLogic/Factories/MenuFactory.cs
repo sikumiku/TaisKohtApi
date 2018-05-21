@@ -10,6 +10,7 @@ namespace BusinessLogic.Factories
     {
         MenuDTO Create(Menu menu);
         Menu Create(MenuDTO menuDTO);
+        MenuDTO CreateComplex(Menu newMenu);
     }
 
     public class MenuFactory : IMenuFactory
@@ -31,6 +32,11 @@ namespace BusinessLogic.Factories
                 ActiveTo = menuDTO.ActiveTo,
                 RepetitionInterval = menuDTO.RepetitionInterval
             };
+        }
+
+        public MenuDTO CreateComplex(Menu menu)
+        {
+            return MenuDTO.CreateFromDomainWithAssociatedTables(menu);
         }
     }
 }

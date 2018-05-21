@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using BusinessLogic.Factories;
+using BusinessLogic.Helpers;
 using Domain;
 
 namespace BusinessLogic.DTO
@@ -20,13 +23,13 @@ namespace BusinessLogic.DTO
         [MaxLength(50)]
         public string Email { get; set; }
         //OneToMany
-        public List<MenuDTO> MenusDTOs { get; set; } = new List<MenuDTO>();
-        public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
+        public List<MenuDTO> Menus { get; set; } = new List<MenuDTO>();
         //foreign keys
         public int? PromotionId { get; set; }
-        public Promotion Promotion { get; set; }
+        public PromotionDTO Promotion { get; set; }
         public int? AddressId { get; set; }
-        public Address Address { get; set; }
+        public AddressDTO Address { get; set; }
+        public Rating Rating { get; set; }
 
         public static RestaurantDTO CreateFromDomain(Restaurant restaurant)
         {
@@ -38,19 +41,20 @@ namespace BusinessLogic.DTO
                 Url = restaurant.Url,
                 ContactNumber = restaurant.ContactNumber,
                 Email = restaurant.Email,
-                Address = restaurant.Address,
-                Promotion = restaurant.Promotion
+                Address = AddressDTO.CreateFromDomain(restaurant.Address),
+                Promotion = PromotionDTO.CreateFromDomain(restaurant.Promotion),
+                Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null
             };
         }
 
-        public static RestaurantDTO CreateFromDomainWithMenus(Restaurant restaurant)
+        public static RestaurantDTO CreateFromDomainWithMenus(Restaurant r)
         {
-            throw new NotImplementedException();
-        }
+            var restaurant = CreateFromDomain(r);
+            if (restaurant == null) { return null; }
 
-        public static RestaurantDTO CreateFromDomainWithDishes(Restaurant restaurant)
-        {
-            throw new NotImplementedException();
+            restaurant.Menus = r.Menus.Select(MenuDTO.CreateFromDomain).ToList();
+            restaurant.Rating = r.RatingLogs.Any() ? Rating.CreateWithComments(r.RatingLogs) : null;
+            return restaurant;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace BusinessLogic.Factories
     {
         PromotionDTO Create(Promotion promotion);
         Promotion Create(PromotionDTO promotionDTO);
+        PromotionDTO CreateComplex(Promotion promotion);
     }
 
     public class PromotionFactory : IPromotionFactory
@@ -29,6 +30,11 @@ namespace BusinessLogic.Factories
                 Type = promotionDTO.Type,
                 ValidTo = promotionDTO.ValidTo
             };
+        }
+
+        public PromotionDTO CreateComplex(Promotion promotion)
+        {
+            return PromotionDTO.CreateFromDomainWithAssociatedTables(promotion);
         }
     }
 }

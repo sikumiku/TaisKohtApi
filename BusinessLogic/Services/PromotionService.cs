@@ -25,7 +25,7 @@ namespace BusinessLogic.Services
             var newPromotion = _promotionFactory.Create(promotionDTO);
             _uow.Promotions.Add(newPromotion);
             _uow.SaveChanges();
-            return _promotionFactory.Create(newPromotion);
+            return _promotionFactory.CreateComplex(newPromotion);
         }
 
         public IEnumerable<PromotionDTO> GetAllPromotions()
@@ -39,7 +39,7 @@ namespace BusinessLogic.Services
             var promotion = _uow.Promotions.Find(id);
             if (promotion == null || !promotion.Active) return null;
 
-            return _promotionFactory.Create(promotion);
+            return _promotionFactory.CreateComplex(promotion);
         }
 
         public void UpdatePromotion(int id, PromotionDTO updatedPromotionDTO)
