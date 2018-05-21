@@ -76,7 +76,7 @@ namespace TaisKohtApi.Controllers.api
         {
             var user = _userService.GetUserById(id);
             if (user == null) return NotFound();
-            if (user.Email == IdentityExtensions.GetUserId(User.Identity))
+            if (User.IsInRole("admin") || user.Email == IdentityExtensions.GetUserId(User.Identity))
             {
                 return Ok(user);
             }
@@ -91,7 +91,11 @@ namespace TaisKohtApi.Controllers.api
             var user = _userService.GetUserById(id);
 
             if (user == null) return NotFound();
-            _userService.UpdateUser(id, userDTO);
+            if (User.IsInRole("admin") || user.Email == IdentityExtensions.GetUserId(User.Identity))
+            {
+                _userService.UpdateUser(id, userDTO);
+
+            }
 
             return NoContent();
         }
