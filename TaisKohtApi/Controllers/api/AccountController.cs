@@ -94,10 +94,9 @@ namespace TaisKohtApi.Controllers.api
             if (User.IsInRole("admin") || user.Email == IdentityExtensions.GetUserId(User.Identity))
             {
                 _userService.UpdateUser(id, userDTO);
-
+                return NoContent();
             }
-
-            return NoContent();
+            return StatusCode(403, Json("Unauthorized access."));
         }
 
     }
