@@ -2,12 +2,13 @@
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
 
-class LoginForm extends React.Component {
+class RegisterForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            confirmPassword: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -15,24 +16,24 @@ class LoginForm extends React.Component {
     }
 
     validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0;
+        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.confirmPassword.length > 0;
     }
 
     handleChange(event) {
         this.setState({
-             [event.target.id]: event.target.value
+            [event.target.id]: event.target.value
         });
     }
 
     handleSubmit(event) {
-        alert('Login was submitted: ' + this.state.email + ' with password ' + this.state.password + '.');
+        alert('Registration was submitted: ' + this.state.email + ' with password ' + this.state.password + '.');
         event.preventDefault();
-        fetch("http://localhost:64376/api/account/login",
-                {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.state)
-                })
+        fetch("http://localhost:64376/api/account/register",
+            {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.state)
+            })
             .then(function (response) {
                 return response.json();
             })
@@ -45,8 +46,7 @@ class LoginForm extends React.Component {
     render() {
         return (
             <div className="Login">
-                <p>Ei ole veel kontot loonud? Registreeru
-                <a href="/register">siin.</a></p>
+                <p>Juba konto loodud? Logi sisse <a href="/login">siin:</a></p>
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="email" bsSize="large">
                         <ControlLabel>E-mail</ControlLabel>
@@ -65,12 +65,20 @@ class LoginForm extends React.Component {
                             type="password"
                         />
                     </FormGroup>
+                    <FormGroup controlId="confirmPassword" bsSize="large">
+                        <ControlLabel>Korda salasõna</ControlLabel>
+                        <FormControl
+                            value={this.state.confirmPassword}
+                            onChange={this.handleChange}
+                            type="password"
+                        />
+                    </FormGroup>
                     <Button
                         block
                         bsSize="large"
                         disabled={!this.validateForm()}
                         type="submit"
-                            >
+                    >
                         SISENE
                     </Button>
                 </form>
@@ -80,4 +88,4 @@ class LoginForm extends React.Component {
 }
 
 
-export default LoginForm;
+export default RegisterForm;

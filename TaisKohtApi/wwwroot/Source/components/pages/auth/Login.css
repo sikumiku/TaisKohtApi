@@ -1,6 +1,7 @@
 ﻿@media all and (min-width: 480px) {
     .Login {
         padding: 60px 0;
+        max-width: 700px;
     }
 
     .Login form {

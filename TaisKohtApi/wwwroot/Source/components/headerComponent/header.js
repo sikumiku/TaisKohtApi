@@ -10,7 +10,7 @@ class Header extends Component {
                 <nav class="navbar navbar-inverse">
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a class="navbar-brand" href="#brand">Tais Kõht</a>
+                            <a class="navbar-brand" href="#brand">Täis Kõht</a>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>

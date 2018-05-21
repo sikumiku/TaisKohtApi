@@ -5,6 +5,7 @@ import Header from './components/headerComponent/header';
 import MainPage from './components/pages/mainPage/mainPage';
 import RestaurantList from './components/pages/restaurants/RestaurantList';
 import LoginForm from './components/pages/auth/login';
+import RegisterForm from './components/pages/auth/register';
 
 class App extends Component {
     render() {
@@ -15,7 +16,7 @@ class App extends Component {
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/restaurants" component={RestaurantList} />
                     <Route exact path="/login" component={LoginForm} />
-
+                    <Route exact path="/register" component={RegisterForm} />
                 </div>
             </Router>
         );
