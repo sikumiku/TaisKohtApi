@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class InitialDbCreation : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -410,6 +410,45 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RatingLogs",
+                columns: table => new
+                {
+                    RatingLogId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    Comment = table.Column<string>(maxLength: 2000, nullable: true),
+                    DishId = table.Column<int>(nullable: true),
+                    Rating = table.Column<int>(nullable: false),
+                    RestaurantId = table.Column<int>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RatingLogs", x => x.RatingLogId);
+                    table.ForeignKey(
+                        name: "FK_RatingLogs_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "DishId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RatingLogs_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RatingLogs_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DishIngredients",
                 columns: table => new
                 {
@@ -472,52 +511,6 @@ namespace DAL.TaisKoht.EF.Migrations
                         column: x => x.MenuId,
                         principalTable: "Menus",
                         principalColumn: "MenuId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RatingLogs",
-                columns: table => new
-                {
-                    RatingLogId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    Comment = table.Column<string>(maxLength: 2000, nullable: true),
-                    DishId = table.Column<int>(nullable: true),
-                    MenuId = table.Column<int>(nullable: true),
-                    Rating = table.Column<int>(nullable: false),
-                    RestaurantId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RatingLogs", x => x.RatingLogId);
-                    table.ForeignKey(
-                        name: "FK_RatingLogs_Dishes_DishId",
-                        column: x => x.DishId,
-                        principalTable: "Dishes",
-                        principalColumn: "DishId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RatingLogs_Menus_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menus",
-                        principalColumn: "MenuId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RatingLogs_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RatingLogs_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -636,11 +629,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RatingLogs_MenuId",
-                table: "RatingLogs",
-                column: "MenuId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RatingLogs_RestaurantId",
                 table: "RatingLogs",
                 column: "RestaurantId");
@@ -709,10 +697,10 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "Ingredients");
 
             migrationBuilder.DropTable(
-                name: "Dishes");
+                name: "Menus");
 
             migrationBuilder.DropTable(
-                name: "Menus");
+                name: "Dishes");
 
             migrationBuilder.DropTable(
                 name: "Restaurants");

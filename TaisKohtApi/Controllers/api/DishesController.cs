@@ -39,6 +39,54 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
+        /// Gets searched dishes as a list
+        /// </summary>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no dishes can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Dishes/search?title=th
+        [HttpGet("Search")]
+        [ProducesResponseType(typeof(List<DishDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult Search(string title)
+        {
+            var result = _dishService.SearchDishByTitle(title);
+            if (!result.Any())
+            {
+                return NotFound(title);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Gets price limited dishes as a list
+        /// </summary>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no dishes can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Dishes/Pricelimit
+        [HttpGet("Pricelimit")]
+        [ProducesResponseType(typeof(List<DishDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult Pricelimit(decimal priceLimit)
+        {
+            var result = _dishService.SearchDishByPriceLimit(priceLimit);
+            if (!result.Any())
+            {
+                return NotFound(priceLimit);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Find dish by ID
         /// </summary>
         /// <param name="id">ID of dish to return</param>
