@@ -13,6 +13,7 @@ using DAL.TaisKoht.EF;
 using DAL.TaisKoht.EF.Helpers;
 using DAL.TaisKoht.Interfaces;
 using DAL.TaisKoht.Interfaces.Helpers;
+using DAL.TaisKoht.Interfaces.Repositories;
 using Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -103,6 +104,7 @@ namespace TaisKohtApi
             services.AddScoped<IPromotionFactory, PromotionFactory>();
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantFactory, RestaurantFactory>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserFactory, UserFactory>();
 
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();

@@ -7,7 +7,7 @@ namespace BusinessLogic.DTO
 {
     public class UserDTO
     {
-        public int UserId { get; set; }
+        public string Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
         public bool Active { get; set; }
@@ -17,7 +17,7 @@ namespace BusinessLogic.DTO
             if (user == null || !user.Active) { return null; }
             return new UserDTO()
             {
-                UserId = user.UserId,
+                Id = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
                 Active = user.Active
