@@ -35,7 +35,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants
-        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
         [ProducesResponseType(404)]
@@ -43,14 +43,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Get()
         {
-            List<String> types = new List<string>();
-            foreach (var claim in User.Claims)
-            {
-                types.Add("Type:" + claim.Type);
-                types.Add("Value:" + claim.Value);
-            }
-            //return Ok(_restaurantService.GetAllRestaurants());
-            return Ok(types);
+            return Ok(_restaurantService.GetAllRestaurants());
         }
 
         /// <summary>

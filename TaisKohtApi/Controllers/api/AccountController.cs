@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
@@ -11,6 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
 namespace TaisKohtApi.Controllers.api
@@ -38,10 +42,11 @@ namespace TaisKohtApi.Controllers.api
             _userService = userService;
         }
 
+        [RequireRequestValue("role")]
         [Authorize(Roles = "admin")]
         [HttpGet(Name = "GetUsersByRole")]
         [Route("getAllUsersInRole")]
-        public IActionResult GetUsersByRole([FromQuery(Name = "role")] string role)
+        public IActionResult Get([FromQuery(Name = "role")] string role)
         {
             return Ok(_userManager.GetUsersInRoleAsync(role));
         } 
@@ -70,8 +75,9 @@ namespace TaisKohtApi.Controllers.api
             return NoContent();
         }
 
+        [RequireRequestValue("id")]
         [Authorize(Roles = "admin, normalUser, premiumUser")]
-        [HttpGet("{id}", Name = "GetUser")]
+        [HttpGet("{id}"), ActionName("Get")]
         public IActionResult GetUser(string id)
         {
             var user = _userService.GetUserById(id);
@@ -99,5 +105,17 @@ namespace TaisKohtApi.Controllers.api
             return StatusCode(403, Json("Unauthorized access."));
         }
 
+        public class RequireRequestValueAttribute : ActionMethodSelectorAttribute
+        {
+            public RequireRequestValueAttribute(string valueName)
+            {
+                ValueName = valueName;
+            }
+            public string ValueName { get; private set; }
+            public override bool IsValidForRequest(RouteContext routeContext, ActionDescriptor action)
+            {
+                return (routeContext.RouteData.Values != null);
+            }
+        }
     }
 }

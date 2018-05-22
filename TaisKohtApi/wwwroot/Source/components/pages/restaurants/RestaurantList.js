@@ -5,7 +5,7 @@ export default class RestaurantList extends React.Component {
     constructor() {
         super();
         this.state = { restos: [], loading: true };
-        fetch('api/Resto/List')
+        fetch('api/v1/Restaurants')
             .then(response => response.json())
             .then(data => {
                 this.setState({ restos: data, loading: false });
@@ -23,7 +23,7 @@ export default class RestaurantList extends React.Component {
         </div>;
     }
     refreshData() {
-        fetch('api/Resto/List')
+        fetch('api/v1/Restaurants')
             .then(response => response.json())
             .then(data => {
                 this.setState({ restos: data, loading: false });
@@ -34,16 +34,18 @@ export default class RestaurantList extends React.Component {
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Address</th>
-                    <th>Rating</th>
+                    <th>Url</th>
+                    <th>Contactnumber</th>
+                    <th>Email</th>
                 </tr>
             </thead>
             <tbody>
                 {restos.map(resto =>
                     <tr key={resto.name}>
                         <td>{resto.name}</td>
-                        <td>{resto.address}</td>
-                        <td>{resto.rating}</td>
+                        <td>{resto.url}</td>
+                        <td>{resto.contactNumber}</td>
+                        <td>{resto.email}</td>
                     </tr>
                 )}
             </tbody>
