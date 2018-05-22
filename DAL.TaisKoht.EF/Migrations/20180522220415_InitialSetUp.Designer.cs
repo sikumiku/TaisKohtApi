@@ -6,14 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180519224300_Create")]
-    partial class Create
+    [Migration("20180522220415_InitialSetUp")]
+    partial class InitialSetUp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,8 +102,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<string>("UserId1");
-
                     b.Property<bool?>("Vegan");
 
                     b.Property<decimal?>("WeightG")
@@ -116,7 +113,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Dishes");
                 });
@@ -175,11 +172,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<string>("UserId1");
-
                     b.HasKey("IngredientId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Ingredients");
                 });
@@ -207,15 +202,13 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<string>("UserId1");
-
                     b.HasKey("MenuId");
 
                     b.HasIndex("PromotionId");
 
                     b.HasIndex("RestaurantId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Menus");
                 });
@@ -293,15 +286,13 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<string>("UserId1");
-
                     b.HasKey("RatingLogId");
 
                     b.HasIndex("DishId");
 
                     b.HasIndex("RestaurantId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("RatingLogs");
                 });
@@ -345,40 +336,77 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.RestaurantUser", b =>
                 {
-                    b.Property<int>("RestaurantUserId")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("RestaurantId");
+
+                    b.Property<int>("UserId");
 
                     b.Property<bool>("Active");
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("RestaurantId");
+                    b.Property<int>("RestaurantUserId");
 
                     b.Property<DateTime?>("StartedAt");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.HasKey("RestaurantId", "UserId");
 
-                    b.Property<string>("UserId1");
-
-                    b.Property<string>("UserRoleId");
-
-                    b.HasKey("RestaurantUserId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.HasIndex("UserId1");
-
-                    b.HasIndex("UserRoleId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("RestaurantUsers");
                 });
 
+            modelBuilder.Entity("Domain.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("RoleId");
+
+                    b.Property<string>("AccessLevel")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.Property<int>("RoleId");
+
+                    b.Property<DateTime>("UpdateTime");
+
+                    b.Property<int?>("UserRoleId");
+
+                    b.Property<int?>("UserRoleRoleId");
+
+                    b.Property<int?>("UserRoleUserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.HasIndex("UserRoleUserId", "UserRoleRoleId");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("UserId");
 
                     b.Property<int>("AccessFailedCount");
 
@@ -431,7 +459,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("UserRoleId");
 
-                    b.Property<string>("UserRoleId1");
+                    b.Property<int?>("UserRoleRoleId");
+
+                    b.Property<int?>("UserRoleUserId");
 
                     b.HasKey("Id");
 
@@ -445,131 +475,16 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasIndex("PromotionId");
 
-                    b.HasIndex("UserRoleId1");
+                    b.HasIndex("UserRoleUserId", "UserRoleRoleId");
 
-                    b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ClaimType");
-
-                    b.Property<string>("ClaimValue");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ClaimType");
-
-                    b.Property<string>("ClaimValue");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider");
-
-                    b.Property<string>("ProviderKey");
-
-                    b.Property<string>("ProviderDisplayName");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("LoginProvider");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Domain.UserRole", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+                    b.Property<int>("UserId");
 
-                    b.Property<string>("AccessLevel")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<int>("RoleId");
 
                     b.Property<bool>("Active");
 
@@ -579,9 +494,81 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("UserRoleId");
 
-                    b.ToTable("UserRole");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.HasDiscriminator().HasValue("UserRole");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("RoleClaimId");
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<int>("RoleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleClaim");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("UserClaimId");
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClaim");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("ProviderKey");
+
+                    b.Property<string>("ProviderDisplayName");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLogin");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("UserToken");
                 });
 
             modelBuilder.Entity("Domain.Dish", b =>
@@ -598,7 +585,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.User", "User")
                         .WithMany("Dishes")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -624,7 +611,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     b.HasOne("Domain.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -642,7 +629,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.User", "User")
                         .WithMany("Menus")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -654,7 +641,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Menu", "Menu")
-                        .WithMany()
+                        .WithMany("MenuDishes")
                         .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -673,7 +660,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.User", "User")
                         .WithMany("RatingLogs")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -699,12 +686,15 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.User", "User")
                         .WithMany("RestaurantUsers")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
 
-                    b.HasOne("Domain.UserRole")
-                        .WithMany("RestaurantUsers")
-                        .HasForeignKey("UserRoleId")
+            modelBuilder.Entity("Domain.Role", b =>
+                {
+                    b.HasOne("Domain.UserRole", "UserRole")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserRoleUserId", "UserRoleRoleId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -717,37 +707,13 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.UserRole", "UserRole")
                         .WithMany("Users")
-                        .HasForeignKey("UserRoleId1")
+                        .HasForeignKey("UserRoleUserId", "UserRoleRoleId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Domain.UserRole", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Domain.User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Domain.User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Domain.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -758,7 +724,31 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.HasOne("Domain.Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.HasOne("Domain.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.HasOne("Domain.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()
