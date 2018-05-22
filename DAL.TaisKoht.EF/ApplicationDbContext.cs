@@ -4,30 +4,43 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Interfaces;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace DAL.TaisKoht.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<User>, IDataContext
+    public class ApplicationDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>, IDataContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelbuilder.Entity<RestaurantUser>()
+            builder.Entity<RestaurantUser>()
                 .HasKey(x => new {x.RestaurantId, x.UserId});
 
-            foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            base.OnModelCreating(modelbuilder);
+            base.OnModelCreating(builder);
+
+            builder.Entity<User>().ToTable("User");
+            builder.Entity<User>().Property(p => p.Id).HasColumnName("UserId");
+            builder.Entity<Role>().ToTable("Role");
+            builder.Entity<Role>().Property(p => p.Id).HasColumnName("RoleId");
+            builder.Entity<UserRole>().ToTable("UserRole");
+            builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaim");
+            builder.Entity<IdentityUserClaim<int>>().Property(p => p.Id).HasColumnName("UserClaimId");
+            builder.Entity<IdentityUserLogin<int>>().ToTable("UserLogin");
+            builder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaim");
+            builder.Entity<IdentityRoleClaim<int>>().Property(p => p.Id).HasColumnName("RoleClaimId");
+            builder.Entity<IdentityUserToken<int>>().ToTable("UserToken");
         }
 
         public DbSet<Address> Addresses { get; set; }
