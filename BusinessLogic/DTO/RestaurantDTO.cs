@@ -55,15 +55,5 @@ namespace BusinessLogic.DTO
             restaurant.Rating = r.RatingLogs.Any() ? Rating.CreateWithComments(r.RatingLogs) : null;
             return restaurant;
         }
-
-        public static RestaurantDTO CreateFromDomainWithUsers(Restaurant r)
-        {
-            var restaurant = CreateFromDomain(r);
-            if (restaurant == null) { return null; }
-
-            restaurant.Users = r.RestaurantUsers.Select(ru => UserDTO.CreateFromDomain(ru.User)).ToList();
-            return restaurant;
-
-        }
     }
 }
