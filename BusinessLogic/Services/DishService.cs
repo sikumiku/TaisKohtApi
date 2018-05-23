@@ -104,5 +104,19 @@ namespace BusinessLogic.Services
 
             return dishes.Take(amount);
         }
+
+        public IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree)
+        {
+            var dishes = _uow.Dishes.All().Where(x => x.Active && x.Daily == true && x.AvailableFrom <= DateTime.Today && x.AvailableTo >= DateTime.Today)
+                .Select(dish => _dishFactory.Create(dish));
+
+            if (vegan == true) return dishes.Where(v => v.Vegan == true);
+
+            if (glutenFree == true) return dishes.Where(g => g.GlutenFree == true);
+
+            if (vegan == true && glutenFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true);
+
+            return dishes;
+        }
     }
 }

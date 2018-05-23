@@ -17,8 +17,12 @@ namespace BusinessLogic.Services
 
         void DeleteDish(int id);
 
+        IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree);
+
         IEnumerable<DishDTO> SearchDishByTitle(string title);
+
         IEnumerable<DishDTO> SearchDishByPriceLimit(decimal dishPrice);
+
         IEnumerable<DishDTO> GetTopDishes(int amount);
     }
 }
