@@ -17,6 +17,7 @@ namespace BusinessLogic.Services
 
         void DeleteRestaurant(int id);
         IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName);
+        IEnumerable<RestaurantDTO> GetTopRestaurants(int amount);
         List<UserDTO> GetRestaurantUsersById(int id);
     }
 }

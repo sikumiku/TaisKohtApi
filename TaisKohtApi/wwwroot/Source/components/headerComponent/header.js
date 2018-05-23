@@ -15,7 +15,7 @@ class Header extends Component {
                         <Navbar.Toggle />
                     </Navbar.Header>
                     <Navbar.Collapse>
-                        <ul className="nav navbar-nav navbar-right">
+                        <ul className="nav navbar-nav navbar-right">r
                             <LinkContainer to="/">
                                 <NavItem eventKey={1}>PÄEVAPAKKUMISED</NavItem>
                             </LinkContainer>
