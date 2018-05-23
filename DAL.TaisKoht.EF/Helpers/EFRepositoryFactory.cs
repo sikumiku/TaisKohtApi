@@ -25,6 +25,7 @@ namespace DAL.TaisKoht.EF.Helpers
                 {typeof(IRestaurantRepository), (dataContext) => new EFRestaurantRepository(dataContext as ApplicationDbContext) },
                 {typeof(IRestaurantUserRepository), (dataContext) => new EFRestaurantUserRepository(dataContext as ApplicationDbContext) },
                 {typeof(IUserRepository), (dataContext) => new EFUserRepository(dataContext as ApplicationDbContext) },
+                {typeof(IRatingLogRepository), (dataContext) => new EFRatingLogRepository(dataContext as ApplicationDbContext) },
             };
         }
 
