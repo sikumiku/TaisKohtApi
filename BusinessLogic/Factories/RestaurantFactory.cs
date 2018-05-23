@@ -34,7 +34,7 @@ namespace BusinessLogic.Factories
 
         public RestaurantDTO CreateComplex(Restaurant restaurant)
         {
-            return RestaurantDTO.CreateFromDomainWithMenus(restaurant);
+            return RestaurantDTO.CreateFromDomainWithMenusAndRating(restaurant);
         }
     }
 }
