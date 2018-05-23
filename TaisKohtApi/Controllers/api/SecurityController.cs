@@ -97,11 +97,22 @@ namespace TaisKohtApi.Controllers.api
                 if (result.Succeeded)
                 {
                     var currentUser = await _userManager.FindByEmailAsync(newUser.Email);
-                    var currentRole = await _userManager.AddToRoleAsync(currentUser, "normalUser");
+                    String currentRole = "";
+    
+                    if (currentUser.UserName == "admin")
+                    {
+                        await _userManager.AddToRoleAsync(currentUser, "admin");
+                        currentRole = "admin";
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(currentUser, "normalUser");
+                        currentRole = "normalUser";
+                    }
                     await _signInManager.SignInAsync(newUser, isPersistent: false);
                     _logger.LogInformation(3, "User create a new account with password.");
                     var claims = createClaims(newUser);
-                    claims.Add(new Claim(ClaimTypes.Role, "normalUser"));
+                    claims.Add(new Claim(ClaimTypes.Role, currentRole));
                     var userClaims = await _userManager.GetClaimsAsync(newUser);
                     claims.AddRange(userClaims);
                     var token = createToken(claims);
