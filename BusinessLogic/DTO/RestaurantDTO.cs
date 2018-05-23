@@ -22,6 +22,7 @@ namespace BusinessLogic.DTO
         [EmailAddress]
         [MaxLength(50)]
         public string Email { get; set; }
+        // At least one user should be mandatory when posting
         public List<User> Users { get; set; }
         //OneToMany
         public List<MenuDTO> Menus { get; set; } = new List<MenuDTO>();

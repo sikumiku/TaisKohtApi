@@ -20,6 +20,7 @@ namespace TaisKohtApi.Controllers.api
             _menuService = menuService;
         }
 
+        [Obsolete("Get() is pointless. We are fetching menus associated with one restaurant. Can keep for sake of variety.")]
         /// <summary>
         /// Gets all menus as a list
         /// </summary>
@@ -47,16 +48,16 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Menus/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name="GetMenu")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Get(int id)
         {
-            var m = _menuService.GetMenuById(id);
-            if (m == null) return NotFound();
-            return Ok(m);
+            var menu = _menuService.GetMenuById(id);
+            if (menu == null) return NotFound();
+            return Ok(menu);
         }
 
         /// <summary>
@@ -78,18 +79,19 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Menus
+        // TODO: check if method works once we are able to generate users again
         [HttpPost(Name = "PostMenu")]
         [ProducesResponseType(typeof(MenuDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]MenuDTO menuDTO)
+        public IActionResult Post([FromBody]PostMenuDTO menuDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
             var newMenu = _menuService.AddNewMenu(menuDTO);
 
-            return CreatedAtAction("PostMenu", new { id = newMenu.MenuId }, newMenu);
+            return CreatedAtAction("Get", new { id = newMenu.MenuId }, newMenu);
         }
 
         /// <summary>
@@ -111,12 +113,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Menus/5
+        // TODO: check if method works once we are able to generate users again
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]MenuDTO menuDTO)
+        public IActionResult Put(int id, [FromBody]PostMenuDTO menuDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
             var m = _menuService.GetMenuById(id);
@@ -135,6 +138,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Menu not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
         // DELETE: api/v1/Menus/5
+        // TODO: check if method works once we are able to generate users again
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

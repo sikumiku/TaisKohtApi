@@ -9,7 +9,7 @@ namespace BusinessLogic.Factories
     public interface IMenuFactory
     {
         MenuDTO Create(Menu menu);
-        Menu Create(MenuDTO menuDTO);
+        Menu Create(PostMenuDTO menuDTO);
         MenuDTO CreateComplex(Menu newMenu);
     }
 
@@ -20,11 +20,10 @@ namespace BusinessLogic.Factories
             return MenuDTO.CreateFromDomain(menu);
         }
 
-        public Menu Create(MenuDTO menuDTO)
+        public Menu Create(PostMenuDTO menuDTO)
         {
             return new Menu
             {
-                MenuId = menuDTO.MenuId,
                 RestaurantId = menuDTO.RestaurantId,
                 UserId = menuDTO.UserId,
                 PromotionId = menuDTO.PromotionId,
