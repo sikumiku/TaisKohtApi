@@ -20,6 +20,7 @@ namespace TaisKohtApi.Controllers.api
             _ratingLogService = ratingLogService;
         }
 
+        [Obsolete("Get() is pointless. To be removed.")]
         /// <summary>
         /// Gets all ratings as a list
         /// </summary>
@@ -78,18 +79,18 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Rating
-        [HttpPost(Name = "PostRating")]
-        [ProducesResponseType(typeof(RatingLogDTO), 201)]
+        [HttpPost(Name = "PostRestaurantRatingLog")]
+        [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]RatingLogDTO ratingDTO)
+        public IActionResult PostRestaurantRatingLog([FromBody]RatingLogForEntityDTO ratingDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
             var newRating = _ratingLogService.AddNewRatingLog(ratingDTO);
 
-            return CreatedAtAction("PostRating", new { id = newRating.RatingLogId }, newRating);
+            return CreatedAtAction("Get", new { id = newRating.RatingLogId }, newRating);
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]RatingLogDTO ratingDTO)
+        public IActionResult Put(int id, [FromBody]RatingLogForEntityDTO ratingDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
             var dto = _ratingLogService.GetRatingLogById(id);

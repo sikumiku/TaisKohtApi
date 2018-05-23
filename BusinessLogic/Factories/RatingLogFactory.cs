@@ -11,8 +11,9 @@ namespace BusinessLogic.Factories
     {
         RatingLogDTO Create(RatingLog ratingLog);
         RatingLog Create(RatingLogDTO ratingLogDTO);
+        RatingLog Create(RatingLogForEntityDTO ratingLogDTO);
     }
-    class RatingLogFactory : IRatingLogFactory
+    public class RatingLogFactory : IRatingLogFactory
     {
         public RatingLogDTO Create(RatingLog ratingLog)
         {
@@ -24,6 +25,19 @@ namespace BusinessLogic.Factories
             return new RatingLog
             {
                 RatingLogId = ratingLogDTO.RatingLogId,
+                Rating = ratingLogDTO.Rating,
+                Comment = ratingLogDTO.Comment,
+                //RestaurantId = ratingLogDTO.RestaurantId,
+                //DishId = ratingLogDTO.DishId,
+                //UserId = ratingLogDTO.UserId
+            };
+        }
+
+        public RatingLog Create(RatingLogForEntityDTO ratingLogDTO)
+        {
+            return new RatingLog
+            {
+                //RatingLogId = ratingLogDTO.RatingLogId,
                 Rating = ratingLogDTO.Rating,
                 Comment = ratingLogDTO.Comment,
                 RestaurantId = ratingLogDTO.RestaurantId,

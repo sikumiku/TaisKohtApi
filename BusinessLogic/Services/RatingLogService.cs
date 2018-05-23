@@ -9,7 +9,7 @@ using Domain;
 
 namespace BusinessLogic.Services
 {
-    class RatingLogService : IRatingLogService
+    public class RatingLogService : IRatingLogService
     {
         private readonly ITaisKohtUnitOfWork _uow;
         private readonly IRatingLogFactory _ratingLogFactory;
@@ -17,14 +17,6 @@ namespace BusinessLogic.Services
         {
             _uow = uow;
             _ratingLogFactory = ratingLogFactory;
-        }
-
-        public RatingLogDTO AddNewRatingLog(RatingLogDTO ratingLogDTO)
-        {
-            var newRatingLog = _ratingLogFactory.Create(ratingLogDTO);
-            _uow.RatingLogs.Add(newRatingLog);
-            _uow.SaveChanges();
-            return _ratingLogFactory.Create(newRatingLog);
         }
 
         public IEnumerable<RatingLogDTO> GetAllRatingLogs()
@@ -41,17 +33,38 @@ namespace BusinessLogic.Services
             return _ratingLogFactory.Create(ratingLog);
         }
 
-        public void UpdateRatingLog(int id, RatingLogDTO updatedRatingLogDTO)
+        //public RatingLogDTO AddNewRatingLog(RatingLogDTO ratingLogDTO)
+        //{
+        //    var newRatingLog = _ratingLogFactory.Create(ratingLogDTO);
+        //    _uow.RatingLogs.Add(newRatingLog);
+        //    _uow.SaveChanges();
+        //    return _ratingLogFactory.Create(newRatingLog);
+        //}
+
+        public RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO)
         {
-            RatingLog ratingLog = _uow.RatingLogs.Find(id);
-            ratingLog.Comment = updatedRatingLogDTO.Comment;
-            ratingLog.Rating = updatedRatingLogDTO.Rating;
-            ratingLog.RestaurantId = updatedRatingLogDTO.RestaurantId;
-            ratingLog.DishId = updatedRatingLogDTO.DishId;
-            ratingLog.UpdateTime = DateTime.UtcNow;
-            _uow.RatingLogs.Update(ratingLog);
+            var newRatingLog = _ratingLogFactory.Create(ratingLogDTO);
+            _uow.RatingLogs.Add(newRatingLog);
             _uow.SaveChanges();
+            return _ratingLogFactory.Create(newRatingLog);
         }
+
+        public void UpdateRatingLog(int id, RatingLogForEntityDTO dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public void UpdateRatingLog(int id, RatingLogDTO updatedRatingLogDTO)
+        //{
+        //    RatingLog ratingLog = _uow.RatingLogs.Find(id);
+        //    ratingLog.Comment = updatedRatingLogDTO.Comment;
+        //    ratingLog.Rating = updatedRatingLogDTO.Rating;
+        //    ratingLog.RestaurantId = updatedRatingLogDTO.RestaurantId;
+        //    ratingLog.DishId = updatedRatingLogDTO.DishId;
+        //    ratingLog.UpdateTime = DateTime.UtcNow;
+        //    _uow.RatingLogs.Update(ratingLog);
+        //    _uow.SaveChanges();
+        //}
 
         public void DeleteRatingLog(int id)
         {

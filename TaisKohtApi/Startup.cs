@@ -106,6 +106,8 @@ namespace TaisKohtApi
             services.AddScoped<IRestaurantFactory, RestaurantFactory>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserFactory, UserFactory>();
+            services.AddScoped<IRatingLogService, RatingLogService>();
+            services.AddScoped<IRatingLogFactory, RatingLogFactory>();
 
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
@@ -192,37 +194,37 @@ namespace TaisKohtApi
 
             app.UseMvc();
 
-           // CreateUserRoles(services).Wait();
+            //CreateUserRoles(services).Wait();
         }
 
-       // private async Task CreateUserRoles(IServiceProvider serviceProvider)
-       //{
-       //    var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-       //    var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
-       //
-       //    var roleCheck1 = await RoleManager.RoleExistsAsync("Admin");
-       //    if (!roleCheck1)
-       //    {
-       //        await RoleManager.CreateAsync(new IdentityRole("Admin"));
-       //    }
-       //    var roleCheck2 = await RoleManager.RoleExistsAsync("normalUser");
-       //    if (!roleCheck2)
-       //    {
-       //        await RoleManager.CreateAsync(new IdentityRole("normalUser"));
-       //    }
-       //    var roleCheck3 = await RoleManager.RoleExistsAsync("premiumUser");
-       //    if (!roleCheck3)
-       //    {
-       //        await RoleManager.CreateAsync(new IdentityRole("premiumUser"));
-       //    }
-       //    var admin = new User { UserName = "admin", Email = "admin@gmail.com" };
-       //    var result = await UserManager.FindByEmailAsync(admin.Email);
-       //    if (result == null)
-       //    {
-       //        await UserManager.CreateAsync(admin, "Aa123456789.");
-       //        var currentUser = await UserManager.FindByEmailAsync(admin.Email);
-       //        await UserManager.AddToRoleAsync(currentUser, "Admin");
-       //    }
-       //}
+        //private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        //{
+        //    var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //    var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+        //    var roleCheck1 = await RoleManager.RoleExistsAsync("Admin");
+        //    if (!roleCheck1)
+        //    {
+        //        await RoleManager.CreateAsync(new IdentityRole("Admin"));
+        //    }
+        //    var roleCheck2 = await RoleManager.RoleExistsAsync("normalUser");
+        //    if (!roleCheck2)
+        //    {
+        //        await RoleManager.CreateAsync(new IdentityRole("normalUser"));
+        //    }
+        //    var roleCheck3 = await RoleManager.RoleExistsAsync("premiumUser");
+        //    if (!roleCheck3)
+        //    {
+        //        await RoleManager.CreateAsync(new IdentityRole("premiumUser"));
+        //    }
+        //    var admin = new User { UserName = "admin", Email = "admin@gmail.com" };
+        //    var result = await UserManager.FindByEmailAsync(admin.Email);
+        //    if (result == null)
+        //    {
+        //        await UserManager.CreateAsync(admin, "Aa123456789.");
+        //        var currentUser = await UserManager.FindByEmailAsync(admin.Email);
+        //        await UserManager.AddToRoleAsync(currentUser, "Admin");
+        //    }
+        //}
     }
 }
