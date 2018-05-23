@@ -11,7 +11,7 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180522220415_InitialSetUp")]
+    [Migration("20180523005010_InitialSetUp")]
     partial class InitialSetUp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,8 +120,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.DishIngredient", b =>
                 {
-                    b.Property<int>("DishIngredientId")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("IngredientId");
+
+                    b.Property<int>("DishId");
 
                     b.Property<bool>("Active");
 
@@ -130,19 +131,15 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("DishId");
-
-                    b.Property<int>("IngredientId");
+                    b.Property<int>("DishIngredientId");
 
                     b.Property<int?>("MenuId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.HasKey("DishIngredientId");
+                    b.HasKey("IngredientId", "DishId");
 
                     b.HasIndex("DishId");
-
-                    b.HasIndex("IngredientId");
 
                     b.HasIndex("MenuId");
 
@@ -215,24 +212,21 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.MenuDish", b =>
                 {
-                    b.Property<int>("MenuDishId")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("MenuId");
+
+                    b.Property<int>("DishId");
 
                     b.Property<bool>("Active");
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("DishId");
-
-                    b.Property<int>("MenuId");
+                    b.Property<int>("MenuDishId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.HasKey("MenuDishId");
+                    b.HasKey("MenuId", "DishId");
 
                     b.HasIndex("DishId");
-
-                    b.HasIndex("MenuId");
 
                     b.ToTable("MenuDishes");
                 });
@@ -257,9 +251,13 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
+                    b.Property<int>("UserId");
+
                     b.Property<DateTime>("ValidTo");
 
                     b.HasKey("PromotionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Promotions");
                 });
@@ -374,6 +372,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
+
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
@@ -384,20 +385,12 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int?>("UserRoleId");
-
-                    b.Property<int?>("UserRoleRoleId");
-
-                    b.Property<int?>("UserRoleUserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.HasIndex("UserRoleUserId", "UserRoleRoleId");
 
                     b.ToTable("Role");
                 });
@@ -444,8 +437,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int?>("PromotionId");
-
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -457,12 +448,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<int?>("UserRoleId");
-
-                    b.Property<int?>("UserRoleRoleId");
-
-                    b.Property<int?>("UserRoleUserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -473,18 +458,16 @@ namespace DAL.TaisKoht.EF.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("PromotionId");
-
-                    b.HasIndex("UserRoleUserId", "UserRoleRoleId");
-
                     b.ToTable("User");
                 });
 
             modelBuilder.Entity("Domain.UserRole", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnName("UserId");
 
-                    b.Property<int>("RoleId");
+                    b.Property<int>("RoleId")
+                        .HasColumnName("RoleId");
 
                     b.Property<bool>("Active");
 
@@ -610,7 +593,7 @@ namespace DAL.TaisKoht.EF.Migrations
             modelBuilder.Entity("Domain.Ingredient", b =>
                 {
                     b.HasOne("Domain.User", "User")
-                        .WithMany()
+                        .WithMany("Ingredients")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -643,6 +626,14 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.HasOne("Domain.Menu", "Menu")
                         .WithMany("MenuDishes")
                         .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Domain.Promotion", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Promotions")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -690,38 +681,17 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Domain.Role", b =>
-                {
-                    b.HasOne("Domain.UserRole", "UserRole")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserRoleUserId", "UserRoleRoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Domain.User", b =>
-                {
-                    b.HasOne("Domain.Promotion", "Promotion")
-                        .WithMany("Users")
-                        .HasForeignKey("PromotionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.UserRole", "UserRole")
-                        .WithMany("Users")
-                        .HasForeignKey("UserRoleUserId", "UserRoleRoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Domain.UserRole", b =>
                 {
                     b.HasOne("Domain.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

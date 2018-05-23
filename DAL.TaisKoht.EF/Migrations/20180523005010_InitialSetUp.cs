@@ -32,193 +32,23 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Promotions",
+                name: "Role",
                 columns: table => new
                 {
-                    PromotionId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AccessLevel = table.Column<string>(maxLength: 50, nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: true),
-                    Type = table.Column<string>(maxLength: 50, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    ValidTo = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Promotions", x => x.PromotionId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Restaurants",
-                columns: table => new
-                {
-                    RestaurantId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    AddressId = table.Column<int>(nullable: true),
-                    ContactNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    Email = table.Column<string>(maxLength: 50, nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    PromotionId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    Url = table.Column<string>(maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Restaurants", x => x.RestaurantId);
-                    table.ForeignKey(
-                        name: "FK_Restaurants_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "AddressId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Restaurants_Promotions_PromotionId",
-                        column: x => x.PromotionId,
-                        principalTable: "Promotions",
-                        principalColumn: "PromotionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DishIngredients",
-                columns: table => new
-                {
-                    DishIngredientId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
-                    DishId = table.Column<int>(nullable: false),
-                    IngredientId = table.Column<int>(nullable: false),
-                    MenuId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DishIngredients", x => x.DishIngredientId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MenuDishes",
-                columns: table => new
-                {
-                    MenuDishId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    DishId = table.Column<int>(nullable: false),
-                    MenuId = table.Column<int>(nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MenuDishes", x => x.MenuDishId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RatingLogs",
-                columns: table => new
-                {
-                    RatingLogId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    Comment = table.Column<string>(maxLength: 2000, nullable: true),
-                    DishId = table.Column<int>(nullable: true),
-                    Rating = table.Column<int>(nullable: false),
-                    RestaurantId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RatingLogs", x => x.RatingLogId);
-                    table.ForeignKey(
-                        name: "FK_RatingLogs_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Dishes",
-                columns: table => new
-                {
-                    DishId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    AvailableFrom = table.Column<DateTime>(nullable: true),
-                    AvailableTo = table.Column<DateTime>(nullable: true),
-                    Daily = table.Column<bool>(nullable: true),
-                    DailyPrice = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
                     Description = table.Column<string>(maxLength: 200, nullable: true),
-                    GlutenFree = table.Column<bool>(nullable: true),
-                    Kcal = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
-                    LactoseFree = table.Column<bool>(nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
-                    PromotionId = table.Column<int>(nullable: true),
-                    RestaurantId = table.Column<int>(nullable: false),
-                    ServeTime = table.Column<DateTime>(nullable: true),
-                    Title = table.Column<string>(maxLength: 40, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    Vegan = table.Column<bool>(nullable: true),
-                    WeightG = table.Column<decimal>(type: "decimal(8, 2)", nullable: true)
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dishes", x => x.DishId);
-                    table.ForeignKey(
-                        name: "FK_Dishes_Promotions_PromotionId",
-                        column: x => x.PromotionId,
-                        principalTable: "Promotions",
-                        principalColumn: "PromotionId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Dishes_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Menus",
-                columns: table => new
-                {
-                    MenuId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    ActiveFrom = table.Column<DateTime>(nullable: true),
-                    ActiveTo = table.Column<DateTime>(nullable: true),
-                    AddTime = table.Column<DateTime>(nullable: false),
-                    PromotionId = table.Column<int>(nullable: true),
-                    RepetitionInterval = table.Column<int>(nullable: true),
-                    RestaurantId = table.Column<int>(nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Menus", x => x.MenuId);
-                    table.ForeignKey(
-                        name: "FK_Menus_Promotions_PromotionId",
-                        column: x => x.PromotionId,
-                        principalTable: "Promotions",
-                        principalColumn: "PromotionId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Menus_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Role", x => x.RoleId);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,24 +72,35 @@ namespace DAL.TaisKoht.EF.Migrations
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    PromotionId = table.Column<int>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    UserRoleId = table.Column<int>(nullable: true),
-                    UserRoleRoleId = table.Column<int>(nullable: true),
-                    UserRoleUserId = table.Column<int>(nullable: true)
+                    UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaim",
+                columns: table => new
+                {
+                    RoleClaimId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    RoleId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaim", x => x.RoleClaimId);
                     table.ForeignKey(
-                        name: "FK_User_Promotions_PromotionId",
-                        column: x => x.PromotionId,
-                        principalTable: "Promotions",
-                        principalColumn: "PromotionId",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_RoleClaim_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,28 +129,25 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RestaurantUsers",
+                name: "Promotions",
                 columns: table => new
                 {
-                    RestaurantId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    PromotionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    RestaurantUserId = table.Column<int>(nullable: false),
-                    StartedAt = table.Column<DateTime>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false)
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
+                    Type = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    ValidTo = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RestaurantUsers", x => new { x.RestaurantId, x.UserId });
+                    table.PrimaryKey("PK_Promotions", x => x.PromotionId);
                     table.ForeignKey(
-                        name: "FK_RestaurantUsers_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RestaurantUsers_User_UserId",
+                        name: "FK_Promotions_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "UserId",
@@ -358,6 +196,34 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserRole",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserRoleId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRole", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRole_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserRole_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserToken",
                 columns: table => new
                 {
@@ -378,67 +244,254 @@ namespace DAL.TaisKoht.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleClaim",
+                name: "Restaurants",
                 columns: table => new
                 {
-                    RoleClaimId = table.Column<int>(nullable: false)
+                    RestaurantId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false)
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    AddressId = table.Column<int>(nullable: true),
+                    ContactNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    Email = table.Column<string>(maxLength: 50, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    PromotionId = table.Column<int>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    Url = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleClaim", x => x.RoleClaimId);
+                    table.PrimaryKey("PK_Restaurants", x => x.RestaurantId);
+                    table.ForeignKey(
+                        name: "FK_Restaurants_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Restaurants_Promotions_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotions",
+                        principalColumn: "PromotionId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRole",
+                name: "Dishes",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
+                    DishId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
+                    AvailableFrom = table.Column<DateTime>(nullable: true),
+                    AvailableTo = table.Column<DateTime>(nullable: true),
+                    Daily = table.Column<bool>(nullable: true),
+                    DailyPrice = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
+                    GlutenFree = table.Column<bool>(nullable: true),
+                    Kcal = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    LactoseFree = table.Column<bool>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
+                    PromotionId = table.Column<int>(nullable: true),
+                    RestaurantId = table.Column<int>(nullable: false),
+                    ServeTime = table.Column<DateTime>(nullable: true),
+                    Title = table.Column<string>(maxLength: 40, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserRoleId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    Vegan = table.Column<bool>(nullable: true),
+                    WeightG = table.Column<decimal>(type: "decimal(8, 2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRole", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_Dishes", x => x.DishId);
                     table.ForeignKey(
-                        name: "FK_UserRole_User_UserId",
+                        name: "FK_Dishes_Promotions_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotions",
+                        principalColumn: "PromotionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Dishes_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Dishes_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "Menus",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(nullable: false)
+                    MenuId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccessLevel = table.Column<string>(maxLength: 50, nullable: false),
                     Active = table.Column<bool>(nullable: false),
+                    ActiveFrom = table.Column<DateTime>(nullable: true),
+                    ActiveTo = table.Column<DateTime>(nullable: true),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    PromotionId = table.Column<int>(nullable: true),
+                    RepetitionInterval = table.Column<int>(nullable: true),
+                    RestaurantId = table.Column<int>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserRoleId = table.Column<int>(nullable: true),
-                    UserRoleRoleId = table.Column<int>(nullable: true),
-                    UserRoleUserId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.RoleId);
+                    table.PrimaryKey("PK_Menus", x => x.MenuId);
                     table.ForeignKey(
-                        name: "FK_Role_UserRole_UserRoleUserId_UserRoleRoleId",
-                        columns: x => new { x.UserRoleUserId, x.UserRoleRoleId },
-                        principalTable: "UserRole",
-                        principalColumns: new[] { "UserId", "RoleId" },
+                        name: "FK_Menus_Promotions_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotions",
+                        principalColumn: "PromotionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Menus_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Menus_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RestaurantUsers",
+                columns: table => new
+                {
+                    RestaurantId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    RestaurantUserId = table.Column<int>(nullable: false),
+                    StartedAt = table.Column<DateTime>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantUsers", x => new { x.RestaurantId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_RestaurantUsers_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RestaurantUsers_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RatingLogs",
+                columns: table => new
+                {
+                    RatingLogId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    Comment = table.Column<string>(maxLength: 2000, nullable: true),
+                    DishId = table.Column<int>(nullable: true),
+                    Rating = table.Column<int>(nullable: false),
+                    RestaurantId = table.Column<int>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RatingLogs", x => x.RatingLogId);
+                    table.ForeignKey(
+                        name: "FK_RatingLogs_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "DishId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RatingLogs_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RatingLogs_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DishIngredients",
+                columns: table => new
+                {
+                    IngredientId = table.Column<int>(nullable: false),
+                    DishId = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    DishIngredientId = table.Column<int>(nullable: false),
+                    MenuId = table.Column<int>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DishIngredients", x => new { x.IngredientId, x.DishId });
+                    table.ForeignKey(
+                        name: "FK_DishIngredients_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "DishId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DishIngredients_Ingredients_IngredientId",
+                        column: x => x.IngredientId,
+                        principalTable: "Ingredients",
+                        principalColumn: "IngredientId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DishIngredients_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "MenuId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MenuDishes",
+                columns: table => new
+                {
+                    MenuId = table.Column<int>(nullable: false),
+                    DishId = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    MenuDishId = table.Column<int>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuDishes", x => new { x.MenuId, x.DishId });
+                    table.ForeignKey(
+                        name: "FK_MenuDishes_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "DishId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MenuDishes_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "MenuId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -463,11 +516,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DishIngredients_IngredientId",
-                table: "DishIngredients",
-                column: "IngredientId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DishIngredients_MenuId",
                 table: "DishIngredients",
                 column: "MenuId");
@@ -483,11 +531,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuDishes_MenuId",
-                table: "MenuDishes",
-                column: "MenuId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Menus_PromotionId",
                 table: "Menus",
                 column: "PromotionId");
@@ -500,6 +543,11 @@ namespace DAL.TaisKoht.EF.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Menus_UserId",
                 table: "Menus",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Promotions_UserId",
+                table: "Promotions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -540,11 +588,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Role_UserRoleUserId_UserRoleRoleId",
-                table: "Role",
-                columns: new[] { "UserRoleUserId", "UserRoleRoleId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RoleClaim_RoleId",
                 table: "RoleClaim",
                 column: "RoleId");
@@ -562,16 +605,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_PromotionId",
-                table: "User",
-                column: "PromotionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_UserRoleUserId_UserRoleRoleId",
-                table: "User",
-                columns: new[] { "UserRoleUserId", "UserRoleRoleId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserClaim_UserId",
                 table: "UserClaim",
                 column: "UserId");
@@ -585,118 +618,10 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_DishIngredients_Dishes_DishId",
-                table: "DishIngredients",
-                column: "DishId",
-                principalTable: "Dishes",
-                principalColumn: "DishId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_DishIngredients_Ingredients_IngredientId",
-                table: "DishIngredients",
-                column: "IngredientId",
-                principalTable: "Ingredients",
-                principalColumn: "IngredientId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_DishIngredients_Menus_MenuId",
-                table: "DishIngredients",
-                column: "MenuId",
-                principalTable: "Menus",
-                principalColumn: "MenuId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_MenuDishes_Dishes_DishId",
-                table: "MenuDishes",
-                column: "DishId",
-                principalTable: "Dishes",
-                principalColumn: "DishId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_MenuDishes_Menus_MenuId",
-                table: "MenuDishes",
-                column: "MenuId",
-                principalTable: "Menus",
-                principalColumn: "MenuId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_RatingLogs_User_UserId",
-                table: "RatingLogs",
-                column: "UserId",
-                principalTable: "User",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_RatingLogs_Dishes_DishId",
-                table: "RatingLogs",
-                column: "DishId",
-                principalTable: "Dishes",
-                principalColumn: "DishId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Dishes_User_UserId",
-                table: "Dishes",
-                column: "UserId",
-                principalTable: "User",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Menus_User_UserId",
-                table: "Menus",
-                column: "UserId",
-                principalTable: "User",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_User_UserRole_UserRoleUserId_UserRoleRoleId",
-                table: "User",
-                columns: new[] { "UserRoleUserId", "UserRoleRoleId" },
-                principalTable: "UserRole",
-                principalColumns: new[] { "UserId", "RoleId" },
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_RoleClaim_Role_RoleId",
-                table: "RoleClaim",
-                column: "RoleId",
-                principalTable: "Role",
-                principalColumn: "RoleId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_UserRole_Role_RoleId",
-                table: "UserRole",
-                column: "RoleId",
-                principalTable: "Role",
-                principalColumn: "RoleId",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_User_Promotions_PromotionId",
-                table: "User");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_UserRole_User_UserId",
-                table: "UserRole");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Role_UserRole_UserRoleUserId_UserRoleRoleId",
-                table: "Role");
-
             migrationBuilder.DropTable(
                 name: "DishIngredients");
 
@@ -719,6 +644,9 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "UserLogin");
 
             migrationBuilder.DropTable(
+                name: "UserRole");
+
+            migrationBuilder.DropTable(
                 name: "UserToken");
 
             migrationBuilder.DropTable(
@@ -731,6 +659,9 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "Dishes");
 
             migrationBuilder.DropTable(
+                name: "Role");
+
+            migrationBuilder.DropTable(
                 name: "Restaurants");
 
             migrationBuilder.DropTable(
@@ -741,12 +672,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "UserRole");
-
-            migrationBuilder.DropTable(
-                name: "Role");
         }
     }
 }

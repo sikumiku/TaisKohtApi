@@ -23,6 +23,12 @@ namespace DAL.TaisKoht.EF
             builder.Entity<RestaurantUser>()
                 .HasKey(x => new {x.RestaurantId, x.UserId});
 
+            builder.Entity<MenuDish>()
+                .HasKey(x => new {x.MenuId, x.DishId});
+
+            builder.Entity<DishIngredient>()
+                .HasKey(x => new {x.IngredientId, x.DishId});
+
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
@@ -35,6 +41,8 @@ namespace DAL.TaisKoht.EF
             builder.Entity<Role>().ToTable("Role");
             builder.Entity<Role>().Property(p => p.Id).HasColumnName("RoleId");
             builder.Entity<UserRole>().ToTable("UserRole");
+            builder.Entity<UserRole>().Property(p => p.UserId).HasColumnName("UserId");
+            builder.Entity<UserRole>().Property(p => p.RoleId).HasColumnName("RoleId");
             builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaim");
             builder.Entity<IdentityUserClaim<int>>().Property(p => p.Id).HasColumnName("UserClaimId");
             builder.Entity<IdentityUserLogin<int>>().ToTable("UserLogin");

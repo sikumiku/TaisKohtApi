@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Helpers;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class User : IdentityUser<int>
+    public class User : IdentityUser<int>, IEssentialEntityBase
     {
         public int UserId { get; set; }
         [MaxLength(50)]
@@ -24,10 +25,8 @@ namespace Domain
         public List<Dish> Dishes { get; set; } = new List<Dish>();
         public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
-        //foreign keys
-        public int? PromotionId { get; set; }
-        public Promotion Promotion { get; set; }
-        public int? UserRoleId { get; set; }
-        public UserRole UserRole { get; set; }
+        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public List<Promotion> Promotions { get; set; } = new List<Promotion>();
+        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }
 }

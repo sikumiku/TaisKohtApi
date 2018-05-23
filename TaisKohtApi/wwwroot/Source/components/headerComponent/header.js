@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Nav, NavItem, NavDropdown, MenuItem, Navbar } from 'react-bootstrap';
+import { NavItem, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 
@@ -7,40 +7,25 @@ class Header extends Component {
     render() {
         return (
             <header>
-                <nav class="navbar navbar-inverse">
+                <nav className="navbar navbar-inverse">
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a class="navbar-brand" href="#brand">Täis Kõht</a>
+                            <a className="navbar-brand" href="#brand">Täis Kõht</a>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
                     <Navbar.Collapse>
-<<<<<<< Updated upstream
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul className="nav navbar-nav navbar-right">
                             <LinkContainer to="/">
                                 <NavItem eventKey={1}>PÄEVAPAKKUMISED</NavItem>
-=======
-                        <Nav>
-                            <LinkContainer to="/">git g
-                                <NavItem eventKey={1}>Home</NavItem>
->>>>>>> Stashed changes
                             </LinkContainer>
                             <LinkContainer to="/restaurants">
                                 <NavItem eventKey={1}>RESTORANID</NavItem>
                             </LinkContainer>
-<<<<<<< Updated upstream
                             <LinkContainer to="/login">
                                 <NavItem eventKey={1}>SISENE</NavItem>
                             </LinkContainer>
                         </ul>
-=======
-                        </Nav>
-                        <Nav pullRight>
-                            <NavItem eventKey={2} href="#">
-                                Login
-      </NavItem>
-                        </Nav>
->>>>>>> Stashed changes
                     </Navbar.Collapse>
                 </nav>
             </header>
