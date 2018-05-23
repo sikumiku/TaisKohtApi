@@ -21,14 +21,15 @@ namespace BusinessLogic.Services
             _menuFactory = menuFactory;
         }
 
-        public MenuDTO AddNewMenu(MenuDTO menuDTO)
+        public MenuDTO AddNewMenu(PostMenuDTO menuDTO)
         {
             var newMenu = _menuFactory.Create(menuDTO);
             _uow.Menus.Add(newMenu);
             _uow.SaveChanges();
-            return _menuFactory.CreateComplex(newMenu);
+            return _menuFactory.Create(newMenu);
         }
 
+        //Seda pole vb vaja
         public IEnumerable<MenuDTO> GetAllMenus()
         {
             return _uow.Menus.All().Where(x => x.Active)
@@ -37,21 +38,25 @@ namespace BusinessLogic.Services
 
         public MenuDTO GetMenuById(int id)
         {
-            var menu = _uow.Menus.Find(id);
+            var menu = _uow.Menus.Find(id); //also returns related dishes and promotion if any
             if (menu == null || !menu.Active) return null;
 
             return _menuFactory.CreateComplex(menu);
         }
 
-        public void UpdateMenu(int id, MenuDTO updatedMenuDTO)
+        public void UpdateMenu(int id, PostMenuDTO updatedMenuDTO)
         {
-            Menu menu = _uow.Menus.Find(id);
-            menu.ActiveFrom = updatedMenuDTO.ActiveFrom;
-            menu.ActiveTo = updatedMenuDTO.ActiveTo;
-            menu.RepetitionInterval = updatedMenuDTO.RepetitionInterval;
-            menu.UpdateTime = DateTime.UtcNow;
-            _uow.Menus.Update(menu);
-            _uow.SaveChanges();
+            if (_uow.Menus.Exists(id))
+            {
+                Menu menu = _uow.Menus.Find(id);
+                menu.ActiveFrom = updatedMenuDTO.ActiveFrom;
+                menu.ActiveTo = updatedMenuDTO.ActiveTo;
+                menu.PromotionId = updatedMenuDTO.PromotionId;
+                menu.RepetitionInterval = updatedMenuDTO.RepetitionInterval;
+                menu.UpdateTime = DateTime.UtcNow;
+                _uow.Menus.Update(menu);
+                _uow.SaveChanges();
+            }
         }
 
         public void DeleteMenu(int id)

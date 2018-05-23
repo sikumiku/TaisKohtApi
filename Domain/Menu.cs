@@ -8,6 +8,7 @@ namespace Domain
     public class Menu : EssentialEntityBase
     {
         public int MenuId { get; set; }
+        public string Name { get; set; }
         public DateTime? ActiveFrom { get; set; }
         public DateTime? ActiveTo { get; set; }
         [Range(1,365)]

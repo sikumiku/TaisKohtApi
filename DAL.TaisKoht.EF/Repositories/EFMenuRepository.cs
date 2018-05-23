@@ -23,6 +23,8 @@ namespace DAL.TaisKoht.EF.Repositories
         public override Menu Find(params object[] id)
         {
             return RepositoryDbSet
+                .Include(m => m.MenuDishes)
+                    .ThenInclude(md => md.Dish)
                 .SingleOrDefault(x => (int)id[0] == x.MenuId);
         }
 
