@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Nav, NavItem, NavDropdown, MenuItem, Navbar } from 'react-bootstrap';
+import { NavItem, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 
@@ -7,15 +7,15 @@ class Header extends Component {
     render() {
         return (
             <header>
-                <nav class="navbar navbar-inverse">
+                <nav className="navbar navbar-inverse">
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a class="navbar-brand" href="#brand">Täis Kõht</a>
+                            <a className="navbar-brand" href="#brand">Täis Kõht</a>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
                     <Navbar.Collapse>
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul className="nav navbar-nav navbar-right">r
                             <LinkContainer to="/">
                                 <NavItem eventKey={1}>PÄEVAPAKKUMISED</NavItem>
                             </LinkContainer>

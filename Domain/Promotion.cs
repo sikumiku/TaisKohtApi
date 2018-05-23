@@ -16,10 +16,13 @@ namespace Domain
         [MaxLength(50)]
         public string Type { get; set; }
         public DateTime ValidTo { get; set; }
+        //foreign keys
+        [Required]
+        public int UserId { get; set; }
+        public User User { get; set; }
         //OneToMany
         public List<Menu> Menus { get; set; } = new List<Menu>();
         public List<Dish> Dishes { get; set; } = new List<Dish>();
-        public List<User> Users { get; set; } = new List<User>();
         public List<Restaurant> Restaurants { get; set; } = new List<Restaurant>();
     }
 }

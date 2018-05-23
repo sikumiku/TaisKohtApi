@@ -2,7 +2,7 @@
 
 namespace Domain.Helpers
 {
-    public class EssentialEntityBase
+    public class EssentialEntityBase : IEssentialEntityBase
     {
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
