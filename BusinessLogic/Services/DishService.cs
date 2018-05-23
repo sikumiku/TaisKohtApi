@@ -105,18 +105,25 @@ namespace BusinessLogic.Services
             return dishes.Take(amount);
         }
 
-        public IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree)
+        public IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree, bool lactoseFree)
         {
-            var dishes = _uow.Dishes.All().Where(x => x.Active && x.Daily == true && x.AvailableFrom <= DateTime.Today && x.AvailableTo >= DateTime.Today)
-                .Select(dish => _dishFactory.Create(dish));
+            var dishes = _uow.Dishes.All().Where(x => x.Active && x.Daily == true && x.AvailableFrom <= DateTime.Today && x.AvailableTo >= DateTime.Today);
 
-            if (vegan == true) return dishes.Where(v => v.Vegan == true);
+            if (vegan == true && glutenFree == true && lactoseFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
 
-            if (glutenFree == true) return dishes.Where(g => g.GlutenFree == true);
+            if (vegan == true && glutenFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true).Select(dish => _dishFactory.Create(dish));
 
-            if (vegan == true && glutenFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true);
+            if (vegan == true && lactoseFree == true) return dishes.Where(x => x.Vegan == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
 
-            return dishes;
+            if (glutenFree == true && lactoseFree == true) return dishes.Where(x => x.GlutenFree == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
+
+            if (vegan == true) return dishes.Where(v => v.Vegan == true).Select(dish => _dishFactory.Create(dish));
+
+            if (glutenFree == true) return dishes.Where(g => g.GlutenFree == true).Select(dish => _dishFactory.Create(dish));
+
+            if (lactoseFree == true) return dishes.Where(l => l.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
+
+            return dishes.Select(dish => _dishFactory.Create(dish));
         }
     }
 }
