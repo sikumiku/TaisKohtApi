@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
@@ -65,6 +67,26 @@ namespace TaisKohtApi.Controllers.api
         }
 
         [Authorize(Roles = "admin")]
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(User))]
+        [Route("addRoleToUser")]
+        public async Task<IActionResult> CreateAsync([FromQuery(Name = "role, userId")] string role, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null && await _roleManager.RoleExistsAsync(role))
+            {
+                await _userManager.AddToRoleAsync(user, role);
+            }
+
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(role));
+            }
+
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("deactivate")]
         public IActionResult Delete(string id)
@@ -77,7 +99,7 @@ namespace TaisKohtApi.Controllers.api
 
         [RequireRequestValue("id")]
         [Authorize(Roles = "admin, normalUser, premiumUser")]
-        [HttpGet("{id}"), ActionName("Get")]
+        [HttpGet("{id}"), ActionName("GetUser")]
         public IActionResult GetUser(string id)
         {
             var user = _userService.GetUserById(id);
