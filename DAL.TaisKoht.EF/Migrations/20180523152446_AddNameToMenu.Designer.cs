@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180523005959_DefaultRoles")]
-    partial class DefaultRoles
+    [Migration("20180523152446_AddNameToMenu")]
+    partial class AddNameToMenu
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -188,6 +188,8 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<DateTime?>("ActiveTo");
 
                     b.Property<DateTime>("AddTime");
+
+                    b.Property<string>("Name");
 
                     b.Property<int?>("PromotionId");
 

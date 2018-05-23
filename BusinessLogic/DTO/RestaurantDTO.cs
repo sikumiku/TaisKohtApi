@@ -22,10 +22,8 @@ namespace BusinessLogic.DTO
         [EmailAddress]
         [MaxLength(50)]
         public string Email { get; set; }
-        // At least one user should be mandatory when posting, but not when fetching restaurant
-        //public List<UserDTO> Users { get; set; }
         //OneToMany
-        public List<MenuDTO> Menus { get; set; } = new List<MenuDTO>();
+        public List<SimpleMenuDTO> Menus { get; set; } = new List<SimpleMenuDTO>();
         //foreign keys
         public int? PromotionId { get; set; }
         public PromotionDTO Promotion { get; set; }
@@ -48,20 +46,24 @@ namespace BusinessLogic.DTO
                 Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null            };
         }
 
-        public static RestaurantDTO CreateFromDomainWithMenus(Restaurant r)
+        public static RestaurantDTO CreateFromDomainWithMenusAndRating(Restaurant r)
         {
             var restaurant = CreateFromDomain(r);
             if (restaurant == null) { return null; }
 
-            restaurant.Menus = r.Menus.Select(MenuDTO.CreateFromDomain).ToList();
+            restaurant.Menus = r.Menus.Select(SimpleMenuDTO.CreateFromDomain).ToList();
             restaurant.Rating = r.RatingLogs.Any() ? Rating.CreateWithComments(r.RatingLogs) : null;
             return restaurant;
         }
 
-        //public static RestaurantDTO CreateFromDomainWithUsers(Restaurant restaurant)
-        //{
-        //    var restaurantWithUser = CreateFromDomain(restaurant);
-             
-        //}
+        public static RestaurantDTO CreateFromDomainWithUsers(Restaurant r)
+        {
+            var restaurant = CreateFromDomain(r);
+            if (restaurant == null) { return null; }
+
+            restaurant.Users = r.RestaurantUsers.Select(ru => UserDTO.CreateFromDomain(ru.User)).ToList();
+            return restaurant;
+
+        }
     }
 }

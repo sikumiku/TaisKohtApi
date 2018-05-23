@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180523005010_InitialSetUp")]
-    partial class InitialSetUp
+    [Migration("20180523180625_Create")]
+    partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -473,13 +473,21 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
+                    b.Property<int?>("RoleId1");
+
                     b.Property<DateTime>("UpdateTime");
+
+                    b.Property<int?>("UserId1");
 
                     b.Property<int>("UserRoleId");
 
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("RoleId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserRole");
                 });
@@ -688,10 +696,18 @@ namespace DAL.TaisKoht.EF.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Domain.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId1");
+
                     b.HasOne("Domain.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

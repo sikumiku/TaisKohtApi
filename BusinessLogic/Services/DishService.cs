@@ -91,5 +91,18 @@ namespace BusinessLogic.Services
             return _uow.Dishes.All().Where(x => x.Price <= dishPrice)
                 .Select(dish => _dishFactory.Create(dish));
         }
+
+        public IEnumerable<DishDTO> GetTopDishes(int amount)
+        {
+            int topAmount;
+            if (!int.TryParse(amount.ToString(), out topAmount)) return null;
+
+            var dishes = _uow.Dishes.All().Where(x => x.Active).OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
+                .Select(dish => _dishFactory.Create(dish));
+
+            if (dishes.Count() < amount) return null;
+
+            return dishes.Take(amount);
+        }
     }
 }
