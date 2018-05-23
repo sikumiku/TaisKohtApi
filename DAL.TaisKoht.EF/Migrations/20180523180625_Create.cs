@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class InitialSetUp : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -203,7 +203,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     RoleId = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
+                    RoleId1 = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId1 = table.Column<int>(nullable: true),
                     UserRoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -216,8 +218,20 @@ namespace DAL.TaisKoht.EF.Migrations
                         principalColumn: "RoleId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_UserRole_Role_RoleId1",
+                        column: x => x.RoleId1,
+                        principalTable: "Role",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_UserRole_User_UserId",
                         column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserRole_User_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "User",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
@@ -618,6 +632,16 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_RoleId1",
+                table: "UserRole",
+                column: "RoleId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_UserId1",
+                table: "UserRole",
+                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

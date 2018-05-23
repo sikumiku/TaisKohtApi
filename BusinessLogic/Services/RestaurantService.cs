@@ -106,10 +106,7 @@ namespace BusinessLogic.Services
             var restaurants = _uow.Restaurants.All().Where(x => x.Active).OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
 
-            if(restaurants.Count() < amount)
-            {
-                return null;
-            }
+            if(restaurants.Count() < amount) return null;
 
             return restaurants.Take(amount);
         }

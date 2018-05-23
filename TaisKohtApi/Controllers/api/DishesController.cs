@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,6 +82,31 @@ namespace TaisKohtApi.Controllers.api
             if (!result.Any())
             {
                 return NotFound(priceLimit);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Gets top dishes as a list
+        /// </summary>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no dishes can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Dishes/Top
+        [AllowAnonymous]
+        [HttpGet("Top")]
+        [ProducesResponseType(typeof(List<DishDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult Top(int amount)
+        {
+            var result = _dishService.GetTopDishes(amount);
+            if (!result.Any())
+            {
+                return NotFound();
             }
 
             return Ok(result);
