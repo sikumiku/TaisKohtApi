@@ -48,7 +48,7 @@ namespace BusinessLogic.DTO
             menuDTO.PromotionId = m.PromotionId;
             List<DishDTO> dishes = m.MenuDishes
                 .FindAll(md => md.MenuId == m.MenuId)
-                .Select(md => DishDTO.CreateFromDomain(md.Dish))
+                .Select(DishDTO.CreateFromMenuDish)
                 .ToList();
             menuDTO.Dishes = dishes;
             return menuDTO;

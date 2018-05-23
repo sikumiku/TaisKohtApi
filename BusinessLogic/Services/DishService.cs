@@ -20,7 +20,7 @@ namespace BusinessLogic.Services
             _dishFactory = dishFactory;
         }
 
-        public DishDTO AddNewDish(DishDTO dishDTO)
+        public DishDTO AddNewDish(PostDishDTO dishDTO)
         {
             var newDish = _dishFactory.Create(dishDTO);
             _uow.Dishes.Add(newDish);
@@ -42,25 +42,28 @@ namespace BusinessLogic.Services
             return _dishFactory.CreateComplex(dish);
         }
 
-        public void UpdateDish(int id, DishDTO updatedDishDTO)
+        public void UpdateDish(int id, PostDishDTO updatedDishDTO)
         {
-            Dish dish = _uow.Dishes.Find(id);
-            dish.Title = updatedDishDTO.Title;
-            dish.Description = updatedDishDTO.Description;
-            dish.AvailableFrom = updatedDishDTO.AvailableFrom;
-            dish.AvailableTo = updatedDishDTO.AvailableTo;
-            dish.ServeTime = updatedDishDTO.ServeTime;
-            dish.Vegan = updatedDishDTO.Vegan;
-            dish.LactoseFree = updatedDishDTO.LactoseFree;
-            dish.GlutenFree = updatedDishDTO.GlutenFree;
-            dish.Kcal = updatedDishDTO.Kcal;
-            dish.WeightG = updatedDishDTO.WeightG;
-            dish.Price = updatedDishDTO.Price;
-            dish.DailyPrice = updatedDishDTO.DailyPrice;
-            dish.Daily = updatedDishDTO.Daily;
-            dish.UpdateTime = DateTime.UtcNow;
-            _uow.Dishes.Update(dish);
-            _uow.SaveChanges();
+            if (_uow.Dishes.Exists(id))
+            {
+                Dish dish = _uow.Dishes.Find(id);
+                dish.Title = updatedDishDTO.Title;
+                dish.Description = updatedDishDTO.Description;
+                dish.AvailableFrom = updatedDishDTO.AvailableFrom;
+                dish.AvailableTo = updatedDishDTO.AvailableTo;
+                dish.ServeTime = updatedDishDTO.ServeTime;
+                dish.Vegan = updatedDishDTO.Vegan;
+                dish.LactoseFree = updatedDishDTO.LactoseFree;
+                dish.GlutenFree = updatedDishDTO.GlutenFree;
+                dish.Kcal = updatedDishDTO.Kcal;
+                dish.WeightG = updatedDishDTO.WeightG;
+                dish.Price = updatedDishDTO.Price;
+                dish.DailyPrice = updatedDishDTO.DailyPrice;
+                dish.Daily = updatedDishDTO.Daily;
+                dish.UpdateTime = DateTime.UtcNow;
+                _uow.Dishes.Update(dish);
+                _uow.SaveChanges();
+            }   
         }
 
         public void DeleteDish(int id)

@@ -22,8 +22,6 @@ namespace BusinessLogic.DTO
         [EmailAddress]
         [MaxLength(50)]
         public string Email { get; set; }
-        // At least one user should be mandatory when posting
-        public List<UserDTO> Users { get; set; }
         //OneToMany
         public List<SimpleMenuDTO> Menus { get; set; } = new List<SimpleMenuDTO>();
         //foreign keys
@@ -45,8 +43,7 @@ namespace BusinessLogic.DTO
                 Email = restaurant.Email,
                 Address = AddressDTO.CreateFromDomain(restaurant.Address),
                 Promotion = PromotionDTO.CreateFromDomain(restaurant.Promotion),
-                Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null
-            };
+                Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null            };
         }
 
         public static RestaurantDTO CreateFromDomainWithMenusAndRating(Restaurant r)
