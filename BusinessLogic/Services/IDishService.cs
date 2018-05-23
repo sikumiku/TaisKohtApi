@@ -17,7 +17,7 @@ namespace BusinessLogic.Services
 
         void DeleteDish(int id);
 
-        IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree);
+        IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree, bool lactoseFree);
 
         IEnumerable<DishDTO> SearchDishByTitle(string title);
 

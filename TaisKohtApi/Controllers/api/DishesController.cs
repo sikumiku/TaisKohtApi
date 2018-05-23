@@ -52,9 +52,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Daily(bool vegan, bool glutenFree)
+        public IActionResult Daily(bool vegan, bool glutenFree, bool lactoseFree)
         {
-            var result = _dishService.GetAllDailyDishes(vegan, glutenFree);
+            var result = _dishService.GetAllDailyDishes(vegan, glutenFree, lactoseFree);
             if (!result.Any())
             {
                 return NotFound();
