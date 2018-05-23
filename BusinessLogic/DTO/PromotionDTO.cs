@@ -50,4 +50,29 @@ namespace BusinessLogic.DTO
         }
 
     }
+
+    public class SimplePromotionDTO
+    {
+        public int PromotionId { get; set; }
+        [MaxLength(50)]
+        public string Name { get; set; }
+        [MaxLength(255)]
+        public string Description { get; set; }
+        [MaxLength(50)]
+        public string Type { get; set; }
+        public DateTime ValidTo { get; set; }
+
+        public static SimplePromotionDTO CreateFromDomain(Promotion promotion)
+        {
+            if (promotion == null || !promotion.Active) { return null; }
+            return new SimplePromotionDTO()
+            {
+                PromotionId = promotion.PromotionId,
+                Name = promotion.Name,
+                Description = promotion.Description,
+                Type = promotion.Type,
+                ValidTo = promotion.ValidTo
+            };
+        }
+    }
 }

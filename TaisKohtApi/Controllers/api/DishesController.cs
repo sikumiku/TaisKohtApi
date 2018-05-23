@@ -116,7 +116,14 @@ namespace TaisKohtApi.Controllers.api
         ///
         ///     POST api/v1/Dishes
         ///     {
-        ///         ...
+        ///         "title" : "Chicken Kiev",
+        ///         "description" : "Tasty meal",
+        ///         "vegan" : false,
+        ///         "price" : 5.25,
+        ///         "daily" : true,
+        ///         "glutenFree" : true,
+        ///         "restaurantId" : 4,
+        ///         "userId" : 12
         ///     }
         ///
         /// </remarks>
@@ -128,30 +135,37 @@ namespace TaisKohtApi.Controllers.api
         // POST: api/v1/Dishes
 
         [HttpPost(Name = "PostDish")]
-        [ProducesResponseType(typeof(DishDTO), 201)]
+        [ProducesResponseType(typeof(PostDishDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]DishDTO dishDTO)
+        public IActionResult Post([FromBody]PostDishDTO dishDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
             var newDish = _dishService.AddNewDish(dishDTO);
 
-            return CreatedAtAction("PostDish", new { id = newDish.DishId }, newDish);
+            return CreatedAtAction("Get", new { id = newDish.DishId }, newDish);
         }
 
         /// <summary>
         /// Update an existing dish
         /// </summary>
         /// <param name="id">ID of dish to update</param>
-        /// <param name="dishDTO">Updated object</param>
+        /// <param name="PostDishDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Dishes/{id}
         ///     {
-        ///         ...
+        ///         "title" : "Roast beef",
+        ///         "description" : "Tasty meal",
+        ///         "vegan" : false,
+        ///         "price" : 7.5,
+        ///         "daily" : false,
+        ///         "glutenFree" : true,
+        ///         "restaurantId" : 2,
+        ///         "userId" : 5
         ///     }
         ///
         /// </remarks>
@@ -165,7 +179,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]DishDTO dishDTO)
+        public IActionResult Put(int id, [FromBody]PostDishDTO dishDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
             var d = _dishService.GetDishById(id);

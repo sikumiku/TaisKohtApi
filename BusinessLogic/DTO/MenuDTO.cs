@@ -46,7 +46,7 @@ namespace BusinessLogic.DTO
             menuDTO.PromotionId = m.PromotionId;
             List<DishDTO> dishes = m.MenuDishes
                 .FindAll(md => md.MenuId == m.MenuId)
-                .Select(md => DishDTO.CreateFromDomain(md.Dish))
+                .Select(DishDTO.CreateFromMenuDish)
                 .ToList();
             menuDTO.Dishes = dishes;
             return menuDTO;
@@ -66,20 +66,5 @@ namespace BusinessLogic.DTO
         [Required]
         public int UserId { get; set; }
         public int? PromotionId { get; set; }
-
-        public static MenuDTO CreateFromDomain(Menu menu)
-        {
-            if (menu == null || !menu.Active) { return null; }
-            return new MenuDTO()
-            {
-                MenuId = menu.MenuId,
-                ActiveFrom = menu.ActiveFrom,
-                ActiveTo = menu.ActiveTo,
-                RepetitionInterval = menu.RepetitionInterval,
-                RestaurantId = menu.RestaurantId,
-                UserId = menu.UserId,
-                PromotionId = menu.PromotionId,
-            };
-        }
     }
 }

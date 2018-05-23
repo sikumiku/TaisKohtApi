@@ -23,6 +23,8 @@ namespace DAL.TaisKoht.EF.Repositories
         public override Dish Find(params object[] id)
         {
             return RepositoryDbSet
+                    .Include(d => d.DishIngredients)
+                        .ThenInclude(di => di.Ingredient)
                 .SingleOrDefault(x => (int)id[0] == x.DishId);
         }
 

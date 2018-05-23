@@ -10,7 +10,7 @@ namespace BusinessLogic.Factories
     {
         DishDTO Create(Dish dish);
         DishDTO CreateComplex(Dish dish);
-        Dish Create(DishDTO dishDTO);
+        Dish Create(PostDishDTO dishDTO);
     }
 
     public class DishFactory : IDishFactory
@@ -25,11 +25,10 @@ namespace BusinessLogic.Factories
             return DishDTO.CreateFromDomainWithAssociatedTables(dish);
         }
 
-        public Dish Create(DishDTO dishDTO)
+        public Dish Create(PostDishDTO dishDTO)
         {
             return new Dish
             {
-                DishId = dishDTO.DishId,
                 RestaurantId = dishDTO.RestaurantId,
                 UserId = dishDTO.UserId,
                 PromotionId = dishDTO.PromotionId,

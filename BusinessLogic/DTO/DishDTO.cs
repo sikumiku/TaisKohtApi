@@ -34,14 +34,9 @@ namespace BusinessLogic.DTO
         [Column(TypeName = "decimal(8, 2)")]
         public Decimal? DailyPrice { get; set; }
         public bool? Daily { get; set; }
-        //foreign keys
-        [Required]
-        public int RestaurantId { get; set; }
-        [Required]
-        public int UserId { get; set; }
-        public int? PromotionId { get; set; }
-        public PromotionDTO Promotion { get; set; }
-        public List<IngredientDTO> Ingredients { get; set; } = new List<IngredientDTO>();
+        //additional data
+        public SimplePromotionDTO Promotion { get; set; }
+        public List<IngredientDTO> Ingredients { get; set; }
         public Rating Rating { get; set; }
 
         public static DishDTO CreateFromDomain(Dish dish)
@@ -50,9 +45,6 @@ namespace BusinessLogic.DTO
             return new DishDTO()
             {
                 DishId = dish.DishId,
-                RestaurantId = dish.RestaurantId,
-                UserId = dish.UserId,
-                PromotionId = dish.PromotionId,
                 Title = dish.Title,
                 Description = dish.Description,
                 AvailableFrom = dish.AvailableFrom,
@@ -66,7 +58,6 @@ namespace BusinessLogic.DTO
                 Price = dish.Price,
                 DailyPrice = dish.DailyPrice,
                 Daily = dish.Daily,
-                Promotion = PromotionDTO.CreateFromDomain(dish.Promotion),
                 Rating = dish.RatingLogs.Any() ? Rating.Create(dish.RatingLogs) : null
         };
         }
@@ -85,9 +76,40 @@ namespace BusinessLogic.DTO
             var dish = CreateFromDomain(d);
             if (dish == null) { return null; }
 
+            dish.Promotion = SimplePromotionDTO.CreateFromDomain(d.Promotion);
             dish.Ingredients = d.DishIngredients.Select(IngredientDTO.CreateFromDishIngredientDomain).ToList();
             dish.Rating = d.RatingLogs.Any() ? Rating.CreateWithComments(d.RatingLogs) : null;
             return dish;
         }
+    }
+
+    public class PostDishDTO
+    {
+        [MinLength(3)]
+        [MaxLength(40)]
+        public string Title { get; set; }
+        [MaxLength(200)]
+        public string Description { get; set; }
+        public DateTime? AvailableFrom { get; set; }
+        public DateTime? AvailableTo { get; set; }
+        public DateTime? ServeTime { get; set; }
+        public bool? Vegan { get; set; }
+        public bool? LactoseFree { get; set; }
+        public bool? GlutenFree { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public Decimal? Kcal { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public Decimal? WeightG { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public Decimal? Price { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public Decimal? DailyPrice { get; set; }
+        public bool? Daily { get; set; }
+        //foreign keys
+        [Required]
+        public int RestaurantId { get; set; }
+        [Required]
+        public int UserId { get; set; }
+        public int? PromotionId { get; set; }
     }
 }
