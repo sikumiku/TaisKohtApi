@@ -50,7 +50,7 @@ namespace BusinessLogic.Services
         {
             var restaurant = _uow.Restaurants.Find(restaurantId);
             var restaurantUsers = _uow.RestaurantUsers.FindAll(restaurant.RestaurantId);
-            if (restaurantUsers == null || restaurant.Active) return null;
+            if (restaurantUsers == null || !restaurant.Active) return null;
             List<UserDTO> users = new List<UserDTO>();
             //find all users by restaurantUsers
             foreach (var restaurantUser in restaurantUsers)
@@ -96,6 +96,22 @@ namespace BusinessLogic.Services
             
             return _uow.Restaurants.All().Where(x => x.Name.Contains(restaurantName))
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
+        }
+
+        public IEnumerable<RestaurantDTO> GetTopRestaurants(int amount)
+        {
+            int topAmount;
+            if (!int.TryParse(amount.ToString(), out topAmount)) return null;
+
+            var restaurants = _uow.Restaurants.All().Where(x => x.Active).OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
+                .Select(restaurant => _restaurantFactory.Create(restaurant));
+
+            if(restaurants.Count() < amount)
+            {
+                return null;
+            }
+
+            return restaurants.Take(amount);
         }
     }
 }
