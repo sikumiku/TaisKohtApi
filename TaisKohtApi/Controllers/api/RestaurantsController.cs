@@ -137,7 +137,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Restaurants
-        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [Authorize(Roles = "admin, normalUser, premiumUser")] // replace with [AllowAnonymous] while user generation is broken
         [HttpPost]
         [ProducesResponseType(typeof(RestaurantDTO), 201)]
         [ProducesResponseType(400)]

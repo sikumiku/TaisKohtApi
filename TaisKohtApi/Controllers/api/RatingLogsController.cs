@@ -48,6 +48,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ratings/5
+        // TODO: check if method works once we are able to generate users again
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(RatingLogDTO), 200)]
         [ProducesResponseType(404)]
@@ -79,6 +80,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Rating
+        // TODO: check if method works once we are able to generate users again
         [HttpPost(Name = "PostRestaurantRatingLog")]
         [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
         [ProducesResponseType(400)]
@@ -112,6 +114,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Ratings/5
+        // TODO: check if method works once we are able to generate users again
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -136,6 +139,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Rating not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
         // DELETE: api/v1/Ratings/5
+        // TODO: check if method works once we are able to generate users again
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
