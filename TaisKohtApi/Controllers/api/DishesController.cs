@@ -40,6 +40,30 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
+        /// Gets today daily dishes as a list
+        /// </summary>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no dishes can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Dishes/Daily
+        [HttpGet("Daily")]
+        [ProducesResponseType(typeof(List<DishDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult Daily(bool vegan, bool glutenFree)
+        {
+            var result = _dishService.GetAllDailyDishes(vegan, glutenFree);
+            if (!result.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Gets searched dishes as a list
         /// </summary>
         /// <response code="200">Successful operation</response> 
