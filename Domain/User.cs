@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class User : IdentityUser<int>, IEssentialEntityBase
+    public class User : IdentityUser<string>, IEssentialEntityBase
     {
-        public int UserId { get; set; }
+        [Required]
+        [MaxLength(450)]
+        public string UserId { get; set; }
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]

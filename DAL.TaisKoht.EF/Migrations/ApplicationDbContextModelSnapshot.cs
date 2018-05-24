@@ -99,7 +99,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.Property<bool?>("Vegan");
 
@@ -166,7 +167,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("IngredientId");
 
@@ -188,6 +190,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("AddTime");
 
+                    b.Property<string>("Name");
+
                     b.Property<int?>("PromotionId");
 
                     b.Property<int?>("RepetitionInterval");
@@ -196,7 +200,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("MenuId");
 
@@ -250,7 +255,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.Property<DateTime>("ValidTo");
 
@@ -281,7 +287,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("RatingLogId");
 
@@ -335,7 +342,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     b.Property<int>("RestaurantId");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<bool>("Active");
 
@@ -356,7 +363,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("RoleId");
 
@@ -380,7 +387,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
 
-                    b.Property<int>("RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.Property<DateTime>("UpdateTime");
 
@@ -396,7 +405,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("UserId");
 
@@ -442,7 +451,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -462,23 +473,25 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.UserRole", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<string>("UserId")
                         .HasColumnName("UserId");
 
-                    b.Property<int>("RoleId")
+                    b.Property<string>("RoleId")
                         .HasColumnName("RoleId");
 
                     b.Property<bool>("Active");
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int?>("RoleId1");
+                    b.Property<string>("RoleId1");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<int?>("UserId1");
+                    b.Property<string>("UserId1");
 
-                    b.Property<int>("UserRoleId");
+                    b.Property<string>("UserRoleId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.HasKey("UserId", "RoleId");
 
@@ -491,7 +504,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -501,7 +514,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<int>("RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -510,7 +524,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("RoleClaim");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -520,7 +534,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -529,7 +544,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("UserClaim");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
@@ -537,7 +552,8 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -546,9 +562,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("UserLogin");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<string>("LoginProvider");
 
@@ -709,7 +725,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Domain.Role")
                         .WithMany()
@@ -717,7 +733,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()
@@ -725,7 +741,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()
@@ -733,7 +749,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()

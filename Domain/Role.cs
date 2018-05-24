@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class Role : IdentityRole<int>, IEssentialEntityBase
+    public class Role : IdentityRole<string>, IEssentialEntityBase
     {
-        public int RoleId { get; set; }
+        [Required]
+        [MaxLength(450)]
+        public string RoleId { get; set; }
         [Required]
         [MaxLength(50)]
         public string AccessLevel { get; set; }

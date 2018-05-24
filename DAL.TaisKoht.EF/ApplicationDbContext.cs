@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DAL.Interfaces;
 using Domain;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace DAL.TaisKoht.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>, IDataContext
+    public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IDataContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -43,12 +44,12 @@ namespace DAL.TaisKoht.EF
             builder.Entity<UserRole>().ToTable("UserRole");
             builder.Entity<UserRole>().Property(p => p.UserId).HasColumnName("UserId");
             builder.Entity<UserRole>().Property(p => p.RoleId).HasColumnName("RoleId");
-            builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaim");
-            builder.Entity<IdentityUserClaim<int>>().Property(p => p.Id).HasColumnName("UserClaimId");
-            builder.Entity<IdentityUserLogin<int>>().ToTable("UserLogin");
-            builder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaim");
-            builder.Entity<IdentityRoleClaim<int>>().Property(p => p.Id).HasColumnName("RoleClaimId");
-            builder.Entity<IdentityUserToken<int>>().ToTable("UserToken");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
+            builder.Entity<IdentityUserClaim<string>>().Property(p => p.Id).HasColumnName("UserClaimId");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
+            builder.Entity<IdentityRoleClaim<string>>().Property(p => p.Id).HasColumnName("RoleClaimId");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
         }
 
         public DbSet<Address> Addresses { get; set; }
@@ -63,5 +64,6 @@ namespace DAL.TaisKoht.EF
         public DbSet<RestaurantUser> RestaurantUsers { get; set; }
         public new DbSet<User> Users { get; set; }
         public new DbSet<UserRole> UserRoles { get; set; }
+        public new DbSet<Role> Roles { get; set; }
     }
 }

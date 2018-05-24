@@ -7,17 +7,19 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class UserRole : IdentityUserRole<int>, IEssentialEntityBase
+    public class UserRole : IdentityUserRole<string>, IEssentialEntityBase
     {
-        public int UserRoleId { get; set; }
+        [Required]
+        [MaxLength(450)]
+        public string UserRoleId { get; set; }
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
         public bool Active { get; set; } = true;
         [Required]
-        public override int UserId { get; set; }
+        public override string UserId { get; set; }
         public User User { get; set; }
         [Required]
-        public override int RoleId { get; set; }
+        public override string RoleId { get; set; }
         public Role Role { get; set; }
     }
 }

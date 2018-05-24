@@ -19,7 +19,7 @@ namespace Domain
         public int? DishId { get; set; }
         public Dish Dish { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace Domain
         public List<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
         //foreign keys
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
     }
 }

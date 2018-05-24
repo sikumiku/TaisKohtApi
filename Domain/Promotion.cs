@@ -18,7 +18,7 @@ namespace Domain
         public DateTime ValidTo { get; set; }
         //foreign keys
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         //OneToMany
         public List<Menu> Menus { get; set; } = new List<Menu>();

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Create : Migration
+    public partial class InitialNr78 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,8 +35,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<string>(nullable: false),
                     AccessLevel = table.Column<string>(maxLength: 50, nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
@@ -55,8 +54,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
@@ -90,7 +88,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,7 +113,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     Description = table.Column<string>(maxLength: 255, nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -140,7 +138,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     Type = table.Column<string>(maxLength: 50, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     ValidTo = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -162,7 +160,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -182,7 +180,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -199,14 +197,12 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "UserRole",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
-                    RoleId1 = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId1 = table.Column<int>(nullable: true),
-                    UserRoleId = table.Column<int>(nullable: false)
+                    UserRoleId = table.Column<string>(maxLength: 450, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,20 +214,8 @@ namespace DAL.TaisKoht.EF.Migrations
                         principalColumn: "RoleId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserRole_Role_RoleId1",
-                        column: x => x.RoleId1,
-                        principalTable: "Role",
-                        principalColumn: "RoleId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_UserRole_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserRole_User_UserId1",
-                        column: x => x.UserId1,
                         principalTable: "User",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
@@ -241,7 +225,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "UserToken",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
@@ -312,7 +296,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     ServeTime = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(maxLength: 40, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     Vegan = table.Column<bool>(nullable: true),
                     WeightG = table.Column<decimal>(type: "decimal(8, 2)", nullable: true)
                 },
@@ -349,11 +333,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     ActiveFrom = table.Column<DateTime>(nullable: true),
                     ActiveTo = table.Column<DateTime>(nullable: true),
                     AddTime = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     PromotionId = table.Column<int>(nullable: true),
                     RepetitionInterval = table.Column<int>(nullable: true),
                     RestaurantId = table.Column<int>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -383,7 +368,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 columns: table => new
                 {
                     RestaurantId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     RestaurantUserId = table.Column<int>(nullable: false),
@@ -420,7 +405,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     Rating = table.Column<int>(nullable: false),
                     RestaurantId = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -632,16 +617,6 @@ namespace DAL.TaisKoht.EF.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRole_RoleId1",
-                table: "UserRole",
-                column: "RoleId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRole_UserId1",
-                table: "UserRole",
-                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
