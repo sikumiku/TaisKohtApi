@@ -27,7 +27,6 @@ namespace Domain
         public List<Dish> Dishes { get; set; } = new List<Dish>();
         public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
-        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }

@@ -20,6 +20,5 @@ namespace Domain
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
         public bool Active { get; set; } = true;
-        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }
