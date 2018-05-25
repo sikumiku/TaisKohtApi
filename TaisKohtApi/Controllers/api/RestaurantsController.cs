@@ -37,7 +37,7 @@ namespace TaisKohtApi.Controllers.api
         // GET: api/v1/Restaurants
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -56,7 +56,7 @@ namespace TaisKohtApi.Controllers.api
         // GET: api/v1/Restaurants/search?name=th
         [AllowAnonymous]
         [HttpGet("Search")]
-        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -81,7 +81,7 @@ namespace TaisKohtApi.Controllers.api
         // GET: api/v1/Restaurants/Top
         [AllowAnonymous]
         [HttpGet("Top")]
-        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -143,9 +143,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]RestaurantDTO restaurantDTO)
+        public IActionResult Post([FromBody]PostRestaurantDTO restaurantDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            if (restaurantDTO.UserId != User.Identity.GetUserId()) return BadRequest("Provided userId does not match logged in user Id");
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO);
 
@@ -177,10 +178,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]RestaurantDTO restaurantDTO)
+        public IActionResult Put(int id, [FromBody]PostRestaurantDTO restaurantDTO)
         {
-
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var restaurant = _restaurantService.GetRestaurantById(id);
 
             if (restaurant == null) return NotFound();
@@ -227,8 +227,7 @@ namespace TaisKohtApi.Controllers.api
         {
             var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);
             var userIds = new ArrayList();
-            users.ForEach(u => userIds.Add(u.Email));
-            //Identity GetUserId returns user email not id
+            users.ForEach(u => userIds.Add(u.UserId));
             return User.IsInRole("admin") || userIds.Contains(User.Identity.GetUserId());
         }
     }
