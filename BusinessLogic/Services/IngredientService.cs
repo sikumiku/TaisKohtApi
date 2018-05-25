@@ -21,7 +21,7 @@ namespace BusinessLogic.Services
             _ingredientFactory = ingredientFactory;
         }
 
-        public IngredientDTO AddNewIngredient(IngredientDTO ingredientDTO)
+        public IngredientDTO AddNewIngredient(PostIngredientDTO ingredientDTO)
         {
             var newIngredient = _ingredientFactory.Create(ingredientDTO);
             _uow.Ingredients.Add(newIngredient);
@@ -43,7 +43,7 @@ namespace BusinessLogic.Services
             return _ingredientFactory.Create(ingredient);
         }
 
-        public void UpdateIngredient(int id, IngredientDTO updatedIngredientDTO)
+        public void UpdateIngredient(int id, PostIngredientDTO updatedIngredientDTO)
         {
             Ingredient ingredient = _uow.Ingredients.Find(id);
             ingredient.Name = updatedIngredientDTO.Name;

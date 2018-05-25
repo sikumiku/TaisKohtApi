@@ -18,7 +18,6 @@ namespace Domain
         public string FirstLastName => $"{FirstName} {LastName}";
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
-
         public bool Active { get; set; } = true;
         //OneToMany
         public List<Menu> Menus { get; set; } = new List<Menu>();

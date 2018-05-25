@@ -47,4 +47,32 @@ namespace BusinessLogic.DTO
             return ingredient;
         }
     }
+
+    public class PostIngredientDTO
+    {
+        [Required]
+        [MinLength(3)]
+        [MaxLength(50)]
+        public string Name { get; set; }
+        [MaxLength(255)]
+        public string Description { get; set; }
+        [MinLength(1)]
+        [MaxLength(10)]
+        public string AmountUnit { get; set; }
+        //foreign keys
+        [Required]
+        public string UserId { get; set; }
+
+        public static PostIngredientDTO CreateFromDomain(Ingredient ingredient)
+        {
+            if (ingredient == null || !ingredient.Active) { return null; }
+            return new PostIngredientDTO()
+            {
+                Name = ingredient.Name,
+                Description = ingredient.Description,
+                AmountUnit = ingredient.AmountUnit,
+                UserId = ingredient.UserId
+            };
+        }
+    }
 }

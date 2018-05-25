@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -56,7 +57,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get(int id)
+        public IActionResult GetIngredient(int id)
         {
             var i = _ingredientService.GetIngredientById(id);
             if (i == null) return NotFound();
@@ -88,11 +89,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]IngredientDTO ingredientDTO)
+        public IActionResult Post([FromBody]PostIngredientDTO ingredientDTO)
         {
-            //ingredientDTO.UserId; //objekti k2est v6tta id, ManyToMany puhul kuidas teha?
-            //User.Identity.GetUserId(); //id saamine useri k2est
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            if (ingredientDTO.UserId != User.Identity.GetUserId()) return BadRequest("Provided userId does not match logged in user Id");
 
             var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO);
 
@@ -124,9 +124,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]IngredientDTO ingredientDTO)
+        public IActionResult Put(int id, [FromBody]PostIngredientDTO ingredientDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            if (ingredientDTO.UserId != User.Identity.GetUserId()) return BadRequest("Provided userId does not match logged in user Id");
             var i = _ingredientService.GetIngredientById(id);
 
             if (i == null) return NotFound();
@@ -150,8 +151,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var i = _ingredientService.GetIngredientById(id);
-            if (i == null) return NotFound();
+            var ingredient = _ingredientService.GetIngredientById(id);
+            if (ingredient == null) return NotFound();
+            if (ingredient.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be deleted by admin or by logged in user who created the ingredient.");
             _ingredientService.DeleteIngredient(id);
             return NoContent();
         }
