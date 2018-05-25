@@ -19,17 +19,40 @@ namespace DAL.TaisKoht.EF
             : base(options)
         {
         }
+ 
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<DishIngredient> DishIngredients { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<MenuDish> MenuDishes { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<RatingLog> RatingLogs { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<RestaurantUser> RestaurantUsers { get; set; }
+        public new DbSet<User> Users { get; set; }
+        public new DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<RestaurantUser>()
-                .HasKey(x => new {x.RestaurantId, x.UserId});
-
             builder.Entity<MenuDish>()
                 .HasKey(x => new {x.MenuId, x.DishId});
 
             builder.Entity<DishIngredient>()
                 .HasKey(x => new {x.IngredientId, x.DishId});
+
+            builder.Entity<RestaurantUser>()
+                .HasKey(ru => new {ru.RestaurantId, ru.UserId});
+
+            builder.Entity<RestaurantUser>()
+                .HasOne(ru => ru.Restaurant)
+                .WithMany(ru => ru.RestaurantUsers)
+                .HasForeignKey(ru => ru.RestaurantId);
+
+            builder.Entity<RestaurantUser>()
+                .HasOne(ru => ru.User)
+                .WithMany(ru => ru.RestaurantUsers)
+                .HasForeignKey(ru => ru.UserId);
 
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
@@ -78,6 +101,7 @@ namespace DAL.TaisKoht.EF
             builder.Entity<User>().Property(p => p.Id).HasColumnName("UserId");
             builder.Entity<Role>().ToTable("Role");
             builder.Entity<Role>().Property(p => p.Id).HasColumnName("RoleId");
+            builder.Entity<RestaurantUser>().Property(p => p.RestaurantUserId).ValueGeneratedOnAdd();
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRole");
             builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
             builder.Entity<IdentityUserClaim<string>>().Property(p => p.Id).HasColumnName("UserClaimId");
@@ -122,17 +146,5 @@ namespace DAL.TaisKoht.EF
                 }
             }
         }
-        public DbSet<Address> Addresses { get; set; }
-        public DbSet<Dish> Dishes { get; set; }
-        public DbSet<DishIngredient> DishIngredients { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set; }
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<MenuDish> MenuDishes { get; set; }
-        public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<RatingLog> RatingLogs { get; set; }
-        public DbSet<Restaurant> Restaurants { get; set; }
-        public DbSet<RestaurantUser> RestaurantUsers { get; set; }
-        public new DbSet<User> Users { get; set; }
-        public new DbSet<Role> Roles { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace Domain
         public List<Menu> Menus { get; set; } = new List<Menu>();
         public List<Dish> Dishes { get; set; } = new List<Dish>();
         public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
-        public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
+        public List<RestaurantUser> RestaurantUsers { get; set; } 
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }

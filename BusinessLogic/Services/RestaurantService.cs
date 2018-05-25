@@ -25,10 +25,11 @@ namespace BusinessLogic.Services
             _userManager = userManager;
         }
 
-        public RestaurantDTO AddNewRestaurant(RestaurantDTO restaurantDTO)
+        public RestaurantDTO AddNewRestaurant(PostRestaurantDTO restaurantDTO)
         {
             var newRestaurant = _restaurantFactory.Create(restaurantDTO);
             _uow.Restaurants.Add(newRestaurant);
+            _uow.RestaurantUsers.Add(new RestaurantUser{ RestaurantId = newRestaurant.RestaurantId, UserId = restaurantDTO.UserId });
             _uow.SaveChanges();
             return _restaurantFactory.CreateComplex(newRestaurant);
         }
@@ -52,10 +53,8 @@ namespace BusinessLogic.Services
             var restaurantUsers = _uow.RestaurantUsers.FindAll(restaurant.RestaurantId);
             if (restaurantUsers == null || !restaurant.Active) return null;
             List<UserDTO> users = new List<UserDTO>();
-            //find all users by restaurantUsers
             foreach (var restaurantUser in restaurantUsers)
             {
-                //UserId should be string or should use id
                 var user = _uow.Users.Find(restaurantUser.UserId);
                 if (user != null)
                 {
@@ -66,15 +65,13 @@ namespace BusinessLogic.Services
             return users;
         }
 
-        public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)
+        public void UpdateRestaurant(int id, PostRestaurantDTO updatedRestaurantDTO)
         {
             Restaurant restaurant = _uow.Restaurants.Find(id);
-            restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
             restaurant.Name = updatedRestaurantDTO.Name;
             restaurant.Url = updatedRestaurantDTO.Url;
             restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
             restaurant.Email = updatedRestaurantDTO.Email;
-            //restaurant.Address = updatedRestaurantDTO.Address;
             restaurant.UpdateTime = DateTime.UtcNow;
             _uow.Restaurants.Update(restaurant);
             _uow.SaveChanges();
