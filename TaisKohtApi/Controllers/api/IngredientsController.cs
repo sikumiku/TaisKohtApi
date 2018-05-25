@@ -82,6 +82,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Ingredients
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [ProducesResponseType(typeof(IngredientDTO), 201)]
         [ProducesResponseType(400)]
@@ -117,6 +118,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Ingredients/5
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -141,6 +143,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Ingredient not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
         // DELETE: api/v1/Ingredients/5
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

@@ -9,9 +9,6 @@ namespace Domain
 {
     public class User : IdentityUser<string>, IEssentialEntityBase
     {
-        [Required]
-        [MaxLength(450)]
-        public string UserId { get; set; }
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
@@ -21,7 +18,7 @@ namespace Domain
         public string FirstLastName => $"{FirstName} {LastName}";
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
-        public bool Active { get; set; } = true;
+        public bool Active { get; set; }
         //OneToMany
         public List<Menu> Menus { get; set; } = new List<Menu>();
         public List<Dish> Dishes { get; set; } = new List<Dish>();

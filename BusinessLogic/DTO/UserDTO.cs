@@ -17,7 +17,7 @@ namespace BusinessLogic.DTO
             if (user == null || !user.Active) { return null; }
             return new UserDTO()
             {
-                UserId = user.UserId,
+                UserId = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
                 Active = user.Active

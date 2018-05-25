@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,6 @@ namespace TaisKohtApi.Controllers.api
             _ratingLogService = ratingLogService;
         }
 
-        [Obsolete("Get() is pointless. To be removed.")]
         /// <summary>
         /// Gets all ratings as a list
         /// </summary>
@@ -29,6 +29,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ratings
+        [Obsolete("Get() is pointless. To be removed.")]
         [HttpGet]
         [ProducesResponseType(typeof(List<RatingLogDTO>), 200)]
         [ProducesResponseType(404)]
@@ -48,7 +49,6 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ratings/5
-        // TODO: check if method works once we are able to generate users again
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(RatingLogDTO), 200)]
         [ProducesResponseType(404)]
@@ -80,7 +80,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Rating
-        // TODO: check if method works once we are able to generate users again
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostRestaurantRatingLog")]
         [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
         [ProducesResponseType(400)]
@@ -114,7 +114,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Ratings/5
-        // TODO: check if method works once we are able to generate users again
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -139,7 +139,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Rating not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
         // DELETE: api/v1/Ratings/5
-        // TODO: check if method works once we are able to generate users again
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

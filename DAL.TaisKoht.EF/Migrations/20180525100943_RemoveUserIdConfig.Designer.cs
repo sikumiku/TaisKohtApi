@@ -11,9 +11,10 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180525100943_RemoveUserIdConfig")]
+    partial class RemoveUserIdConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,6 +410,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .HasColumnName("RoleId");
 
                     b.Property<string>("AccessLevel")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<bool>("Active");
@@ -428,6 +430,10 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.Property<DateTime>("UpdateTime")
                         .ValueGeneratedOnAddOrUpdate()
