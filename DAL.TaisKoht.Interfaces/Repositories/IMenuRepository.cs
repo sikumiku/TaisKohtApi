@@ -14,5 +14,7 @@ namespace DAL.TaisKoht.Interfaces.Repositories
         /// <param name="id">Menu PK value</param>
         /// <returns></returns>
         bool Exists(int id);
+
+        int GetUserMenuCount(string userId);
     }
 }

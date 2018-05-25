@@ -44,6 +44,11 @@ namespace BusinessLogic.Services
             return _menuFactory.CreateComplex(menu);
         }
 
+        public int GetUserMenuCount(string userId)
+        {
+            return _uow.Menus.GetUserMenuCount(userId);
+        }
+
         public void UpdateMenu(int id, PostMenuDTO updatedMenuDTO)
         {
             if (_uow.Menus.Exists(id))
