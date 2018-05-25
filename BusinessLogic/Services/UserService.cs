@@ -48,7 +48,6 @@ namespace BusinessLogic.Services
             User user = _uow.Users.Find(id);
             user.UserName = updatedUserDTO.UserName;
             user.Email = updatedUserDTO.Email;
-            //restaurant.Address = updatedRestaurantDTO.Address;
             user.UpdateTime = DateTime.UtcNow;
             _uow.Users.Update(user);
             _uow.SaveChanges();

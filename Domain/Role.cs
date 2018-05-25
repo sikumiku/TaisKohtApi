@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class Role : IdentityRole<int>, IEssentialEntityBase
+    public class Role : IdentityRole<string>, IEssentialEntityBase
     {
-        public int RoleId { get; set; }
+        [Required]
+        [MaxLength(450)]
+        public string RoleId { get; set; }
         [Required]
         [MaxLength(50)]
         public string AccessLevel { get; set; }
@@ -18,6 +20,5 @@ namespace Domain
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
         public bool Active { get; set; } = true;
-        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

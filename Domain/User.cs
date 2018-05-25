@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class User : IdentityUser<int>, IEssentialEntityBase
+    public class User : IdentityUser<string>, IEssentialEntityBase
     {
-        public int UserId { get; set; }
+        [Required]
+        [MaxLength(450)]
+        public string UserId { get; set; }
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
@@ -25,7 +27,6 @@ namespace Domain
         public List<Dish> Dishes { get; set; } = new List<Dish>();
         public List<RatingLog> RatingLogs { get; set; } = new List<RatingLog>();
         public List<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
-        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }

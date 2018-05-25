@@ -26,10 +26,7 @@ namespace BusinessLogic.Factories
             {
                 RatingLogId = ratingLogDTO.RatingLogId,
                 Rating = ratingLogDTO.Rating,
-                Comment = ratingLogDTO.Comment,
-                //RestaurantId = ratingLogDTO.RestaurantId,
-                //DishId = ratingLogDTO.DishId,
-                //UserId = ratingLogDTO.UserId
+                Comment = ratingLogDTO.Comment
             };
         }
 
@@ -37,7 +34,6 @@ namespace BusinessLogic.Factories
         {
             return new RatingLog
             {
-                //RatingLogId = ratingLogDTO.RatingLogId,
                 Rating = ratingLogDTO.Rating,
                 Comment = ratingLogDTO.Comment,
                 RestaurantId = ratingLogDTO.RestaurantId,

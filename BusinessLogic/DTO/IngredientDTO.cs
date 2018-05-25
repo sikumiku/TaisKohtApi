@@ -22,7 +22,7 @@ namespace BusinessLogic.DTO
         public Decimal? Amount { get; set; }
         //foreign keys
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public static IngredientDTO CreateFromDomain(Ingredient ingredient)
         {

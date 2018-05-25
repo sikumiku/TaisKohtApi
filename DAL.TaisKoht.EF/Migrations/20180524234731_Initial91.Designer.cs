@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180523180625_Create")]
-    partial class Create
+    [Migration("20180524234731_Initial91")]
+    partial class Initial91
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("AddressFirstLine")
                         .HasMaxLength(50);
@@ -51,7 +53,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("Region")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.HasKey("AddressId");
 
@@ -65,7 +69,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<DateTime?>("AvailableFrom");
 
@@ -98,9 +104,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("Title")
                         .HasMaxLength(40);
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.Property<bool?>("Vegan");
 
@@ -126,7 +135,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10, 2)");
@@ -135,7 +146,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("MenuId");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.HasKey("IngredientId", "DishId");
 
@@ -153,7 +166,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("AmountUnit")
                         .HasMaxLength(10);
@@ -165,9 +180,12 @@ namespace DAL.TaisKoht.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("IngredientId");
 
@@ -187,7 +205,11 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime?>("ActiveTo");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
+                    b.Property<string>("Name");
 
                     b.Property<int?>("PromotionId");
 
@@ -195,9 +217,12 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("RestaurantId");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("MenuId");
 
@@ -218,11 +243,15 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<int>("MenuDishId");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.HasKey("MenuId", "DishId");
 
@@ -238,7 +267,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("Description")
                         .HasMaxLength(255);
@@ -249,9 +280,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("Type")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.Property<DateTime>("ValidTo");
 
@@ -269,7 +303,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("Comment")
                         .HasMaxLength(2000);
@@ -280,9 +316,12 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("RestaurantId");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("RatingLogId");
 
@@ -302,7 +341,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<int?>("AddressId");
 
@@ -318,7 +359,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("PromotionId");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("Url")
                         .HasMaxLength(255);
@@ -336,17 +379,21 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     b.Property<int>("RestaurantId");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<int>("RestaurantUserId");
 
                     b.Property<DateTime?>("StartedAt");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.HasKey("RestaurantId", "UserId");
 
@@ -357,7 +404,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("RoleId");
 
@@ -367,7 +414,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -381,9 +430,13 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
 
-                    b.Property<int>("RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.HasKey("Id");
 
@@ -397,7 +450,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("UserId");
 
@@ -405,7 +458,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime");
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -441,9 +496,13 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<DateTime>("UpdateTime");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -461,48 +520,28 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("Domain.UserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnName("UserId");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnName("RoleId");
-
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("AddTime");
-
-                    b.Property<int?>("RoleId1");
-
-                    b.Property<DateTime>("UpdateTime");
-
-                    b.Property<int?>("UserId1");
-
-                    b.Property<int>("UserRoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("RoleClaimId");
 
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<int>("RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired();
+
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.HasKey("Id");
 
@@ -511,17 +550,28 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("RoleClaim");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("UserClaimId");
 
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<int>("UserId");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -530,15 +580,26 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("UserClaim");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
                     b.Property<string>("ProviderKey");
 
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<int>("UserId");
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -547,13 +608,46 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.ToTable("UserLogin");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("RoleId");
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId");
 
                     b.Property<string>("LoginProvider");
 
                     b.Property<string>("Name");
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("GetUtcDate()");
 
                     b.Property<string>("Value");
 
@@ -689,28 +783,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Domain.UserRole", b =>
-                {
-                    b.HasOne("Domain.Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1");
-
-                    b.HasOne("Domain.User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId1");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Domain.Role")
                         .WithMany()
@@ -718,7 +791,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()
@@ -726,7 +799,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()
@@ -734,7 +807,20 @@ namespace DAL.TaisKoht.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Domain.Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("Domain.User")
                         .WithMany()
