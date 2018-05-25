@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/Ratings")]
     public class RatingLogsController : Controller
@@ -30,6 +32,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ratings
         [Obsolete("Get() is pointless. To be removed.")]
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<RatingLogDTO>), 200)]
         [ProducesResponseType(404)]
@@ -49,12 +52,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ratings/5
-        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [HttpGet("{id}", Name = "GetRatingLog")]
         [ProducesResponseType(typeof(RatingLogDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get(int id)
+        public IActionResult GetRatingLog(int id)
         {
             var dto = _ratingLogService.GetRatingLogById(id);
             if (dto == null) return NotFound();
@@ -88,11 +92,11 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult PostRestaurantRatingLog([FromBody]RatingLogForEntityDTO ratingDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newRating = _ratingLogService.AddNewRatingLog(ratingDTO);
 
-            return CreatedAtAction("Get", new { id = newRating.RatingLogId }, newRating);
+            return CreatedAtAction("GetRatingLog", new { id = newRating.RatingLogId }, newRating);
         }
 
         /// <summary>

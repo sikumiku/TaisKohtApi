@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/Menus")]
     public class MenusController : Controller
@@ -30,6 +32,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Menus
         [Obsolete("Get() is pointless. We are fetching menus associated with one restaurant. Can keep for sake of variety.")]
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDTO>), 200)]
         [ProducesResponseType(404)]
@@ -49,12 +52,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Menus/5
+        [AllowAnonymous]
         [HttpGet("{id}", Name="GetMenu")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get(int id)
+        public IActionResult GetMenu(int id)
         {
             var menu = _menuService.GetMenuById(id);
             if (menu == null) return NotFound();
@@ -88,7 +92,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Post([FromBody]PostMenuDTO menuDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newMenu = _menuService.AddNewMenu(menuDTO);
 
