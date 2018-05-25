@@ -34,6 +34,9 @@ namespace BusinessLogic.DTO
         [Column(TypeName = "decimal(8, 2)")]
         public Decimal? DailyPrice { get; set; }
         public bool? Daily { get; set; }
+        //foreign keys
+        [Required]
+        public int RestaurantId { get; set; }
         //additional data
         public SimplePromotionDTO Promotion { get; set; }
         public List<IngredientDTO> Ingredients { get; set; }
@@ -58,6 +61,7 @@ namespace BusinessLogic.DTO
                 Price = dish.Price,
                 DailyPrice = dish.DailyPrice,
                 Daily = dish.Daily,
+                RestaurantId = dish.RestaurantId,
                 Rating = dish.RatingLogs.Any() ? Rating.Create(dish.RatingLogs) : null
         };
         }

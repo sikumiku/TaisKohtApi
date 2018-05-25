@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] //spetsifitseerime authenticationschemei, siis ei toimu reroutingut
     [Produces("application/json")]
     [Route("api/v1/Ingredients")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] //spetsifitseerime authenticationschemei, siis ei toimu reroutingut
     public class IngredientsController : Controller
     {
         private readonly IIngredientService _ingredientService;
@@ -32,8 +32,8 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ingredients
-        [HttpGet]
         [AllowAnonymous]
+        [HttpGet]
         [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
@@ -52,6 +52,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ingredients/5
+        [AllowAnonymous]
         [HttpGet("{id}", Name = "GetIngredient")]
         [ProducesResponseType(typeof(IngredientDTO), 200)]
         [ProducesResponseType(404)]
