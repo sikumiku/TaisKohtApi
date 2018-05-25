@@ -11,6 +11,8 @@ namespace BusinessLogic.Services
 
         MenuDTO GetMenuById(int id);
 
+        int GetUserMenuCount(string userId);
+
         MenuDTO AddNewMenu(PostMenuDTO dto);
 
         void UpdateMenu(int id, PostMenuDTO dto);

@@ -33,5 +33,10 @@ namespace DAL.TaisKoht.EF.Repositories
             return RepositoryDbSet.AsQueryable()
                 .ToList();
         }
+
+        public int GetUserMenuCount(string userId)
+        {
+            return RepositoryDbSet.AsQueryable().Count(m => m.UserId == userId);
+        }
     }
 }

@@ -53,15 +53,6 @@ namespace TaisKohtApi.Controllers.api
                     foreach (var userRole in userRoles)
                     {
                         claims.Add(new Claim(ClaimTypes.Role, userRole));
-                        var role = await _userManager.FindByNameAsync(userRole);
-                        if (role != null)
-                        {
-                            var roleClaims = await _userManager.GetClaimsAsync(role);
-                            foreach (Claim roleClaim in roleClaims)
-                            {
-                                claims.Add(roleClaim);
-                            }
-                        }
                     }
                     var userClaims = await _userManager.GetClaimsAsync(user); 
                     claims.AddRange(userClaims);
@@ -159,7 +150,6 @@ namespace TaisKohtApi.Controllers.api
         {
             var options = new IdentityOptions();
            
-            //find user from db, if they dont exist, add normalRole, if yes, check for Role, if null, add Normalrole, otherwise add specific role
             return new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email), // sub on subject

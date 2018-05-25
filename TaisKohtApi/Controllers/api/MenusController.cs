@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +90,11 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult Post([FromBody]PostMenuDTO menuDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
-
+            int userMenus = _menuService.GetUserMenuCount(User.Identity.GetUserId());
+            if (User.IsInRole("normalUser") && userMenus >= 1)
+            {
+                return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
+            }
             var newMenu = _menuService.AddNewMenu(menuDTO);
 
             return CreatedAtAction("Get", new { id = newMenu.MenuId }, newMenu);
