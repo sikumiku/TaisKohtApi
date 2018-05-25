@@ -9,7 +9,7 @@ namespace BusinessLogic.Factories
     public interface IIngredientFactory
     {
         IngredientDTO Create(Ingredient ingredient);
-        Ingredient Create(IngredientDTO ingredientDTO);
+        Ingredient Create(PostIngredientDTO ingredientDTO);
     }
 
     public class IngredientFactory : IIngredientFactory
@@ -19,11 +19,10 @@ namespace BusinessLogic.Factories
             return IngredientDTO.CreateFromDomain(ingredient);
         }
 
-        public Ingredient Create(IngredientDTO ingredientDTO)
+        public Ingredient Create(PostIngredientDTO ingredientDTO)
         {
             return new Ingredient
             {
-                IngredientId = ingredientDTO.IngredientId,
                 UserId = ingredientDTO.UserId,
                 Name = ingredientDTO.Name,
                 Description = ingredientDTO.Description,

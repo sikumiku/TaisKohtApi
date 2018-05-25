@@ -28,12 +28,12 @@ namespace TaisKohtApi.Controllers.api
     {
         private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<Role> _roleManager;
         private readonly ILogger _logger;
         private readonly IUserService _userService;
 
         public AccountController(Microsoft.AspNetCore.Identity.UserManager<User> userManager,
-            SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
+            SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.RoleManager<Role> roleManager,
             ILogger<AccountController> logger, 
             IUserService userService)
         {
@@ -124,7 +124,7 @@ namespace TaisKohtApi.Controllers.api
             if (role == null) { return BadRequest("Please add role as parameter in order to add role."); }
             if (!await _roleManager.RoleExistsAsync(role))
             {
-                await _roleManager.CreateAsync(new IdentityRole(role));
+                await _roleManager.CreateAsync(new Role{Name = role});
             }
 
             return StatusCode(201, Json(_roleManager.Roles)); 

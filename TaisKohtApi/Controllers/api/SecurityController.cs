@@ -164,7 +164,7 @@ namespace TaisKohtApi.Controllers.api
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email), // sub on subject
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // jti on random string
-                new Claim(options.ClaimsIdentity.UserIdClaimType, user.Email),
+                new Claim(options.ClaimsIdentity.UserIdClaimType, user.Id),
                 new Claim(options.ClaimsIdentity.UserNameClaimType, user.UserName)
             };
         }
