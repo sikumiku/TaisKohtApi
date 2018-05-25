@@ -9,10 +9,10 @@ namespace Domain
 {
     public class Role : IdentityRole<string>, IEssentialEntityBase
     {
-        [Required]
-        [MaxLength(450)]
-        public string RoleId { get; set; }
-        [Required]
+        public Role()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
         [MaxLength(50)]
         public string AccessLevel { get; set; }
         [MaxLength(200)]

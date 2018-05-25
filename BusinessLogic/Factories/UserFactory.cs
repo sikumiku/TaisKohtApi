@@ -23,7 +23,7 @@ namespace BusinessLogic.Factories
         {
             return new User
             {
-                UserId = userDTO.UserId,
+                Id = userDTO.UserId,
                 UserName = userDTO.UserName,
                 Email = userDTO.Email,
                 Active = userDTO.Active

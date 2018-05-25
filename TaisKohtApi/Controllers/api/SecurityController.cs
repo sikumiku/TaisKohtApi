@@ -26,13 +26,15 @@ namespace TaisKohtApi.Controllers.api
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+        private readonly RoleManager<Role> _roleManager;
 
-        public SecurityController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, ILogger<SecurityController> logger)
+        public SecurityController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, ILogger<SecurityController> logger, RoleManager<Role> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         [HttpPost]
@@ -97,16 +99,16 @@ namespace TaisKohtApi.Controllers.api
                 if (result.Succeeded)
                 {
                     var currentUser = await _userManager.FindByEmailAsync(newUser.Email);
-                    String currentRole = "";
+                    var currentRole = "";
     
-                    if (currentUser.UserName == "admin")
+                    if (currentUser.Email == "admin@gmail.com")
                     {
-                        await _userManager.AddToRoleAsync(currentUser, "admin");
+                        await AddToRole(currentUser, "admin");
                         currentRole = "admin";
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(currentUser, "normalUser");
+                        await AddToRole(currentUser, "normalUser");
                         currentRole = "normalUser";
                     }
                     await _signInManager.SignInAsync(newUser, isPersistent: false);
@@ -131,6 +133,16 @@ namespace TaisKohtApi.Controllers.api
                 //return failure reasons to frontend
             }
             return BadRequest("This user already exists.");
+        }
+
+        private async Task AddToRole(User currentUser, string role)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                await _roleManager.CreateAsync(new Role{Name = role});
+            }
+
+            await _userManager.AddToRoleAsync(currentUser, role);
         }
 
         [HttpPost]
