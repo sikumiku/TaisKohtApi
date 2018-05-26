@@ -27,6 +27,7 @@ namespace BusinessLogic.Factories
                 RestaurantId = menuDTO.RestaurantId,
                 UserId = menuDTO.UserId,
                 PromotionId = menuDTO.PromotionId,
+                Name = menuDTO.Name,
                 ActiveFrom = menuDTO.ActiveFrom,
                 ActiveTo = menuDTO.ActiveTo,
                 RepetitionInterval = menuDTO.RepetitionInterval
