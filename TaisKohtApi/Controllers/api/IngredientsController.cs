@@ -40,7 +40,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Get()
         {
-            return Ok(_ingredientService.GetAllIngredients(User.Identity.GetUserId()));
+            if (!User.IsInRole("admin")) return Ok(_ingredientService.GetAllUserIngredients(User.Identity.GetUserId()));
+
+            return Ok(_ingredientService.GetAllIngredients());
         }
 
         /// <summary>
@@ -61,6 +63,7 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult GetIngredient(int id)
         {
             var i = _ingredientService.GetIngredientById(id);
+            if (i.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be showed by admin or by logged in user who created the ingredient.");
             if (i == null) return NotFound();
             return Ok(i);
         }
