@@ -25,12 +25,19 @@ namespace BusinessLogic.Services
             _userManager = userManager;
         }
 
-        public RestaurantDTO AddNewRestaurant(RestaurantDTO restaurantDTO)
+        public RestaurantDTO AddNewRestaurant(PostRestaurantDTO restaurantDTO)
         {
             var newRestaurant = _restaurantFactory.Create(restaurantDTO);
             _uow.Restaurants.Add(newRestaurant);
+            _uow.RestaurantUsers.Add(new RestaurantUser{ RestaurantId = newRestaurant.RestaurantId, UserId = restaurantDTO.UserId });
             _uow.SaveChanges();
             return _restaurantFactory.CreateComplex(newRestaurant);
+        }
+
+        public void AddUserToRestaurant(int id, string userId)
+        {
+            _uow.RestaurantUsers.Add(new RestaurantUser {RestaurantId = id, UserId = userId});
+            _uow.SaveChanges();
         }
 
         public IEnumerable<RestaurantDTO> GetAllRestaurants()
@@ -52,8 +59,6 @@ namespace BusinessLogic.Services
             var restaurantUsers = _uow.RestaurantUsers.FindAllByRestaurantId(restaurant.RestaurantId);
             if (restaurantUsers == null) return null;
             List<UserDTO> users = new List<UserDTO>();
-
-            //find all users by restaurantUsers
             foreach (var restaurantUser in restaurantUsers)
             {
                 var user = _uow.Users.Find(restaurantUser.UserId);
@@ -66,17 +71,15 @@ namespace BusinessLogic.Services
             return users;
         }
 
-        public RestaurantDTO UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)
+        public RestaurantDTO UpdateRestaurant(int id, PostRestaurantDTO updatedRestaurantDTO)
         {
             if (_uow.Restaurants.Exists(id))
             {
                 Restaurant restaurant = _uow.Restaurants.Find(id);
-                restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
                 restaurant.Name = updatedRestaurantDTO.Name;
                 restaurant.Url = updatedRestaurantDTO.Url;
                 restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
                 restaurant.Email = updatedRestaurantDTO.Email;
-                //restaurant.Address = updatedRestaurantDTO.Address;
                 _uow.Restaurants.Update(restaurant);
                 _uow.SaveChanges();
             }

@@ -163,9 +163,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetDish(int id)
         {
-            var d = _dishService.GetDishById(id);
-            if (d == null) return NotFound();
-            return Ok(d);
+            var dishDTO = _dishService.GetDishById(id);
+            if (dishDTO == null) return NotFound();
+            return Ok(dishDTO);
         }
 
         /// <summary>
@@ -272,9 +272,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var d = _dishService.GetDishById(id);
-            if (d == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(d.RestaurantId)) return BadRequest("Dish can only be deleted by admin or by restaurant user");
+            var dishDTO = _dishService.GetDishById(id);
+            if (dishDTO == null) return NotFound();
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be deleted by admin or by restaurant user");
             _dishService.DeleteDish(id);
             return NoContent();
         }

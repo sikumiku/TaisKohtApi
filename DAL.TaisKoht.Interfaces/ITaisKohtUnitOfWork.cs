@@ -14,6 +14,8 @@ namespace DAL.TaisKoht.Interfaces
         IRatingLogRepository RatingLogs { get; }
         IRestaurantUserRepository RestaurantUsers { get; }
         IUserRepository Users { get; }
+        IUserRoleRepository UserRoles { get; }
+        IRoleRepository Roles { get; }
     }
     
 }

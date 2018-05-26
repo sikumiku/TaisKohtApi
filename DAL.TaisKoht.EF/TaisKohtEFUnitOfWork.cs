@@ -34,6 +34,8 @@ namespace DAL.TaisKoht.EF
         public IRatingLogRepository RatingLogs => GetCustomRepository<IRatingLogRepository>();
         public IRestaurantUserRepository RestaurantUsers => GetCustomRepository<IRestaurantUserRepository>();
         public IUserRepository Users => GetCustomRepository<IUserRepository>();
+        public IUserRoleRepository UserRoles => GetCustomRepository<IUserRoleRepository>();
+        public IRoleRepository Roles => GetCustomRepository<IRoleRepository>();
 
         public void SaveChanges()
         {

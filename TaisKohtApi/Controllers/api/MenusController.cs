@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace TaisKohtApi.Controllers.api
 {
@@ -18,10 +19,12 @@ namespace TaisKohtApi.Controllers.api
     public class MenusController : Controller
     {
         private readonly IMenuService _menuService;
+        private readonly IRestaurantService _restaurantService;
 
-        public MenusController(IMenuService menuService)
+        public MenusController(IMenuService menuService, IRestaurantService restaurantService)
         {
             _menuService = menuService;
+            _restaurantService = restaurantService;
         }
 
         /// <summary>
@@ -61,9 +64,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetMenu(int id)
         {
-            var menu = _menuService.GetMenuById(id);
-            if (menu == null) return NotFound();
-            return Ok(menu);
+            var menuDTO = _menuService.GetMenuById(id);
+            if (menuDTO == null) return NotFound();
+            return Ok(menuDTO);
         }
 
         /// <summary>
@@ -94,11 +97,15 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult Post([FromBody]PostMenuDTO menuDTO)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            if (menuDTO.RestaurantId.Equals(null)) return BadRequest("Menu is not related any Restaurant");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("New menu can only be added by admin or by restaurant user");
+
             int userMenus = _menuService.GetUserMenuCount(User.Identity.GetUserId());
             if (User.IsInRole("normalUser") && userMenus >= 1)
             {
                 return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
             }
+
             var newMenu = _menuService.AddNewMenu(menuDTO);
 
             return CreatedAtRoute("GetMenu", new { id = newMenu.MenuId }, newMenu);
@@ -131,7 +138,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Put(int id, [FromBody]PostMenuDTO menuDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            if (menuDTO.RestaurantId.Equals(null)) return BadRequest("Menu is not related any Restaurant");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be updated by admin or by restaurant user");
+
             var m = _menuService.GetMenuById(id);
 
             if (m == null) return NotFound();
@@ -155,10 +165,19 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var m = _menuService.GetMenuById(id);
-            if (m == null) return NotFound();
+            var menuDTO = _menuService.GetMenuById(id);
+            if (menuDTO == null) return NotFound();
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be deleted by admin or by restaurant user");
             _menuService.DeleteMenu(id);
             return NoContent();
+        }
+
+        private Boolean IsRestaurantUserOrAdmin(int restaurantId)
+        {
+            var users = _restaurantService.GetRestaurantUsersById(restaurantId);
+            var userIds = new ArrayList();
+            users.ForEach(u => userIds.Add(u.UserId));
+            return User.IsInRole("admin") || userIds.Contains(User.Identity.GetUserId());
         }
     }
 }

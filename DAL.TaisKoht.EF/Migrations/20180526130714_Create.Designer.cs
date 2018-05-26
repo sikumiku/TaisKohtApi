@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180524234731_Initial91")]
-    partial class Initial91
+    [Migration("20180526130714_Create")]
+    partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -209,7 +209,8 @@ namespace DAL.TaisKoht.EF.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasComputedColumnSql("GetUtcDate()");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(50);
 
                     b.Property<int?>("PromotionId");
 
@@ -409,7 +410,6 @@ namespace DAL.TaisKoht.EF.Migrations
                         .HasColumnName("RoleId");
 
                     b.Property<string>("AccessLevel")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<bool>("Active");
@@ -429,10 +429,6 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasMaxLength(450);
 
                     b.Property<DateTime>("UpdateTime")
                         .ValueGeneratedOnAddOrUpdate()
@@ -499,10 +495,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<DateTime>("UpdateTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasComputedColumnSql("GetUtcDate()");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450);
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);

@@ -45,7 +45,7 @@ class LoginForm extends React.Component {
     render() {
         return (
             <div className="Login">
-                <p>Ei ole veel kontot loonud? Registreeru
+                <p>Ei ole veel kontot loonud? Registreeru 
                 <a href="/register">siin.</a></p>
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="email" bsSize="large">
