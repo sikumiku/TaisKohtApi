@@ -1,83 +1,75 @@
 ﻿import React, { Component } from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import "./Login.css";
+import './Login.css';
+import { Link } from 'react-router-dom';
+import AuthService from './AuthService';
 
-class LoginForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "",
-            password: ""
-        };
-
+class Login extends Component {
+    constructor() {
+        super();
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.Auth = new AuthService();
     }
-
-    validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0;
+    componentWillMount() {
+        if (this.Auth.loggedIn())
+            this.props.history.replace('/');
     }
-
-    handleChange(event) {
-        this.setState({
-             [event.target.id]: event.target.value
-        });
-    }
-
-    handleSubmit(event) {
-        alert('Login was submitted: ' + this.state.email + ' with password ' + this.state.password + '.');
-        event.preventDefault();
-        fetch("http://localhost:64376/api/account/login",
-                {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.state)
-                })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                alert('Received JWT token: ' + data.token);
-                sessionStorage.setItem('jwtToken', data.token);
-            });
-    }
-
     render() {
         return (
-            <div className="Login">
-                <p>Ei ole veel kontot loonud? Registreeru 
-                <a href="/register">siin.</a></p>
-                <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="email" bsSize="large">
-                        <ControlLabel>E-mail</ControlLabel>
-                        <FormControl
-                            autoFocus
-                            type="email"
-                            value={this.state.email}
+            <div className="center">
+                <div>
+                    Pole accounti? 
+                    <Link to="/register">
+                        Registreeri
+                    </Link>
+                </div>
+                <div className="card">
+                    <h1>Login</h1>
+                    <form onSubmit={this.handleFormSubmit}>
+                        <input
+                            className="form-item"
+                            placeholder="Email goes here..."
+                            name="email"
+                            type="text"
                             onChange={this.handleChange}
                         />
-                    </FormGroup>
-                    <FormGroup controlId="password" bsSize="large">
-                        <ControlLabel>Salasõna</ControlLabel>
-                        <FormControl
-                            value={this.state.password}
-                            onChange={this.handleChange}
+                        <input
+                            className="form-item"
+                            placeholder="Password goes here..."
+                            name="password"
                             type="password"
+                            onChange={this.handleChange}
                         />
-                    </FormGroup>
-                    <Button
-                        block
-                        bsSize="large"
-                        disabled={!this.validateForm()}
-                        type="submit"
-                            >
-                        SISENE
-                    </Button>
-                </form>
+                        <input
+                            className="form-submit"
+                            value="SUBMIT"
+                            type="submit"
+                        />
+                    </form>
+                </div>
             </div>
-    );
+        );
+    }
+
+    handleFormSubmit(e) {
+        e.preventDefault();
+
+        this.Auth.login(this.state.email, this.state.password)
+            .then(res => {
+                this.props.history.replace('/');
+            })
+            .catch(err => {
+                alert(err);
+            })
+    }
+
+    handleChange(e) {
+        this.setState(
+            {
+                [e.target.name]: e.target.value
+            }
+        )
     }
 }
 
-
-export default LoginForm;
+export default Login;

@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
+import AuthService from './AuthService';
 
 class RegisterForm extends React.Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class RegisterForm extends React.Component {
             password: "",
             confirmPassword: ""
         };
+        this.Auth = new AuthService();
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,28 +28,20 @@ class RegisterForm extends React.Component {
     }
 
     handleSubmit(event) {
-        alert('Registration was submitted: ' + this.state.email + ' with password ' + this.state.password + '.');
         event.preventDefault();
-        fetch("http://localhost:64376/api/account/register",
-            {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.state)
+        this.Auth.register(this.state.email, this.state.password, this.state.confirmPassword)
+            .then(res => {
+                this.props.history.replace('/');
             })
-            .then(function (response) {
-                return response.json();
+            .catch(err => {
+                alert(err);
             })
-            .then(function (data) {
-                alert('Received JWT token: ' + data.token);
-                sessionStorage.setItem('jwtToken', data.token);
-            });
     }
 
     render() {
         return (
             <div className="Login">
-                <p>Juba konto loodud? Logi sisse <a href="/login">siin:</a></p>
-                <form onSubmit={this.handleSubmit}>
+                  <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="email" bsSize="large">
                         <ControlLabel>E-mail</ControlLabel>
                         <FormControl
