@@ -49,15 +49,15 @@ namespace BusinessLogic.Services
         public RestaurantDTO GetRestaurantById(int id)
         {
             var restaurant = _uow.Restaurants.Find(id);
-            if (restaurant == null || !restaurant.Active) return null;
+            if (restaurant == null) return null;
 
             return _restaurantFactory.CreateComplex(restaurant);
         }
         public List<UserDTO> GetRestaurantUsersById(int restaurantId)
         {
             var restaurant = _uow.Restaurants.Find(restaurantId);
-            var restaurantUsers = _uow.RestaurantUsers.FindAll(restaurant.RestaurantId);
-            if (restaurantUsers == null || !restaurant.Active) return null;
+            var restaurantUsers = _uow.RestaurantUsers.FindAllByRestaurantId(restaurant.RestaurantId);
+            if (restaurantUsers == null) return null;
             List<UserDTO> users = new List<UserDTO>();
             foreach (var restaurantUser in restaurantUsers)
             {
@@ -71,24 +71,26 @@ namespace BusinessLogic.Services
             return users;
         }
 
-        public void UpdateRestaurant(int id, PostRestaurantDTO updatedRestaurantDTO)
+        public RestaurantDTO UpdateRestaurant(int id, PostRestaurantDTO updatedRestaurantDTO)
         {
-            Restaurant restaurant = _uow.Restaurants.Find(id);
-            restaurant.Name = updatedRestaurantDTO.Name;
-            restaurant.Url = updatedRestaurantDTO.Url;
-            restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
-            restaurant.Email = updatedRestaurantDTO.Email;
-            restaurant.UpdateTime = DateTime.UtcNow;
-            _uow.Restaurants.Update(restaurant);
-            _uow.SaveChanges();
+            if (_uow.Restaurants.Exists(id))
+            {
+                Restaurant restaurant = _uow.Restaurants.Find(id);
+                restaurant.Name = updatedRestaurantDTO.Name;
+                restaurant.Url = updatedRestaurantDTO.Url;
+                restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
+                restaurant.Email = updatedRestaurantDTO.Email;
+                _uow.Restaurants.Update(restaurant);
+                _uow.SaveChanges();
+            }
+
+            return GetRestaurantById(id);
         }
 
         public void DeleteRestaurant(int id)
         {
             Restaurant restaurant = _uow.Restaurants.Find(id);
-            restaurant.UpdateTime = DateTime.UtcNow;
-            restaurant.Active = false;
-            _uow.Restaurants.Update(restaurant);
+            _uow.Restaurants.Remove(restaurant);
             _uow.SaveChanges();
         }
 

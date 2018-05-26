@@ -98,7 +98,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newPromotion = _promotionService.AddNewPromotion(promotionDTO);
 
-            return CreatedAtAction("GetPromotion", new { id = newPromotion.PromotionId }, newPromotion);
+            return CreatedAtRoute("GetPromotion", new { id = newPromotion.PromotionId }, newPromotion);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Promotion was successfully updated, no content to be returned</response>
+        /// <response code="200">Promotion was successfully updated, updated Promotion to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
@@ -135,9 +135,9 @@ namespace TaisKohtApi.Controllers.api
             var p = _promotionService.GetPromotionById(id);
 
             if (p == null) return NotFound();
-            _promotionService.UpdatePromotion(id, promotionDTO);
+            PromotionDTO updatedPromotion = _promotionService.UpdatePromotion(id, promotionDTO);
 
-            return NoContent();
+            return Ok(updatedPromotion);
         }
 
         /// <summary>

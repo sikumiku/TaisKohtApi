@@ -96,7 +96,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO, User.Identity.GetUserId());
 
-            return CreatedAtAction("GetIngredient", new { id = newIngredient.IngredientId }, newIngredient);
+            return CreatedAtRoute("GetIngredient", new { id = newIngredient.IngredientId }, newIngredient);
         }
 
         /// <summary>
@@ -113,14 +113,14 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Ingredient was successfully updated, no content to be returned</response>
+        /// <response code="200">Ingredient was successfully updated, updated Ingredient to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Ingredients/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(IngredientDTO), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -130,9 +130,9 @@ namespace TaisKohtApi.Controllers.api
             var i = _ingredientService.GetIngredientById(id);
 
             if (i == null) return NotFound();
-            _ingredientService.UpdateIngredient(id, ingredientDTO);
 
-            return NoContent();
+            IngredientDTO updatedIngredient = _ingredientService.UpdateIngredient(id, ingredientDTO);
+            return Ok(updatedIngredient);
         }
 
         /// <summary>

@@ -9,7 +9,6 @@ namespace Domain
 {
     public class DishIngredient : EssentialEntityBase
     {
-        public int DishIngredientId { get; set; }
         [Column(TypeName = "decimal(10, 2)")]
         public Decimal Amount { get; set; }
         //foreign keys

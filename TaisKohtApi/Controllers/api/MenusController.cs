@@ -107,7 +107,7 @@ namespace TaisKohtApi.Controllers.api
             }
             var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
-            return CreatedAtAction("Get", new { id = newMenu.MenuId }, newMenu);
+            return CreatedAtRoute("GetMenu", new { id = newMenu.MenuId }, newMenu);
         }
 
         /// <summary>
@@ -124,14 +124,14 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Menu was successfully updated, no content to be returned</response>
+        /// <response code="200">Menu was successfully updated, updated Menu to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Menus/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(MenuDTO), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -144,9 +144,9 @@ namespace TaisKohtApi.Controllers.api
             var m = _menuService.GetMenuById(id);
 
             if (m == null) return NotFound();
-            _menuService.UpdateMenu(id, menuDTO);
+            MenuDTO updatedMenu = _menuService.UpdateMenu(id, menuDTO);
 
-            return NoContent();
+            return Ok(updatedMenu);
         }
 
         /// <summary>

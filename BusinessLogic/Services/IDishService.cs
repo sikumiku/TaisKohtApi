@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 
         DishDTO AddNewDish(PostDishDTO dto, string userId);
 
-        void UpdateDish(int id, PostDishDTO dto);
+        DishDTO UpdateDish(int id, PostDishDTO dto);
 
         void DeleteDish(int id);
 
