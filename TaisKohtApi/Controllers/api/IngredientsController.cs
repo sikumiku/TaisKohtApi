@@ -40,7 +40,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Get()
         {
-            return Ok(_ingredientService.GetAllIngredients());
+            return Ok(_ingredientService.GetAllIngredients(User.Identity.GetUserId()));
         }
 
         /// <summary>

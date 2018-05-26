@@ -168,7 +168,7 @@ namespace BusinessLogic.DTO
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
-        public int MenuId { get; set; }
+        public int? MenuId { get; set; }
         public int? PromotionId { get; set; }
     }
 }
