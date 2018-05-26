@@ -96,7 +96,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newRating = _ratingLogService.AddNewRatingLog(ratingDTO);
 
-            return CreatedAtAction("GetRatingLog", new { id = newRating.RatingLogId }, newRating);
+            return CreatedAtRoute("GetRatingLog", new { id = newRating.RatingLogId }, newRating);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Rating was successfully updated, no content to be returned</response>
+        /// <response code="200">Rating was successfully updated, updated Rating to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
@@ -130,9 +130,9 @@ namespace TaisKohtApi.Controllers.api
             var dto = _ratingLogService.GetRatingLogById(id);
 
             if (dto == null) return NotFound();
-            _ratingLogService.UpdateRatingLog(id, ratingDTO);
+            RatingLogDTO updatedRating = _ratingLogService.UpdateRatingLog(id, ratingDTO);
 
-            return NoContent();
+            return Ok(updatedRating);
         }
 
         /// <summary>

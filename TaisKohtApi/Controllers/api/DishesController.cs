@@ -208,7 +208,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newDish = _dishService.AddNewDish(dishDTO);
 
-            return CreatedAtAction("GetDish", new { id = newDish.DishId }, newDish);
+            return CreatedAtRoute("GetDish", new { id = newDish.DishId }, newDish);
         }
 
         /// <summary>
