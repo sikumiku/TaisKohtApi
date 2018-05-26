@@ -14,7 +14,7 @@ namespace BusinessLogic.DTO
         public string Email { get; set; }
         public string UserName { get; set; }
         public bool Active { get; set; }
-        public IdentityUserRole<string> UserRoles { get; set; }
+        public IList<string> UserRoles { get; set; }
 
         public static UserDTO CreateFromDomain(User user)
         {
