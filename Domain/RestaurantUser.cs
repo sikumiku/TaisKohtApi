@@ -8,7 +8,6 @@ namespace Domain
 {
     public class RestaurantUser : EssentialEntityBase
     {
-        [Key]
         public int RestaurantUserId { get; set; }
         public DateTime? StartedAt { get; set; }
         //foreign keys

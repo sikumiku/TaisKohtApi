@@ -101,7 +101,6 @@ namespace DAL.TaisKoht.EF
             builder.Entity<User>().Property(p => p.Id).HasColumnName("UserId");
             builder.Entity<Role>().ToTable("Role");
             builder.Entity<Role>().Property(p => p.Id).HasColumnName("RoleId");
-            builder.Entity<RestaurantUser>().Property(p => p.RestaurantUserId).ValueGeneratedOnAdd();
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRole");
             builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
             builder.Entity<IdentityUserClaim<string>>().Property(p => p.Id).HasColumnName("UserClaimId");

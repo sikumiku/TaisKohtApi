@@ -124,22 +124,30 @@ namespace TaisKohtApi.Controllers.api
         /// Add new user to restaurant's users list
         /// </summary>
         /// <param name="id">ID of restaurant that you wanna add new user to</param>
+        /// <param name="userId">ID of user that you wanna add to restaurant</param>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Restaurant or user not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants/5
         [AllowAnonymous]
-        [HttpPost("{id}", Name = "AddNewUserToRestaurant")]
+        [HttpPost]
+        [Route("addUserToRestaurant")]
         [ProducesResponseType(201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult AddNewUserToRestaurant(int id, string userId)
+        public IActionResult AddUserToRestaurant([FromQuery(Name = "id")] int id, [FromQuery(Name = "userId")] string userId)
         {
             var restaurant = _restaurantService.GetRestaurantById(id);
             var user = _userManager.FindByIdAsync(userId);
             if (restaurant == null || user == null) return NotFound();
+            if (!IsAuthorized(restaurant)) { return StatusCode(403, "You have to be logged in as one of the restaurant users to add new users to restaurant."); }
+            var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);
+            var userIds = new ArrayList();
+            users.ForEach(u => userIds.Add(u.UserId));
+            if (userIds.Contains(userId)) { return BadRequest("Provided user is already user of this restaurant."); }
+
             _restaurantService.AddUserToRestaurant(id, userId);
             return StatusCode(201);
         }
@@ -216,7 +224,7 @@ namespace TaisKohtApi.Controllers.api
             }
             else
             {
-                return StatusCode(403, Json("This action is forbidden to unauthorized user."));
+                return StatusCode(403, "This action is forbidden to unauthorized user.");
             }
             return NoContent();
         }

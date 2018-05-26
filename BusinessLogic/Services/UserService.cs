@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
@@ -15,7 +16,7 @@ namespace BusinessLogic.Services
     {
         private readonly ITaisKohtUnitOfWork _uow;
         private readonly IUserFactory _userFactory;
-        private static UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager;
 
         public UserService(ITaisKohtUnitOfWork uow, IUserFactory userFactory, UserManager<User> userManager)
         {
@@ -28,12 +29,8 @@ namespace BusinessLogic.Services
         {
             var user = _uow.Users.Find(id);
             if (user == null) return null;
-            return _userFactory.Create(user);
-        }
-
-        public void updateUser(string id, UserDTO dto)
-        {
-            throw new NotImplementedException();
+            var roles = this.GetRolesForUser(user);
+            return _userFactory.CreateComplex(user, roles);
         }
 
         public void DeactivateUser(string id)
@@ -56,9 +53,20 @@ namespace BusinessLogic.Services
             _uow.SaveChanges();
         }
 
-        public static async Task<IList<string>> GetRolesForUser(User user)
+        private List<String> GetRolesForUser(User user)
         {
-            return await _userManager.GetRolesAsync(user);
+            IEnumerable<string> userRolesIds = _uow.UserRoles.getUserRolesForUser(user).Select(ur => ur.RoleId).ToList();
+            List<string> roles = new List<string>();
+            foreach (var userRoleId in userRolesIds)
+            {
+                var role = _uow.Roles.Find(userRoleId);
+                if (role != null)
+                {
+                    roles.Add(role.Name);
+                }
+            }
+
+            return roles;
         }
     }
 }
