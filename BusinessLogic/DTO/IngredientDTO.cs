@@ -59,20 +59,5 @@ namespace BusinessLogic.DTO
         [MinLength(1)]
         [MaxLength(10)]
         public string AmountUnit { get; set; }
-        //foreign keys
-        [Required]
-        public string UserId { get; set; }
-
-        public static PostIngredientDTO CreateFromDomain(Ingredient ingredient)
-        {
-            if (ingredient == null || !ingredient.Active) { return null; }
-            return new PostIngredientDTO()
-            {
-                Name = ingredient.Name,
-                Description = ingredient.Description,
-                AmountUnit = ingredient.AmountUnit,
-                UserId = ingredient.UserId
-            };
-        }
     }
 }

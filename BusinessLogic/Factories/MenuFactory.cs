@@ -25,7 +25,6 @@ namespace BusinessLogic.Factories
             return new Menu
             {
                 RestaurantId = menuDTO.RestaurantId,
-                UserId = menuDTO.UserId,
                 PromotionId = menuDTO.PromotionId,
                 ActiveFrom = menuDTO.ActiveFrom,
                 ActiveTo = menuDTO.ActiveTo,

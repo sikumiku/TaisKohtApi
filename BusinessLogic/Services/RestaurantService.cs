@@ -25,11 +25,11 @@ namespace BusinessLogic.Services
             _userManager = userManager;
         }
 
-        public RestaurantDTO AddNewRestaurant(PostRestaurantDTO restaurantDTO)
+        public RestaurantDTO AddNewRestaurant(PostRestaurantDTO restaurantDTO, string userId)
         {
             var newRestaurant = _restaurantFactory.Create(restaurantDTO);
             _uow.Restaurants.Add(newRestaurant);
-            _uow.RestaurantUsers.Add(new RestaurantUser{ RestaurantId = newRestaurant.RestaurantId, UserId = restaurantDTO.UserId });
+            _uow.RestaurantUsers.Add(new RestaurantUser{ RestaurantId = newRestaurant.RestaurantId, UserId = userId });
             _uow.SaveChanges();
             return _restaurantFactory.CreateComplex(newRestaurant);
         }

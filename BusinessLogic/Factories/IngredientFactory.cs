@@ -23,7 +23,6 @@ namespace BusinessLogic.Factories
         {
             return new Ingredient
             {
-                UserId = ingredientDTO.UserId,
                 Name = ingredientDTO.Name,
                 Description = ingredientDTO.Description,
                 AmountUnit = ingredientDTO.AmountUnit

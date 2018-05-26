@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 
         DishDTO GetDishById(int id);
 
-        DishDTO AddNewDish(PostDishDTO dto);
+        DishDTO AddNewDish(PostDishDTO dto, string userId);
 
         void UpdateDish(int id, PostDishDTO dto);
 
