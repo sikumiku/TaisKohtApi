@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 
         IngredientDTO GetIngredientById(int id);
 
-        IngredientDTO AddNewIngredient(PostIngredientDTO dto);
+        IngredientDTO AddNewIngredient(PostIngredientDTO dto, string userId);
 
         void UpdateIngredient(int id, PostIngredientDTO dto);
 

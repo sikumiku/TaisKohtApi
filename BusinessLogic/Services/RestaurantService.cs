@@ -25,11 +25,11 @@ namespace BusinessLogic.Services
             _userManager = userManager;
         }
 
-        public RestaurantDTO AddNewRestaurant(PostRestaurantDTO restaurantDTO)
+        public RestaurantDTO AddNewRestaurant(PostRestaurantDTO restaurantDTO, string userId)
         {
             var newRestaurant = _restaurantFactory.Create(restaurantDTO);
             _uow.Restaurants.Add(newRestaurant);
-            _uow.RestaurantUsers.Add(new RestaurantUser{ RestaurantId = newRestaurant.RestaurantId, UserId = restaurantDTO.UserId });
+            _uow.RestaurantUsers.Add(new RestaurantUser{ RestaurantId = newRestaurant.RestaurantId, UserId = userId });
             _uow.SaveChanges();
             return _restaurantFactory.CreateComplex(newRestaurant);
         }
@@ -40,7 +40,7 @@ namespace BusinessLogic.Services
             _uow.SaveChanges();
         }
 
-        public IEnumerable<RestaurantDTO> GetAllRestaurants()
+        public IEnumerable<SimpleRestaurantDTO> GetAllRestaurants()
         {
             return _uow.Restaurants.All().Where(x => x.Active)
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
@@ -92,7 +92,7 @@ namespace BusinessLogic.Services
             _uow.SaveChanges();
         }
 
-        public IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName)
+        public IEnumerable<SimpleRestaurantDTO> SearchRestaurantByName(string restaurantName)
         {
 
             if (String.IsNullOrEmpty(restaurantName)) return null;
@@ -101,7 +101,7 @@ namespace BusinessLogic.Services
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
         }
 
-        public IEnumerable<RestaurantDTO> GetTopRestaurants(int amount)
+        public IEnumerable<SimpleRestaurantDTO> GetTopRestaurants(int amount)
         {
             int topAmount;
             if (!int.TryParse(amount.ToString(), out topAmount)) return null;
