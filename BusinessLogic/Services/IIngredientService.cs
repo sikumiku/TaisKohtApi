@@ -7,7 +7,8 @@ namespace BusinessLogic.Services
 {
     public interface IIngredientService
     {
-        IEnumerable<IngredientDTO> GetAllIngredients(string userId);
+        IEnumerable<IngredientDTO> GetAllUserIngredients(string userId);
+        IEnumerable<IngredientDTO> GetAllIngredients();
 
         IngredientDTO GetIngredientById(int id);
 

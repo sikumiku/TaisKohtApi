@@ -30,9 +30,15 @@ namespace BusinessLogic.Services
             return _ingredientFactory.Create(newIngredient);
         }
 
-        public IEnumerable<IngredientDTO> GetAllIngredients(string userId)
+        public IEnumerable<IngredientDTO> GetAllUserIngredients(string userId)
         {
             return _uow.Ingredients.All().Where(x => x.UserId == userId)
+                .Select(ingredient => _ingredientFactory.Create(ingredient));
+        }
+
+        public IEnumerable<IngredientDTO> GetAllIngredients()
+        {
+            return _uow.Ingredients.All()
                 .Select(ingredient => _ingredientFactory.Create(ingredient));
         }
 
