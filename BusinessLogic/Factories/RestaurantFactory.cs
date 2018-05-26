@@ -9,7 +9,7 @@ namespace BusinessLogic.Factories
     public interface IRestaurantFactory
     {
         RestaurantDTO Create(Restaurant promotion);
-        Restaurant Create(RestaurantDTO restaurantDTO);
+        Restaurant Create(PostRestaurantDTO restaurantDTO);
         RestaurantDTO CreateComplex(Restaurant restaurant);
     }
 
@@ -20,15 +20,15 @@ namespace BusinessLogic.Factories
             return RestaurantDTO.CreateFromDomain(restaurant);
         }
 
-        public Restaurant Create(RestaurantDTO restaurantDTO)
+        public Restaurant Create(PostRestaurantDTO restaurantDTO)
         {
             return new Restaurant
             {
-                RestaurantId = restaurantDTO.RestaurantId,
                 Name = restaurantDTO.Name,
                 Url = restaurantDTO.Url,
                 ContactNumber = restaurantDTO.ContactNumber,
-                Email = restaurantDTO.Email
+                Email = restaurantDTO.Email,
+                Address = AddressDTO.CreateFromDTO(restaurantDTO.Address)
             };
         }
 

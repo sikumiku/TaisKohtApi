@@ -8,13 +8,10 @@ namespace BusinessLogic.Services
     public interface IRestaurantService
     {
         IEnumerable<RestaurantDTO> GetAllRestaurants();
-
         RestaurantDTO GetRestaurantById(int id);
-
-        RestaurantDTO AddNewRestaurant(RestaurantDTO dto);
-
-        void UpdateRestaurant(int id, RestaurantDTO dto);
-
+        void AddUserToRestaurant(int id, string userId);
+        RestaurantDTO AddNewRestaurant(PostRestaurantDTO dto);
+        void UpdateRestaurant(int id, PostRestaurantDTO dto);
         void DeleteRestaurant(int id);
         IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName);
         IEnumerable<RestaurantDTO> GetTopRestaurants(int amount);

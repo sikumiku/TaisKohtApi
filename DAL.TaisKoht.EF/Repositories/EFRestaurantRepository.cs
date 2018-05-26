@@ -23,18 +23,19 @@ namespace DAL.TaisKoht.EF.Repositories
         public override Restaurant Find(params object[] id)
         {
             return RepositoryDbSet
-                //.Include(y => y.Menus)
-                //.Include(x => x.Dishes)
-                //.Include(z => z.Promotions)
+                .Include(a => a.Address)
+                .Include(a => a.Menus)
+                .Include(a => a.Dishes)
+                .Include(a => a.Promotion)
+                .Include(a => a.RatingLogs)
                 .SingleOrDefault(x => (int)id[0] == x.RestaurantId);
         }
 
         public override IEnumerable<Restaurant> All()
         {
             return RepositoryDbSet.AsQueryable()
-                //.Include(x => x.Menus)
-                //.ThenInclude(y => y.Dishes)
-                //.ThenInclude(z => z.Promotions)
+                .Include(a => a.Address)
+                .Include(a => a.RatingLogs)
                 .ToList();
         }
     }

@@ -10,6 +10,7 @@ namespace BusinessLogic.Factories
     {
         UserDTO Create(User user);
         User Create(UserDTO userDTO);
+        UserDTO CreateComplex(User user, List<string> roles);
     }
 
     public class UserFactory : IUserFactory
@@ -28,6 +29,11 @@ namespace BusinessLogic.Factories
                 Email = userDTO.Email,
                 Active = userDTO.Active
             };
+        }
+
+        public UserDTO CreateComplex(User user, List<string> roles)
+        {
+            return UserDTO.CreateFromDomainWithRoles(user, roles);
         }
     }
 }

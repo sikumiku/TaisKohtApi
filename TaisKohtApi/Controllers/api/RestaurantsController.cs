@@ -21,10 +21,12 @@ namespace TaisKohtApi.Controllers.api
     public class RestaurantsController : Controller
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
 
-        public RestaurantsController(IRestaurantService restaurantService)
+        public RestaurantsController(IRestaurantService restaurantService, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
         {
             _restaurantService = restaurantService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace TaisKohtApi.Controllers.api
         // GET: api/v1/Restaurants
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -56,7 +58,7 @@ namespace TaisKohtApi.Controllers.api
         // GET: api/v1/Restaurants/search?name=th
         [AllowAnonymous]
         [HttpGet("Search")]
-        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -81,7 +83,7 @@ namespace TaisKohtApi.Controllers.api
         // GET: api/v1/Restaurants/Top
         [AllowAnonymous]
         [HttpGet("Top")]
-        [ProducesResponseType(typeof(List<RestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -119,6 +121,38 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
+        /// Add new user to restaurant's users list
+        /// </summary>
+        /// <param name="id">ID of restaurant that you wanna add new user to</param>
+        /// <param name="userId">ID of user that you wanna add to restaurant</param>
+        /// <response code="200">Successful operation</response>
+        /// <response code="404">Restaurant or user not found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Restaurants/5
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("addUserToRestaurant")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult AddUserToRestaurant([FromQuery(Name = "id")] int id, [FromQuery(Name = "userId")] string userId)
+        {
+            var restaurant = _restaurantService.GetRestaurantById(id);
+            var user = _userManager.FindByIdAsync(userId);
+            if (restaurant == null || user == null) return NotFound();
+            if (!IsAuthorized(restaurant)) { return StatusCode(403, "You have to be logged in as one of the restaurant users to add new users to restaurant."); }
+            var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);
+            var userIds = new ArrayList();
+            users.ForEach(u => userIds.Add(u.UserId));
+            if (userIds.Contains(userId)) { return BadRequest("Provided user is already user of this restaurant."); }
+
+            _restaurantService.AddUserToRestaurant(id, userId);
+            return StatusCode(201);
+        }
+
+        /// <summary>
         /// Creates a restaurant
         /// </summary>
         /// <param name="restaurantDTO">Restaurant object to be added</param>
@@ -143,9 +177,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]RestaurantDTO restaurantDTO)
+        public IActionResult Post([FromBody]PostRestaurantDTO restaurantDTO)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            if (restaurantDTO.UserId != User.Identity.GetUserId()) return BadRequest("Provided userId does not match logged in user Id");
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO);
 
@@ -177,10 +212,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]RestaurantDTO restaurantDTO)
+        public IActionResult Put(int id, [FromBody]PostRestaurantDTO restaurantDTO)
         {
-
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var restaurant = _restaurantService.GetRestaurantById(id);
 
             if (restaurant == null) return NotFound();
@@ -190,7 +224,7 @@ namespace TaisKohtApi.Controllers.api
             }
             else
             {
-                return StatusCode(403, Json("This action is forbidden to unauthorized user."));
+                return StatusCode(403, "This action is forbidden to unauthorized user.");
             }
             return NoContent();
         }

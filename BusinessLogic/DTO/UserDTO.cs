@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLogic.Services;
@@ -10,11 +11,12 @@ namespace BusinessLogic.DTO
 {
     public class UserDTO
     {
+
         public string UserId { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
         public bool Active { get; set; }
-        public IList<string> UserRoles { get; set; }
+        public List<string> UserRoles { get; set; }
 
         public static UserDTO CreateFromDomain(User user)
         {
@@ -24,9 +26,17 @@ namespace BusinessLogic.DTO
                 UserId = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
-                Active = user.Active,
-                UserRoles = UserService.GetRolesForUser(user).Result
+                Active = user.Active
             };
+        }
+
+        public static UserDTO CreateFromDomainWithRoles(User u, List<string> roles)
+        {
+            var user = CreateFromDomain(u);
+            if (user == null) { return null; }
+
+            user.UserRoles = roles;
+            return user;
         }
     }
 
