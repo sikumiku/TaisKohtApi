@@ -1,10 +1,29 @@
 ﻿import React, { Component } from 'react';
 import { NavItem, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-
+import AuthService from '../pages/auth/AuthService';
+import withAuth from '../pages/auth/withAuth';
+const Auth = new AuthService();
 
 class Header extends Component {
+
+    handleLogout() {
+        Auth.logout()
+        this.props.history.replace('/');
+    }
+
     render() {
+        let authButton;
+        if (Auth.loggedIn()) {
+            console.log('Is logged in.');
+            authButton = <button type="button" className="form-submit" onClick={this.handleLogout.bind(this)}>Logout</button>;
+        } else {
+            console.log('Is logged out.');
+            authButton = 
+                <LinkContainer to="/login">
+                    <NavItem eventKey={1}>SISENE</NavItem>
+                </LinkContainer>;
+        }
         return (
             <header>
                 <nav className="navbar navbar-inverse">
@@ -22,9 +41,7 @@ class Header extends Component {
                             <LinkContainer to="/restaurants">
                                 <NavItem eventKey={1}>RESTORANID</NavItem>
                             </LinkContainer>
-                            <LinkContainer to="/login">
-                                <NavItem eventKey={1}>SISENE</NavItem>
-                            </LinkContainer>
+                            {authButton}
                         </ul>
                     </Navbar.Collapse>
                 </nav>

@@ -26,21 +26,14 @@ class RegisterForm extends React.Component {
     }
 
     handleSubmit(event) {
-        alert('Registration was submitted: ' + this.state.email + ' with password ' + this.state.password + '.');
-        event.preventDefault();
-        fetch("http://localhost:64376/api/account/register",
-            {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.state)
+        e.preventDefault();
+        this.Auth.register(this.state.username, this.state.password)
+            .then(res => {
+                this.props.history.replace('/');
             })
-            .then(function (response) {
-                return response.json();
+            .catch(err => {
+                alert(err);
             })
-            .then(function (data) {
-                alert('Received JWT token: ' + data.token);
-                sessionStorage.setItem('jwtToken', data.token);
-            });
     }
 
     render() {
