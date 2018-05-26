@@ -20,6 +20,11 @@ namespace DAL.TaisKoht.EF.Repositories
             return RepositoryDbSet.Any(e => e.RestaurantId == id);
         }
 
+        public IEnumerable<RestaurantUser> FindAll(params object[] restaurantId)
+        {
+            return RepositoryDbSet.AsQueryable().ToList().Where(r => r.RestaurantId == (int)restaurantId[0]);
+        }
+
         public IEnumerable<RestaurantUser> FindAllByRestaurantId(int restaurantId)
         {
             return RepositoryDbSet.AsQueryable().ToList().Where(r => r.RestaurantId == restaurantId);
@@ -27,6 +32,11 @@ namespace DAL.TaisKoht.EF.Repositories
         public IEnumerable<RestaurantUser> FindAllByUserId(string userId)
         {
             return RepositoryDbSet.AsQueryable().ToList().Where(r => r.UserId == userId);
+        }
+
+        public int GetUserRestaurantCount(string userId)
+        {
+            return RepositoryDbSet.AsQueryable().Count(r => r.UserId == userId);
         }
     }
 }
