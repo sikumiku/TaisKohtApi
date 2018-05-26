@@ -20,11 +20,13 @@ namespace TaisKohtApi.Controllers.api
     {
         private readonly IDishService _dishService;
         private readonly IRestaurantService _restaurantService;
+        private readonly IIngredientService _ingredientService;
 
-        public DishesController(IDishService dishService, IRestaurantService restaurantService)
+        public DishesController(IDishService dishService, IRestaurantService restaurantService, IIngredientService ingredientService)
         {
             _dishService = dishService;
             _restaurantService = restaurantService;
+            _ingredientService = ingredientService;
         }
 
         /// <summary>
@@ -196,6 +198,7 @@ namespace TaisKohtApi.Controllers.api
         // POST: api/v1/Dishes
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostDish")]
+        [ProducesResponseType(typeof(DishDTO), 201)]
         [ProducesResponseType(typeof(PostDishDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
@@ -209,6 +212,35 @@ namespace TaisKohtApi.Controllers.api
             var newDish = _dishService.AddNewDish(dishDTO, User.Identity.GetUserId());
 
             return CreatedAtRoute("GetDish", new { id = newDish.DishId }, newDish);
+        }
+
+        /// <summary>
+        /// Adds ingredient to dish
+        /// </summary>
+        /// <param name="PostIngredientForDishDTO"></param>
+        /// <returns>Dish with new Ingredient added to it</returns>
+        /// <response code="201">Returns the newly updated dish</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // POST: api/v1/Dishes/addIngredient
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [HttpPost]
+        [Route("addIngredient")]
+        [ProducesResponseType(typeof(DishDTO), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult AddIngredientToDish([FromBody]PostIngredientForDishDTO dishIngredientDTO)
+        {
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+            var dish = _dishService.GetDishById(dishIngredientDTO.DishId);
+            var ingredient = _ingredientService.GetIngredientById(dishIngredientDTO.IngredientId);
+            if (dish == null || ingredient == null) { BadRequest("Invalid dish or ingredient identifier."); }
+            if (!IsRestaurantUserOrAdmin(dish.RestaurantId)) return BadRequest("Ingredient can be added to dish only by users of restaurant that the dish belongs to.");
+            var updatedDish = _dishService.AddIngredientToDish(dishIngredientDTO);
+
+            return CreatedAtRoute("GetDish", new { id = dish.DishId }, updatedDish);
         }
 
         /// <summary>

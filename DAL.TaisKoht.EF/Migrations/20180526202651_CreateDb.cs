@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Create : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -382,7 +382,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     UserId = table.Column<string>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
-                    RestaurantUserId = table.Column<int>(nullable: false),
                     StartedAt = table.Column<DateTime>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
                 },
@@ -450,7 +449,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
                     Amount = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
-                    DishIngredientId = table.Column<int>(nullable: false),
                     MenuId = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
                 },
@@ -485,7 +483,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     DishId = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
-                    MenuDishId = table.Column<int>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
                 },
                 constraints: table =>
