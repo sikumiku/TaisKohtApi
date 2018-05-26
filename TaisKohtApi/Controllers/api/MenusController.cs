@@ -105,8 +105,7 @@ namespace TaisKohtApi.Controllers.api
             {
                 return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
             }
-
-            var newMenu = _menuService.AddNewMenu(menuDTO);
+            var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
             return CreatedAtAction("Get", new { id = newMenu.MenuId }, newMenu);
         }

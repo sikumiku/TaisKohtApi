@@ -10,7 +10,7 @@ namespace BusinessLogic.Services
         IEnumerable<RestaurantDTO> GetAllRestaurants();
         RestaurantDTO GetRestaurantById(int id);
         void AddUserToRestaurant(int id, string userId);
-        RestaurantDTO AddNewRestaurant(PostRestaurantDTO dto);
+        RestaurantDTO AddNewRestaurant(PostRestaurantDTO dto, string userId);
         void UpdateRestaurant(int id, PostRestaurantDTO dto);
         void DeleteRestaurant(int id);
         IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName);

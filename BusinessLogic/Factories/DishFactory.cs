@@ -30,7 +30,6 @@ namespace BusinessLogic.Factories
             return new Dish
             {
                 RestaurantId = dishDTO.RestaurantId,
-                UserId = dishDTO.UserId,
                 PromotionId = dishDTO.PromotionId,
                 Title = dishDTO.Title,
                 Description = dishDTO.Description,
