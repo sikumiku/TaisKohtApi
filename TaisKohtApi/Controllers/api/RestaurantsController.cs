@@ -21,10 +21,12 @@ namespace TaisKohtApi.Controllers.api
     public class RestaurantsController : Controller
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
 
-        public RestaurantsController(IRestaurantService restaurantService)
+        public RestaurantsController(IRestaurantService restaurantService, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
         {
             _restaurantService = restaurantService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -116,6 +118,30 @@ namespace TaisKohtApi.Controllers.api
             var r = _restaurantService.GetRestaurantById(id);
             if (r == null) return NotFound();
             return Ok(r);
+        }
+
+        /// <summary>
+        /// Add new user to restaurant's users list
+        /// </summary>
+        /// <param name="id">ID of restaurant that you wanna add new user to</param>
+        /// <response code="200">Successful operation</response>
+        /// <response code="404">Restaurant or user not found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/Restaurants/5
+        [AllowAnonymous]
+        [HttpPost("{id}", Name = "AddNewUserToRestaurant")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult AddNewUserToRestaurant(int id, string userId)
+        {
+            var restaurant = _restaurantService.GetRestaurantById(id);
+            var user = _userManager.FindByIdAsync(userId);
+            if (restaurant == null || user == null) return NotFound();
+            _restaurantService.AddUserToRestaurant(id, userId);
+            return StatusCode(201);
         }
 
         /// <summary>

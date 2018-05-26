@@ -34,6 +34,12 @@ namespace BusinessLogic.Services
             return _restaurantFactory.CreateComplex(newRestaurant);
         }
 
+        public void AddUserToRestaurant(int id, string userId)
+        {
+            _uow.RestaurantUsers.Add(new RestaurantUser {RestaurantId = id, UserId = userId});
+            _uow.SaveChanges();
+        }
+
         public IEnumerable<RestaurantDTO> GetAllRestaurants()
         {
             return _uow.Restaurants.All().Where(x => x.Active)
