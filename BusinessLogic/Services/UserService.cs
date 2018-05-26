@@ -56,7 +56,7 @@ namespace BusinessLogic.Services
             _uow.SaveChanges();
         }
 
-        public static async Task<IList<string>> GetRolesForUser(User user)
+        public static async Task<IdentityUserRole<string>> GetRolesForUser(User user)
         {
             return await _userManager.GetRolesAsync(user);
         }

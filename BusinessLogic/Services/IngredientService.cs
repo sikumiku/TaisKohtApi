@@ -31,14 +31,14 @@ namespace BusinessLogic.Services
 
         public IEnumerable<IngredientDTO> GetAllIngredients()
         {
-            return _uow.Ingredients.All().Where(x => x.Active)
+            return _uow.Ingredients.All()
                 .Select(ingredient => _ingredientFactory.Create(ingredient));
         }
 
         public IngredientDTO GetIngredientById(int id)
         {
             var ingredient = _uow.Ingredients.Find(id);
-            if (ingredient == null || !ingredient.Active) return null;
+            if (ingredient == null) return null;
 
             return _ingredientFactory.Create(ingredient);
         }
@@ -49,7 +49,6 @@ namespace BusinessLogic.Services
             ingredient.Name = updatedIngredientDTO.Name;
             ingredient.Description = updatedIngredientDTO.Description;
             ingredient.AmountUnit = updatedIngredientDTO.AmountUnit;
-            ingredient.UpdateTime = DateTime.UtcNow;
             _uow.Ingredients.Update(ingredient);
             _uow.SaveChanges();
         }
@@ -57,9 +56,7 @@ namespace BusinessLogic.Services
         public void DeleteIngredient(int id)
         {
             Ingredient ingredient = _uow.Ingredients.Find(id);
-            ingredient.Active = false;
-            ingredient.UpdateTime = DateTime.UtcNow;
-            _uow.Ingredients.Update(ingredient);
+            _uow.Ingredients.Remove(ingredient);
             _uow.SaveChanges();
         }
     }

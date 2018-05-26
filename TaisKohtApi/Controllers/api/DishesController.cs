@@ -78,7 +78,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/search?title=th
+        // GET: api/v1/Dishes/Search?title=th
         [AllowAnonymous]
         [HttpGet("Search")]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
@@ -208,7 +208,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newDish = _dishService.AddNewDish(dishDTO);
 
-            return CreatedAtAction("Get", new { id = newDish.DishId }, newDish);
+            return CreatedAtAction("GetDish", new { id = newDish.DishId }, newDish);
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace TaisKohtApi.Controllers.api
         // PUT: api/v1/Dishes/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(DishDTO), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -252,9 +252,9 @@ namespace TaisKohtApi.Controllers.api
             var d = _dishService.GetDishById(id);
 
             if (d == null) return NotFound();
-            _dishService.UpdateDish(id, dishDTO);
+            DishDTO updatedDish =_dishService.UpdateDish(id, dishDTO);
 
-            return NoContent();
+            return Ok(updatedDish);
         }
 
         /// <summary>

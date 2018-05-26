@@ -42,20 +42,20 @@ namespace BusinessLogic.Services
         public RestaurantDTO GetRestaurantById(int id)
         {
             var restaurant = _uow.Restaurants.Find(id);
-            if (restaurant == null || !restaurant.Active) return null;
+            if (restaurant == null) return null;
 
             return _restaurantFactory.CreateComplex(restaurant);
         }
         public List<UserDTO> GetRestaurantUsersById(int restaurantId)
         {
             var restaurant = _uow.Restaurants.Find(restaurantId);
-            var restaurantUsers = _uow.RestaurantUsers.FindAll(restaurant.RestaurantId);
-            if (restaurantUsers == null || !restaurant.Active) return null;
+            var restaurantUsers = _uow.RestaurantUsers.FindAllByRestaurantId(restaurant.RestaurantId);
+            if (restaurantUsers == null) return null;
             List<UserDTO> users = new List<UserDTO>();
+
             //find all users by restaurantUsers
             foreach (var restaurantUser in restaurantUsers)
             {
-                //UserId should be string or should use id
                 var user = _uow.Users.Find(restaurantUser.UserId);
                 if (user != null)
                 {
@@ -75,7 +75,6 @@ namespace BusinessLogic.Services
             restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
             restaurant.Email = updatedRestaurantDTO.Email;
             //restaurant.Address = updatedRestaurantDTO.Address;
-            restaurant.UpdateTime = DateTime.UtcNow;
             _uow.Restaurants.Update(restaurant);
             _uow.SaveChanges();
         }
@@ -83,9 +82,7 @@ namespace BusinessLogic.Services
         public void DeleteRestaurant(int id)
         {
             Restaurant restaurant = _uow.Restaurants.Find(id);
-            restaurant.UpdateTime = DateTime.UtcNow;
-            restaurant.Active = false;
-            _uow.Restaurants.Update(restaurant);
+            _uow.Restaurants.Remove(restaurant);
             _uow.SaveChanges();
         }
 

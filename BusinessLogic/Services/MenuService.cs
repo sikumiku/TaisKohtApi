@@ -58,7 +58,6 @@ namespace BusinessLogic.Services
                 menu.ActiveTo = updatedMenuDTO.ActiveTo;
                 menu.PromotionId = updatedMenuDTO.PromotionId;
                 menu.RepetitionInterval = updatedMenuDTO.RepetitionInterval;
-                menu.UpdateTime = DateTime.UtcNow;
                 _uow.Menus.Update(menu);
                 _uow.SaveChanges();
             }
@@ -67,9 +66,7 @@ namespace BusinessLogic.Services
         public void DeleteMenu(int id)
         {
             Menu menu = _uow.Menus.Find(id);
-            menu.UpdateTime = DateTime.UtcNow;
-            menu.Active = false;
-            _uow.Menus.Update(menu);
+            _uow.Menus.Remove(menu);
             _uow.SaveChanges();
         }
     }

@@ -10,6 +10,7 @@ namespace DAL.TaisKoht.Interfaces.Repositories
     {
         bool Exists(int id);
 
-        IEnumerable<RestaurantUser> FindAll(params object[] restaurantId);
+        IEnumerable<RestaurantUser> FindAllByRestaurantId(int restaurantId);
+        IEnumerable<RestaurantUser> FindAllByUserId(string userId);
     }
 }
