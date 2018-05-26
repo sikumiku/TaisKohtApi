@@ -7,12 +7,12 @@ export default class AuthService {
         this.getProfile = this.getProfile.bind(this)
     }
 
-    login(username, password) {
+    login(email, password) {
         // Get a token
         return this.fetch(`${this.domain}/login`, {
             method: 'POST',
             body: JSON.stringify({
-                username,
+                email,
                 password
             })
         }).then(res => {
@@ -21,13 +21,14 @@ export default class AuthService {
         })
     }
 
-    register(username, password) {
+    register(email, password, confirmPassword) {
         // Get a token
         return this.fetch(`${this.domain}/register`, {
             method: 'POST',
             body: JSON.stringify({
-                username,
-                password
+                email,
+                password,
+                confirmPassword
             })
         }).then(res => {
             this.setToken(res.token)

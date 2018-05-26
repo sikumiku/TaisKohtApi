@@ -29,7 +29,7 @@ class RegisterForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.Auth.register(this.state.username, this.state.password)
+        this.Auth.register(this.state.email, this.state.password, this.state.confirmPassword)
             .then(res => {
                 this.props.history.replace('/');
             })

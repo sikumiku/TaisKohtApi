@@ -16,12 +16,15 @@ class Header extends Component {
         let authButton;
         if (Auth.loggedIn()) {
             console.log('Is logged in.');
-            authButton = <button type="button" className="form-submit" onClick={this.handleLogout.bind(this)}>Logout</button>;
+            authButton = 
+                <LinkContainer to="/logout">
+                    <NavItem eventKey={1}>Logout</NavItem>
+                </LinkContainer>;
         } else {
             console.log('Is logged out.');
             authButton = 
                 <LinkContainer to="/login">
-                    <NavItem eventKey={1}>SISENE</NavItem>
+                    <NavItem eventKey={1}>Login</NavItem>
                 </LinkContainer>;
         }
         return (
@@ -36,10 +39,10 @@ class Header extends Component {
                     <Navbar.Collapse>
                         <ul className="nav navbar-nav navbar-right">r
                             <LinkContainer to="/">
-                                <NavItem eventKey={1}>PÄEVAPAKKUMISED</NavItem>
+                                <NavItem eventKey={1}>Daily Specials</NavItem>
                             </LinkContainer>
                             <LinkContainer to="/restaurants">
-                                <NavItem eventKey={1}>RESTORANID</NavItem>
+                                <NavItem eventKey={1}>Restaurants</NavItem>
                             </LinkContainer>
                             {authButton}
                         </ul>
