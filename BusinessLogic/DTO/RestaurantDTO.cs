@@ -32,7 +32,7 @@ namespace BusinessLogic.DTO
 
         public static RestaurantDTO CreateFromDomain(Restaurant restaurant)
         {
-            if (restaurant == null || !restaurant.Active) { return null; }
+            if (restaurant == null) { return null; }
             return new RestaurantDTO()
             {
                 RestaurantId = restaurant.RestaurantId,
@@ -42,7 +42,8 @@ namespace BusinessLogic.DTO
                 Email = restaurant.Email,
                 Address = AddressDTO.CreateFromDomain(restaurant.Address),
                 Promotion = PromotionDTO.CreateFromDomain(restaurant.Promotion),
-                Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null            };
+                Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null
+            };
         }
 
         public static RestaurantDTO CreateFromDomainWithAdditionalInfo(Restaurant r)
@@ -75,7 +76,7 @@ namespace BusinessLogic.DTO
 
         public static SimpleRestaurantDTO CreateFromDomain(Restaurant restaurant)
         {
-            if (restaurant == null || !restaurant.Active) { return null; }
+            if (restaurant == null) { return null; }
             return new SimpleRestaurantDTO()
             {
                 RestaurantId = restaurant.RestaurantId,

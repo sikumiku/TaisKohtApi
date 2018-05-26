@@ -22,25 +22,17 @@ namespace BusinessLogic.Services
 
         public IEnumerable<RatingLogDTO> GetAllRatingLogs()
         {
-            return _uow.RatingLogs.All().Where(x => x.Active)
+            return _uow.RatingLogs.All()
                 .Select(ratingLog => _ratingLogFactory.Create(ratingLog));
         }
 
         public RatingLogDTO GetRatingLogById(int id)
         {
             var ratingLog = _uow.RatingLogs.Find(id);
-            if (ratingLog == null || ratingLog.Active) return null;
+            if (ratingLog == null) return null;
 
             return _ratingLogFactory.Create(ratingLog);
         }
-
-        //public RatingLogDTO AddNewRatingLog(RatingLogDTO ratingLogDTO)
-        //{
-        //    var newRatingLog = _ratingLogFactory.Create(ratingLogDTO);
-        //    _uow.RatingLogs.Add(newRatingLog);
-        //    _uow.SaveChanges();
-        //    return _ratingLogFactory.Create(newRatingLog);
-        //}
 
         public RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO)
         {
@@ -71,9 +63,7 @@ namespace BusinessLogic.Services
         public void DeleteRatingLog(int id)
         {
             RatingLog ratingLog = _uow.RatingLogs.Find(id);
-            ratingLog.Active = false;
-            ratingLog.UpdateTime = DateTime.UtcNow;
-            _uow.RatingLogs.Update(ratingLog);
+            _uow.RatingLogs.Remove(ratingLog);
             _uow.SaveChanges();
         }
     }

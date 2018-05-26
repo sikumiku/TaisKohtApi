@@ -24,7 +24,7 @@ namespace BusinessLogic.DTO
 
         public static PromotionDTO CreateFromDomain(Promotion promotion)
         {
-            if(promotion == null || !promotion.Active) { return null; }
+            if(promotion == null) { return null; }
             return new PromotionDTO()
             {
                 PromotionId = promotion.PromotionId,
@@ -64,7 +64,7 @@ namespace BusinessLogic.DTO
 
         public static SimplePromotionDTO CreateFromDomain(Promotion promotion)
         {
-            if (promotion == null || !promotion.Active) { return null; }
+            if (promotion == null) { return null; }
             return new SimplePromotionDTO()
             {
                 PromotionId = promotion.PromotionId,

@@ -16,7 +16,7 @@ namespace BusinessLogic.DTO
 
         public static RatingLogDTO CreateFromDomain(RatingLog ratingLog)
         {
-            if (ratingLog == null || !ratingLog.Active) { return null; }
+            if (ratingLog == null) { return null; }
             return new RatingLogDTO()
             {
                 RatingLogId = ratingLog.RatingLogId,
@@ -40,7 +40,7 @@ namespace BusinessLogic.DTO
 
         public static RatingLogForEntityDTO CreateFromDomain(RatingLog ratingLog)
         {
-            if (ratingLog == null || !ratingLog.Active) { return null; }
+            if (ratingLog == null) { return null; }
             return new RatingLogForEntityDTO()
             {
                 Rating = ratingLog.Rating,

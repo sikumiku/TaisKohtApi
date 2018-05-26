@@ -26,7 +26,7 @@ namespace BusinessLogic.DTO
 
         public static MenuDTO CreateFromDomain(Menu menu)
         {
-            if (menu == null || !menu.Active) { return null; }
+            if (menu == null) { return null; }
             return new MenuDTO()
             {
                 MenuId = menu.MenuId,
@@ -65,7 +65,7 @@ namespace BusinessLogic.DTO
 
         public static SimpleMenuDTO CreateFromDomain(Menu menu)
         {
-            if (menu == null || !menu.Active) { return null; }
+            if (menu == null) { return null; }
             return new SimpleMenuDTO()
             {
                 Name = menu.Name,

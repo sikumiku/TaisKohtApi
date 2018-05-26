@@ -97,7 +97,7 @@ namespace BusinessLogic.Services
             int topAmount;
             if (!int.TryParse(amount.ToString(), out topAmount)) return null;
 
-            var dishes = _uow.Dishes.All().Where(x => x.Active).OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
+            var dishes = _uow.Dishes.All().OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
                 .Select(dish => _dishFactory.Create(dish));
 
             if (dishes.Count() < amount) return null;
@@ -107,7 +107,7 @@ namespace BusinessLogic.Services
 
         public IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree, bool lactoseFree)
         {
-            var dishes = _uow.Dishes.All().Where(x => x.Active && x.Daily == true && x.AvailableFrom <= DateTime.Today && x.AvailableTo >= DateTime.Today);
+            var dishes = _uow.Dishes.All().Where(x => x.Daily == true && x.AvailableFrom <= DateTime.Today && x.AvailableTo >= DateTime.Today);
 
             if (vegan == true && glutenFree == true && lactoseFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
 

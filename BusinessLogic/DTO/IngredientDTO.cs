@@ -26,7 +26,7 @@ namespace BusinessLogic.DTO
 
         public static IngredientDTO CreateFromDomain(Ingredient ingredient)
         {
-            if (ingredient == null || !ingredient.Active) { return null; }
+            if (ingredient == null) { return null; }
             return new IngredientDTO()
             {
                 IngredientId = ingredient.IngredientId,
@@ -39,7 +39,7 @@ namespace BusinessLogic.DTO
 
         public static IngredientDTO CreateFromDishIngredientDomain(DishIngredient di)
         {
-            if (di == null || !di.Active) { return null; }
+            if (di == null) { return null; }
 
             var ingredient = CreateFromDomain(di.Ingredient);
             ingredient.Amount = di.Amount;
