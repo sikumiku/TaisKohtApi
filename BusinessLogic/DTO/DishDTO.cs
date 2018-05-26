@@ -63,7 +63,7 @@ namespace BusinessLogic.DTO
                 Daily = dish.Daily,
                 RestaurantId = dish.RestaurantId,
                 Rating = dish.RatingLogs.Any() ? Rating.Create(dish.RatingLogs) : null
-        };
+            };
         }
 
         public static DishDTO CreateFromMenuDish(MenuDish md)
@@ -168,7 +168,7 @@ namespace BusinessLogic.DTO
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
-        public int MenuId { get; set; }
+        public int? MenuId { get; set; }
         public int? PromotionId { get; set; }
     }
 }

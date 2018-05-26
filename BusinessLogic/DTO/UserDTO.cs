@@ -25,8 +25,7 @@ namespace BusinessLogic.DTO
             {
                 UserId = user.Id,
                 Email = user.Email,
-                UserName = user.UserName,
-                Active = user.Active
+                UserName = user.UserName
             };
         }
 

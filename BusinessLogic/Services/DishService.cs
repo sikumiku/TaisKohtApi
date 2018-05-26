@@ -23,6 +23,17 @@ namespace BusinessLogic.Services
         public DishDTO AddNewDish(PostDishDTO dishDTO, string userId)
         {
             var newDish = _dishFactory.Create(dishDTO);
+
+            if (_uow.Menus.Exists(dishDTO.MenuId))
+            {
+                MenuDish md = new MenuDish()
+                {
+                    DishId = newDish.DishId,
+                    MenuId = dishDTO.MenuId
+                };
+                _uow.D
+            }
+            
             newDish.UserId = userId;
             _uow.Dishes.Add(newDish);
             _uow.SaveChanges();

@@ -52,7 +52,6 @@ namespace BusinessLogic.Services
                 ratingLog.Rating = updatedRatingLogDTO.Rating;
                 ratingLog.RestaurantId = updatedRatingLogDTO.RestaurantId;
                 ratingLog.DishId = updatedRatingLogDTO.DishId;
-                ratingLog.UpdateTime = DateTime.UtcNow;
                 _uow.RatingLogs.Update(ratingLog);
                 _uow.SaveChanges();
             }

@@ -27,6 +27,7 @@ namespace DAL.TaisKoht.EF
         }
 
         public IDishRepository Dishes => GetCustomRepository<IDishRepository>();
+        public IMenuDishRepository MenuDishes => GetCustomRepository<IMenuDishRepository>();
         public IIngredientRepository Ingredients => GetCustomRepository<IIngredientRepository>();
         public IMenuRepository Menus => GetCustomRepository<IMenuRepository>();
         public IPromotionRepository Promotions => GetCustomRepository<IPromotionRepository>();
