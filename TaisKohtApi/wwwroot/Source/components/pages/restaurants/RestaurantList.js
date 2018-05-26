@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import 'es6-promise';
 import 'isomorphic-fetch';
+import RestoListItem from './restoListItem';
 export default class RestaurantList extends React.Component {
     constructor() {
         super();
@@ -30,25 +31,10 @@ export default class RestaurantList extends React.Component {
             });
     }
     static renderRestoTable(restos) {
-        return <table className='table'>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Url</th>
-                    <th>Contactnumber</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {restos.map(resto =>
-                    <tr key={resto.name}>
-                        <td>{resto.name}</td>
-                        <td>{resto.url}</td>
-                        <td>{resto.contactNumber}</td>
-                        <td>{resto.email}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+        return <div className='restoList'>
+            {restos.map(resto =>
+                <RestoListItem resto={resto} />
+            )}
+        </div>;
     }
 }
