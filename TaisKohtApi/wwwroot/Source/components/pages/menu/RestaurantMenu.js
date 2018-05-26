@@ -21,7 +21,7 @@ export default class RestaurantMenu extends React.Component {
         </div>;
     }
     refreshData() {
-        fetch('api/v1/restaurant/' + this.restaurantId)
+        fetch('api/v1/Restaurants/' + this.restaurantId)
             .then(response => response.json())
             .then(data => {
                 this.setState({ menu: data, loading: false });
