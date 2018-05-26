@@ -10,7 +10,6 @@ namespace DAL.TaisKoht.EF
 {
     public static class SeedData
     {
-        private static readonly UserManager<User> _userManager;
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
@@ -19,10 +18,10 @@ namespace DAL.TaisKoht.EF
             context.Database.EnsureCreated();
             if (!context.Roles.Any())
             {
-                context.Roles.Add(new Role { Name = "admin", AccessLevel = "200", Description = "System administrator with god-like abilities", UpdateTime = DateTime.UtcNow, AddTime = DateTime.UtcNow, Active = true });
-                context.Roles.Add(new Role { Name = "premiumUser", AccessLevel = "100", Description = "Subscribed user with advanced privileges", UpdateTime = DateTime.UtcNow, AddTime = DateTime.UtcNow, Active = true });
-                context.Roles.Add(new Role { Name = "normalUser", AccessLevel = "1", Description = "Normal user", UpdateTime = DateTime.UtcNow, AddTime = DateTime.UtcNow, Active = true });
-                context.SaveChanges();
+                context.Roles.Add(new Role { Name = "admin", NormalizedName = "ADMIN", AccessLevel = "200", Description = "System administrator with god-like abilities", UpdateTime = DateTime.UtcNow, AddTime = DateTime.UtcNow, Active = true });
+                context.Roles.Add(new Role { Name = "premiumUser", NormalizedName = "PREMIUMUSER", AccessLevel = "100", Description = "Subscribed user with advanced privileges", UpdateTime = DateTime.UtcNow, AddTime = DateTime.UtcNow, Active = true });
+                context.Roles.Add(new Role { Name = "normalUser", NormalizedName = "NORMALUSER", AccessLevel = "1", Description = "Normal user", UpdateTime = DateTime.UtcNow, AddTime = DateTime.UtcNow, Active = true });
+                context.SaveChanges(); 
             }
         }
     }
