@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/Promotions")]
     public class PromotionsController : Controller
@@ -29,6 +31,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Promotions
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<PromotionDTO>), 200)]
         [ProducesResponseType(404)]
@@ -48,12 +51,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Promotions/5
+        [AllowAnonymous]
         [HttpGet("{id}", Name = "GetPromotion")]
         [ProducesResponseType(typeof(PromotionDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get(int id)
+        public IActionResult GetPromotion(int id)
         {
             var p = _promotionService.GetPromotionById(id);
             if (p == null) return NotFound();
@@ -90,7 +94,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Post([FromBody]PromotionDTO promotionDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newPromotion = _promotionService.AddNewPromotion(promotionDTO);
 

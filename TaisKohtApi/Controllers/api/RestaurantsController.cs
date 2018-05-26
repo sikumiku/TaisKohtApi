@@ -145,7 +145,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Post([FromBody]RestaurantDTO restaurantDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO);
 
@@ -228,7 +228,6 @@ namespace TaisKohtApi.Controllers.api
             var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);
             var userIds = new ArrayList();
             users.ForEach(u => userIds.Add(u.UserId));
-            //Identity GetUserId returns user email not id
             return User.IsInRole("admin") || userIds.Contains(User.Identity.GetUserId());
         }
     }
