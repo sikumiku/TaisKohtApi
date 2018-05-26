@@ -28,5 +28,10 @@ namespace DAL.TaisKoht.EF.Repositories
         {
             return RepositoryDbSet.AsQueryable().ToList().Where(r => r.UserId == userId);
         }
+
+        public int GetUserRestaurantCount(string userId)
+        {
+            return RepositoryDbSet.AsQueryable().Count(r => r.UserId == userId);
+        }
     }
 }

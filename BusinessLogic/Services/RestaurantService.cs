@@ -115,5 +115,10 @@ namespace BusinessLogic.Services
 
             return restaurants.Take(amount);
         }
+
+        public int GetUserRestaurantCount(string userId)
+        {
+            return _uow.RestaurantUsers.GetUserRestaurantCount(userId);
+        }
     }
 }

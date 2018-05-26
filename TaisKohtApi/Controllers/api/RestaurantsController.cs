@@ -180,6 +180,13 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult Post([FromBody]PostRestaurantDTO restaurantDTO)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
+
+            int userRestaurants = _restaurantService.GetUserRestaurantCount(User.Identity.GetUserId());
+            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin") && userRestaurants >= 1)
+            {
+                return BadRequest("Regular user can only create 1 Restaurant. Please sign up for premium services to add more.");
+            }
+
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO, User.Identity.GetUserId());
 
             return CreatedAtRoute("GetRestaurant", new { id = newRestaurant.RestaurantId }, newRestaurant);
