@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 
         int GetUserMenuCount(string userId);
 
-        MenuDTO AddNewMenu(PostMenuDTO dto);
+        MenuDTO AddNewMenu(PostMenuDTO dto, string userId);
 
         MenuDTO UpdateMenu(int id, PostMenuDTO dto);
 

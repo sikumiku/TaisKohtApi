@@ -206,7 +206,7 @@ namespace TaisKohtApi.Controllers.api
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("New dish can only be added by admin or by restaurant user");
 
-            var newDish = _dishService.AddNewDish(dishDTO);
+            var newDish = _dishService.AddNewDish(dishDTO, User.Identity.GetUserId());
 
             return CreatedAtRoute("GetDish", new { id = newDish.DishId }, newDish);
         }

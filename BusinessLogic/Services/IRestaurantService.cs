@@ -7,16 +7,17 @@ namespace BusinessLogic.Services
 {
     public interface IRestaurantService
     {
-        IEnumerable<RestaurantDTO> GetAllRestaurants();
+        IEnumerable<SimpleRestaurantDTO> GetAllRestaurants();
         RestaurantDTO GetRestaurantById(int id);
         void AddUserToRestaurant(int id, string userId);
+        RestaurantDTO AddNewRestaurant(PostRestaurantDTO dto, string userId);
         RestaurantDTO AddNewRestaurant(PostRestaurantDTO dto);
 
         RestaurantDTO UpdateRestaurant(int id, PostRestaurantDTO dto);
 
         void DeleteRestaurant(int id);
-        IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName);
-        IEnumerable<RestaurantDTO> GetTopRestaurants(int amount);
+        IEnumerable<SimpleRestaurantDTO> SearchRestaurantByName(string restaurantName);
+        IEnumerable<SimpleRestaurantDTO> GetTopRestaurants(int amount);
         List<UserDTO> GetRestaurantUsersById(int id);
     }
 }

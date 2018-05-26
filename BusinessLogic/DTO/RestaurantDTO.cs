@@ -24,6 +24,7 @@ namespace BusinessLogic.DTO
         public string Email { get; set; }
         //OneToMany
         public List<SimpleMenuDTO> Menus { get; set; } = new List<SimpleMenuDTO>();
+        public List<SimpleDishDTO> Dishes { get; set; } = new List<SimpleDishDTO>();
         //foreign keys
         public PromotionDTO Promotion { get; set; }
         public AddressDTO Address { get; set; }
@@ -44,12 +45,13 @@ namespace BusinessLogic.DTO
                 Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null            };
         }
 
-        public static RestaurantDTO CreateFromDomainWithMenusAndRating(Restaurant r)
+        public static RestaurantDTO CreateFromDomainWithAdditionalInfo(Restaurant r)
         {
             var restaurant = CreateFromDomain(r);
             if (restaurant == null) { return null; }
 
             restaurant.Menus = r.Menus.Select(SimpleMenuDTO.CreateFromDomain).ToList();
+            restaurant.Dishes = r.Dishes.Select(SimpleDishDTO.CreateFromDomain).ToList();
             restaurant.Rating = r.RatingLogs.Any() ? Rating.CreateWithComments(r.RatingLogs) : null;
             return restaurant;
         }
@@ -100,7 +102,6 @@ namespace BusinessLogic.DTO
         [MaxLength(50)]
         public string Email { get; set; }
         public AddressDTO Address { get; set; }
-        public string UserId { get; set; }
 
         public static PostRestaurantDTO CreateFromDomain(Restaurant restaurant)
         {

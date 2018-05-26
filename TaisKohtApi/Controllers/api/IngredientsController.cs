@@ -93,9 +93,8 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult Post([FromBody]PostIngredientDTO ingredientDTO)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
-            if (ingredientDTO.UserId != User.Identity.GetUserId()) return BadRequest("Provided userId does not match logged in user Id");
 
-            var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO);
+            var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO, User.Identity.GetUserId());
 
             return CreatedAtRoute("GetIngredient", new { id = newIngredient.IngredientId }, newIngredient);
         }
@@ -128,7 +127,6 @@ namespace TaisKohtApi.Controllers.api
         public IActionResult Put(int id, [FromBody]PostIngredientDTO ingredientDTO)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
-            if (ingredientDTO.UserId != User.Identity.GetUserId()) return BadRequest("Provided userId does not match logged in user Id");
             var i = _ingredientService.GetIngredientById(id);
 
             if (i == null) return NotFound();

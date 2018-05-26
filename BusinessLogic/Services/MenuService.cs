@@ -21,9 +21,10 @@ namespace BusinessLogic.Services
             _menuFactory = menuFactory;
         }
 
-        public MenuDTO AddNewMenu(PostMenuDTO menuDTO)
+        public MenuDTO AddNewMenu(PostMenuDTO menuDTO, string userId)
         {
             var newMenu = _menuFactory.Create(menuDTO);
+            newMenu.UserId = userId;
             _uow.Menus.Add(newMenu);
             _uow.SaveChanges();
             return _menuFactory.Create(newMenu);

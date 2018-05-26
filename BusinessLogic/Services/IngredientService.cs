@@ -21,9 +21,10 @@ namespace BusinessLogic.Services
             _ingredientFactory = ingredientFactory;
         }
 
-        public IngredientDTO AddNewIngredient(PostIngredientDTO ingredientDTO)
+        public IngredientDTO AddNewIngredient(PostIngredientDTO ingredientDTO, string userId)
         {
             var newIngredient = _ingredientFactory.Create(ingredientDTO);
+            newIngredient.UserId = userId;
             _uow.Ingredients.Add(newIngredient);
             _uow.SaveChanges();
             return _ingredientFactory.Create(newIngredient);

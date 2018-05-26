@@ -87,6 +87,62 @@ namespace BusinessLogic.DTO
         }
     }
 
+    public class SimpleDishDTO
+    {
+        public int DishId { get; set; }
+        [MinLength(3)]
+        [MaxLength(40)]
+        public string Title { get; set; }
+        [MaxLength(200)]
+        public string Description { get; set; }
+        public DateTime? AvailableFrom { get; set; }
+        public DateTime? AvailableTo { get; set; }
+        public DateTime? ServeTime { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public Decimal? Price { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public Decimal? DailyPrice { get; set; }
+        public bool? Daily { get; set; }
+        //additional data
+        public SimplePromotionDTO Promotion { get; set; }
+        public Rating Rating { get; set; }
+
+        public static SimpleDishDTO CreateFromDomain(Dish dish)
+        {
+            if (dish == null || !dish.Active) { return null; }
+            return new SimpleDishDTO()
+            {
+                DishId = dish.DishId,
+                Title = dish.Title,
+                Description = dish.Description,
+                AvailableFrom = dish.AvailableFrom,
+                AvailableTo = dish.AvailableTo,
+                Price = dish.Price,
+                DailyPrice = dish.DailyPrice,
+                Daily = dish.Daily,
+                Rating = dish.RatingLogs.Any() ? Rating.Create(dish.RatingLogs) : null
+            };
+        }
+
+        public static SimpleDishDTO CreateFromMenuDish(MenuDish md)
+        {
+            if (md == null || !md.Active) { return null; }
+
+            var dish = CreateFromDomain(md.Dish);
+
+            return dish;
+        }
+
+        public static SimpleDishDTO CreateFromDomainWithAssociatedTables(Dish d)
+        {
+            var dish = CreateFromDomain(d);
+            if (dish == null) { return null; }
+
+            dish.Promotion = SimplePromotionDTO.CreateFromDomain(d.Promotion);
+            return dish;
+        }
+    }
+
     public class PostDishDTO
     {
         [MinLength(3)]
@@ -112,8 +168,6 @@ namespace BusinessLogic.DTO
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
-        [Required]
-        public string UserId { get; set; }
         public int MenuId { get; set; }
         public int? PromotionId { get; set; }
     }

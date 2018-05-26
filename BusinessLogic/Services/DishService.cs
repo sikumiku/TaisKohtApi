@@ -20,9 +20,10 @@ namespace BusinessLogic.Services
             _dishFactory = dishFactory;
         }
 
-        public DishDTO AddNewDish(PostDishDTO dishDTO)
+        public DishDTO AddNewDish(PostDishDTO dishDTO, string userId)
         {
             var newDish = _dishFactory.Create(dishDTO);
+            newDish.UserId = userId;
             _uow.Dishes.Add(newDish);
             _uow.SaveChanges();
             return _dishFactory.CreateComplex(newDish);

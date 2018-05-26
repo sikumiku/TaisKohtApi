@@ -101,12 +101,11 @@ namespace TaisKohtApi.Controllers.api
             if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("New menu can only be added by admin or by restaurant user");
 
             int userMenus = _menuService.GetUserMenuCount(User.Identity.GetUserId());
-            if (User.IsInRole("normalUser") && userMenus >= 1)
+            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin") && userMenus >= 1)
             {
                 return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
             }
-
-            var newMenu = _menuService.AddNewMenu(menuDTO);
+            var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
             return CreatedAtRoute("GetMenu", new { id = newMenu.MenuId }, newMenu);
         }
