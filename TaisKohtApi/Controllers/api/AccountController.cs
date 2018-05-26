@@ -86,7 +86,7 @@ namespace TaisKohtApi.Controllers.api
         {
             var user = _userService.GetUserById(id);
             if (user == null) return NotFound();
-            if (User.IsInRole("admin") || user.Email == IdentityExtensions.GetUserId(User.Identity))
+            if (User.IsInRole("admin") || user.UserId == User.Identity.GetUserId())
             {
                 return Ok(user);
             }
@@ -151,7 +151,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/accounts/addRoleToUser
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, premiumUser, normalUser")]
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(UserDTO))]
         [ProducesResponseType(400)]
@@ -159,18 +159,26 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         [Route("addRoleToUser")]
-        public async Task<IActionResult> AddRoleToUser([FromQuery(Name = "role, email")] string role, string email)
+        public async Task<IActionResult> AddRoleToUser([FromQuery(Name = "role")] string role, [FromQuery(Name = "userId")] string userId)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            if (role == null || userId == null) return BadRequest();
+            var user = await _userManager.FindByIdAsync(userId);
             if (user != null && await _roleManager.RoleExistsAsync(role))
             {
-                await _userManager.AddToRoleAsync(user, role);
+                if (User.IsInRole("normalUser") && user.Id == User.Identity.GetUserId() && role == "premiumUser" || User.IsInRole("admin"))
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+                else
+                {
+                    return StatusCode(403, "Users can only be amended by themselves or by admins.");
+                }
             }
             else
             {
                 return BadRequest("No such user and/or role exists. Please double check parameters.");
             }
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, UserDTO.CreateFromDomain(user));
         }
 
         /// <summary>
@@ -200,13 +208,13 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(string id, [FromBody]UserDTO userDTO)
+        public IActionResult Put(string id, [FromBody]UpdateUserDTO userDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
             var user = _userService.GetUserById(id);
 
             if (user == null) return NotFound();
-            if (User.IsInRole("admin") || user.Email == IdentityExtensions.GetUserId(User.Identity))
+            if (User.IsInRole("admin") || user.UserId == User.Identity.GetUserId())
             {
                 _userService.UpdateUser(id, userDTO);
                 return NoContent();

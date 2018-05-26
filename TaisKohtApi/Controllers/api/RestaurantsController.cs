@@ -227,7 +227,7 @@ namespace TaisKohtApi.Controllers.api
         {
             var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);
             var userIds = new ArrayList();
-            users.ForEach(u => userIds.Add(u.Email));
+            users.ForEach(u => userIds.Add(u.UserId));
             //Identity GetUserId returns user email not id
             return User.IsInRole("admin") || userIds.Contains(User.Identity.GetUserId());
         }
