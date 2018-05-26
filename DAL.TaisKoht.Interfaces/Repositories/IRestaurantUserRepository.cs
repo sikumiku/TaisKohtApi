@@ -11,5 +11,7 @@ namespace DAL.TaisKoht.Interfaces.Repositories
         bool Exists(int id);
 
         IEnumerable<RestaurantUser> FindAll(params object[] restaurantId);
+
+        int GetUserRestaurantCount(string userId);
     }
 }
