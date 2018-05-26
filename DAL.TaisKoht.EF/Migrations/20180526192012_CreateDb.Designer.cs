@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180526130714_Create")]
-    partial class Create
+    [Migration("20180526192012_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -142,8 +142,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("DishIngredientId");
-
                     b.Property<int?>("MenuId");
 
                     b.Property<DateTime>("UpdateTime")
@@ -247,8 +245,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<DateTime>("AddTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasComputedColumnSql("GetUtcDate()");
-
-                    b.Property<int>("MenuDishId");
 
                     b.Property<DateTime>("UpdateTime")
                         .ValueGeneratedOnAddOrUpdate()
@@ -387,8 +383,6 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<DateTime>("AddTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasComputedColumnSql("GetUtcDate()");
-
-                    b.Property<int>("RestaurantUserId");
 
                     b.Property<DateTime?>("StartedAt");
 
