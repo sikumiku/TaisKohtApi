@@ -66,17 +66,22 @@ namespace BusinessLogic.Services
             return users;
         }
 
-        public void UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)
+        public RestaurantDTO UpdateRestaurant(int id, RestaurantDTO updatedRestaurantDTO)
         {
-            Restaurant restaurant = _uow.Restaurants.Find(id);
-            restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
-            restaurant.Name = updatedRestaurantDTO.Name;
-            restaurant.Url = updatedRestaurantDTO.Url;
-            restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
-            restaurant.Email = updatedRestaurantDTO.Email;
-            //restaurant.Address = updatedRestaurantDTO.Address;
-            _uow.Restaurants.Update(restaurant);
-            _uow.SaveChanges();
+            if (_uow.Restaurants.Exists(id))
+            {
+                Restaurant restaurant = _uow.Restaurants.Find(id);
+                restaurant.RestaurantId = updatedRestaurantDTO.RestaurantId;
+                restaurant.Name = updatedRestaurantDTO.Name;
+                restaurant.Url = updatedRestaurantDTO.Url;
+                restaurant.ContactNumber = updatedRestaurantDTO.ContactNumber;
+                restaurant.Email = updatedRestaurantDTO.Email;
+                //restaurant.Address = updatedRestaurantDTO.Address;
+                _uow.Restaurants.Update(restaurant);
+                _uow.SaveChanges();
+            }
+
+            return GetRestaurantById(id);
         }
 
         public void DeleteRestaurant(int id)

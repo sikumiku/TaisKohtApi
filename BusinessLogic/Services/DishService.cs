@@ -62,7 +62,9 @@ namespace BusinessLogic.Services
                 dish.Daily = updatedDishDTO.Daily;
                 _uow.Dishes.Update(dish);
                 _uow.SaveChanges();
-            }   
+            }
+
+            return GetDishById(id);
         }
 
         public void DeleteDish(int id)

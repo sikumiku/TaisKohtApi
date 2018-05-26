@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 
         PromotionDTO AddNewPromotion(PromotionDTO dto);
 
-        void UpdatePromotion(int id, PromotionDTO dto);
+        PromotionDTO UpdatePromotion(int id, PromotionDTO dto);
 
         void DeletePromotion(int id);
     }

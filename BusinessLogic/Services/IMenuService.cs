@@ -15,7 +15,7 @@ namespace BusinessLogic.Services
 
         MenuDTO AddNewMenu(PostMenuDTO dto);
 
-        void UpdateMenu(int id, PostMenuDTO dto);
+        MenuDTO UpdateMenu(int id, PostMenuDTO dto);
 
         void DeleteMenu(int id);
     }

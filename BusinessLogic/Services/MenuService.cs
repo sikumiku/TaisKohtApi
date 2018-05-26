@@ -32,14 +32,14 @@ namespace BusinessLogic.Services
         //Seda pole vb vaja
         public IEnumerable<MenuDTO> GetAllMenus()
         {
-            return _uow.Menus.All().Where(x => x.Active)
+            return _uow.Menus.All()
                 .Select(menu => _menuFactory.Create(menu));
         }
 
         public MenuDTO GetMenuById(int id)
         {
             var menu = _uow.Menus.Find(id); //also returns related dishes and promotion if any
-            if (menu == null || !menu.Active) return null;
+            if (menu == null) return null;
 
             return _menuFactory.CreateComplex(menu);
         }
@@ -49,7 +49,7 @@ namespace BusinessLogic.Services
             return _uow.Menus.GetUserMenuCount(userId);
         }
 
-        public void UpdateMenu(int id, PostMenuDTO updatedMenuDTO)
+        public MenuDTO UpdateMenu(int id, PostMenuDTO updatedMenuDTO)
         {
             if (_uow.Menus.Exists(id))
             {
@@ -61,6 +61,8 @@ namespace BusinessLogic.Services
                 _uow.Menus.Update(menu);
                 _uow.SaveChanges();
             }
+
+            return GetMenuById(id);
         }
 
         public void DeleteMenu(int id)

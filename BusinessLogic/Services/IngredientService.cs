@@ -43,14 +43,17 @@ namespace BusinessLogic.Services
             return _ingredientFactory.Create(ingredient);
         }
 
-        public void UpdateIngredient(int id, PostIngredientDTO updatedIngredientDTO)
+        public IngredientDTO UpdateIngredient(int id, PostIngredientDTO updatedIngredientDTO)
         {
-            Ingredient ingredient = _uow.Ingredients.Find(id);
-            ingredient.Name = updatedIngredientDTO.Name;
-            ingredient.Description = updatedIngredientDTO.Description;
-            ingredient.AmountUnit = updatedIngredientDTO.AmountUnit;
-            _uow.Ingredients.Update(ingredient);
-            _uow.SaveChanges();
+            if (_uow.Ingredients.Exists(id)) { 
+                Ingredient ingredient = _uow.Ingredients.Find(id);
+                ingredient.Name = updatedIngredientDTO.Name;
+                ingredient.Description = updatedIngredientDTO.Description;
+                ingredient.AmountUnit = updatedIngredientDTO.AmountUnit;
+                _uow.Ingredients.Update(ingredient);
+                _uow.SaveChanges();
+            }
+            return GetIngredientById(id);
         }
 
         public void DeleteIngredient(int id)

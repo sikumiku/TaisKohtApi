@@ -232,7 +232,7 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Dish was successfully updated, no content to be returned</response>
+        /// <response code="200">Dish was successfully updated, returns updated dish</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>

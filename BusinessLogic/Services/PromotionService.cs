@@ -30,36 +30,39 @@ namespace BusinessLogic.Services
 
         public IEnumerable<PromotionDTO> GetAllPromotions()
         {
-            return _uow.Promotions.All().Where(x => x.Active)
+            return _uow.Promotions.All()
                 .Select(promotion => _promotionFactory.Create(promotion));
         }
 
         public PromotionDTO GetPromotionById(int id)
         {
             var promotion = _uow.Promotions.Find(id);
-            if (promotion == null || !promotion.Active) return null;
+            if (promotion == null) return null;
 
             return _promotionFactory.CreateComplex(promotion);
         }
 
-        public void UpdatePromotion(int id, PromotionDTO updatedPromotionDTO)
+        public PromotionDTO UpdatePromotion(int id, PromotionDTO updatedPromotionDTO)
         {
-            Promotion promotion = _uow.Promotions.Find(id);
-            promotion.Name = updatedPromotionDTO.Name;
-            promotion.Description = updatedPromotionDTO.Description;
-            promotion.Type = updatedPromotionDTO.Type;
-            promotion.ValidTo = updatedPromotionDTO.ValidTo;
-            promotion.UpdateTime = DateTime.UtcNow;
-            _uow.Promotions.Update(promotion);
-            _uow.SaveChanges();
+            if (_uow.Promotions.Exists(id))
+            {
+                Promotion promotion = _uow.Promotions.Find(id);
+                promotion.Name = updatedPromotionDTO.Name;
+                promotion.Description = updatedPromotionDTO.Description;
+                promotion.Type = updatedPromotionDTO.Type;
+                promotion.ValidTo = updatedPromotionDTO.ValidTo;
+                promotion.UpdateTime = DateTime.UtcNow;
+                _uow.Promotions.Update(promotion);
+                _uow.SaveChanges();
+            }
+
+            return GetPromotionById(id);
         }
 
         public void DeletePromotion(int id)
         {
             Promotion promotion = _uow.Promotions.Find(id);
-            promotion.UpdateTime = DateTime.UtcNow;
-            promotion.Active = false;
-            _uow.Promotions.Update(promotion);
+            _uow.Promotions.Remove(promotion);
             _uow.SaveChanges();
         }
     }
