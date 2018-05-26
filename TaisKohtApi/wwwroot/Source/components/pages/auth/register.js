@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
+import AuthService from './AuthService';
 
 class RegisterForm extends React.Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class RegisterForm extends React.Component {
             password: "",
             confirmPassword: ""
         };
+        this.Auth = new AuthService();
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,7 +28,7 @@ class RegisterForm extends React.Component {
     }
 
     handleSubmit(event) {
-        e.preventDefault();
+        event.preventDefault();
         this.Auth.register(this.state.username, this.state.password)
             .then(res => {
                 this.props.history.replace('/');
@@ -39,8 +41,7 @@ class RegisterForm extends React.Component {
     render() {
         return (
             <div className="Login">
-                <p>Juba konto loodud? Logi sisse <a href="/login">siin:</a></p>
-                <form onSubmit={this.handleSubmit}>
+                  <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="email" bsSize="large">
                         <ControlLabel>E-mail</ControlLabel>
                         <FormControl
