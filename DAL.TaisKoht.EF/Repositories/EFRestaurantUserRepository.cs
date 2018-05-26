@@ -17,12 +17,16 @@ namespace DAL.TaisKoht.EF.Repositories
 
         public bool Exists(int id)
         {
-            return RepositoryDbSet.Any(e => e.RestaurantUserId == id);
+            return RepositoryDbSet.Any(e => e.RestaurantId == id);
         }
 
-        public IEnumerable<RestaurantUser> FindAll(params object[] restaurantId)
+        public IEnumerable<RestaurantUser> FindAllByRestaurantId(int restaurantId)
         {
-            return RepositoryDbSet.AsQueryable().ToList().Where(r => r.RestaurantId == (int)restaurantId[0]);
+            return RepositoryDbSet.AsQueryable().ToList().Where(r => r.RestaurantId == restaurantId);
+        }
+        public IEnumerable<RestaurantUser> FindAllByUserId(string userId)
+        {
+            return RepositoryDbSet.AsQueryable().ToList().Where(r => r.UserId == userId);
         }
 
         public int GetUserRestaurantCount(string userId)

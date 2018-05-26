@@ -13,6 +13,7 @@ namespace BusinessLogic.Services
     {
         private readonly ITaisKohtUnitOfWork _uow;
         private readonly IRatingLogFactory _ratingLogFactory;
+
         public RatingLogService(ITaisKohtUnitOfWork uow, IRatingLogFactory ratingLogFactory)
         {
             _uow = uow;
@@ -46,25 +47,26 @@ namespace BusinessLogic.Services
             var newRatingLog = _ratingLogFactory.Create(ratingLogDTO);
             _uow.RatingLogs.Add(newRatingLog);
             _uow.SaveChanges();
+
             return _ratingLogFactory.Create(newRatingLog);
         }
 
-        public void UpdateRatingLog(int id, RatingLogForEntityDTO dto)
+        public RatingLogDTO UpdateRatingLog(int id, RatingLogForEntityDTO updatedRatingLogDTO)
         {
-            throw new NotImplementedException();
-        }
+            if (_uow.RatingLogs.Exists(id))
+            {
+                RatingLog ratingLog = _uow.RatingLogs.Find(id);
+                ratingLog.Comment = updatedRatingLogDTO.Comment;
+                ratingLog.Rating = updatedRatingLogDTO.Rating;
+                ratingLog.RestaurantId = updatedRatingLogDTO.RestaurantId;
+                ratingLog.DishId = updatedRatingLogDTO.DishId;
+                ratingLog.UpdateTime = DateTime.UtcNow;
+                _uow.RatingLogs.Update(ratingLog);
+                _uow.SaveChanges();
+            }
 
-        //public void UpdateRatingLog(int id, RatingLogDTO updatedRatingLogDTO)
-        //{
-        //    RatingLog ratingLog = _uow.RatingLogs.Find(id);
-        //    ratingLog.Comment = updatedRatingLogDTO.Comment;
-        //    ratingLog.Rating = updatedRatingLogDTO.Rating;
-        //    ratingLog.RestaurantId = updatedRatingLogDTO.RestaurantId;
-        //    ratingLog.DishId = updatedRatingLogDTO.DishId;
-        //    ratingLog.UpdateTime = DateTime.UtcNow;
-        //    _uow.RatingLogs.Update(ratingLog);
-        //    _uow.SaveChanges();
-        //}
+            return GetRatingLogById(id);
+        }
 
         public void DeleteRatingLog(int id)
         {

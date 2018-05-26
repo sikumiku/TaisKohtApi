@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 
         RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO);
 
-        void UpdateRatingLog(int id, RatingLogForEntityDTO dto);
+        RatingLogDTO UpdateRatingLog(int id, RatingLogForEntityDTO dto);
 
         //RatingLogDTO AddNewRatingLog(RatingLogDTO dto);
 

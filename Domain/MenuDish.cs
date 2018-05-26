@@ -8,7 +8,6 @@ namespace Domain
 {
     public class MenuDish : EssentialEntityBase
     {
-        public int MenuDishId { get; set; }
         //foreign keys
         [Required]
         public int MenuId { get; set; }

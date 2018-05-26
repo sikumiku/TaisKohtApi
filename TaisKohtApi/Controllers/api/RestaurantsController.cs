@@ -189,7 +189,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO, User.Identity.GetUserId());
 
-            return CreatedAtAction("Get", new { id = newRestaurant.RestaurantId }, newRestaurant);
+            return CreatedAtRoute("GetRestaurant", new { id = newRestaurant.RestaurantId }, newRestaurant);
         }
 
         /// <summary>
@@ -206,32 +206,35 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
-        /// <response code="204">Restaurant was successfully updated, no content to be returned</response>
+        /// <response code="200">Restaurant was successfully updated, updated Restaurant to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Restaurants/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult Put(int id, [FromBody]PostRestaurantDTO restaurantDTO)
         {
+            RestaurantDTO updatedRestaurant;
+
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var restaurant = _restaurantService.GetRestaurantById(id);
 
             if (restaurant == null) return NotFound();
             if (IsAuthorized(restaurant))
             {
-                _restaurantService.UpdateRestaurant(id, restaurantDTO);
+                updatedRestaurant = _restaurantService.UpdateRestaurant(id, restaurantDTO);
             }
             else
             {
                 return StatusCode(403, "This action is forbidden to unauthorized user.");
             }
-            return NoContent();
+
+            return Ok(updatedRestaurant);
         }
 
         /// <summary>

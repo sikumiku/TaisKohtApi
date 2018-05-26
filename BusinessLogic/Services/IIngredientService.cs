@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 
         IngredientDTO AddNewIngredient(PostIngredientDTO dto, string userId);
 
-        void UpdateIngredient(int id, PostIngredientDTO dto);
+        IngredientDTO UpdateIngredient(int id, PostIngredientDTO dto);
 
         void DeleteIngredient(int id);
     }

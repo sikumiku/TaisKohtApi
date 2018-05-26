@@ -139,7 +139,6 @@ namespace DAL.TaisKoht.EF
                         break;
 
                     case EntityState.Modified:
-                        entry.State = EntityState.Modified;
                         entry.CurrentValues["UpdateTime"] = DateTime.UtcNow;
                         break;
                 }
