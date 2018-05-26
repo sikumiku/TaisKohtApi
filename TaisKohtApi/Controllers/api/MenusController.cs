@@ -101,7 +101,7 @@ namespace TaisKohtApi.Controllers.api
             if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("New menu can only be added by admin or by restaurant user");
 
             int userMenus = _menuService.GetUserMenuCount(User.Identity.GetUserId());
-            if (User.IsInRole("normalUser") && userMenus >= 1)
+            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin") && userMenus >= 1)
             {
                 return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
             }

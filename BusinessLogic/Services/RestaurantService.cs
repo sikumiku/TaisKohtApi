@@ -40,7 +40,7 @@ namespace BusinessLogic.Services
             _uow.SaveChanges();
         }
 
-        public IEnumerable<RestaurantDTO> GetAllRestaurants()
+        public IEnumerable<SimpleRestaurantDTO> GetAllRestaurants()
         {
             return _uow.Restaurants.All().Where(x => x.Active)
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
@@ -92,7 +92,7 @@ namespace BusinessLogic.Services
             _uow.SaveChanges();
         }
 
-        public IEnumerable<RestaurantDTO> SearchRestaurantByName(string restaurantName)
+        public IEnumerable<SimpleRestaurantDTO> SearchRestaurantByName(string restaurantName)
         {
 
             if (String.IsNullOrEmpty(restaurantName)) return null;
@@ -101,7 +101,7 @@ namespace BusinessLogic.Services
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
         }
 
-        public IEnumerable<RestaurantDTO> GetTopRestaurants(int amount)
+        public IEnumerable<SimpleRestaurantDTO> GetTopRestaurants(int amount)
         {
             int topAmount;
             if (!int.TryParse(amount.ToString(), out topAmount)) return null;

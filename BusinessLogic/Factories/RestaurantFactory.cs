@@ -8,16 +8,16 @@ namespace BusinessLogic.Factories
 {
     public interface IRestaurantFactory
     {
-        RestaurantDTO Create(Restaurant promotion);
+        SimpleRestaurantDTO Create(Restaurant promotion);
         Restaurant Create(PostRestaurantDTO restaurantDTO);
         RestaurantDTO CreateComplex(Restaurant restaurant);
     }
 
     public class RestaurantFactory : IRestaurantFactory
     {
-        public RestaurantDTO Create(Restaurant restaurant)
+        public SimpleRestaurantDTO Create(Restaurant restaurant)
         {
-            return RestaurantDTO.CreateFromDomain(restaurant);
+            return SimpleRestaurantDTO.CreateFromDomain(restaurant);
         }
 
         public Restaurant Create(PostRestaurantDTO restaurantDTO)
@@ -34,7 +34,7 @@ namespace BusinessLogic.Factories
 
         public RestaurantDTO CreateComplex(Restaurant restaurant)
         {
-            return RestaurantDTO.CreateFromDomainWithMenusAndRating(restaurant);
+            return RestaurantDTO.CreateFromDomainWithAdditionalInfo(restaurant);
         }
     }
 }
