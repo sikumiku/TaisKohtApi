@@ -29,6 +29,15 @@ namespace BusinessLogic.Services
             return _dishFactory.CreateComplex(newDish);
         }
 
+        public DishDTO AddIngredientToDish(PostIngredientForDishDTO postIngredientForDishDTO)
+        {
+            _uow.DishIngredients.Add(new DishIngredient { Amount = postIngredientForDishDTO.Amount, DishId = postIngredientForDishDTO.DishId, IngredientId = postIngredientForDishDTO.DishId });
+            _uow.SaveChanges();
+            var updatedDish = _uow.Dishes.Find(postIngredientForDishDTO.DishId);
+            if (updatedDish == null) return null;
+            return _dishFactory.CreateComplex(updatedDish);
+        }
+
         public IEnumerable<DishDTO> GetAllDishes()
         {
             return _uow.Dishes.All()
