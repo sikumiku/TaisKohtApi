@@ -28,6 +28,7 @@ namespace DAL.TaisKoht.EF.Helpers
                 {typeof(IRatingLogRepository), (dataContext) => new EFRatingLogRepository(dataContext as ApplicationDbContext) },
                 {typeof(IUserRoleRepository), (dataContext) => new EFUserRoleRepository(dataContext as ApplicationDbContext) },
                 {typeof(IRoleRepository), (dataContext) => new EFRoleRepository(dataContext as ApplicationDbContext) },
+                {typeof(IDishIngredientRepository), (dataContext) => new EFDishIngredientRepository(dataContext as ApplicationDbContext) }
             };
         }
 
