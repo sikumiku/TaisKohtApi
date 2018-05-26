@@ -79,6 +79,7 @@ namespace BusinessLogic.DTO
     public class PostMenuDTO
     {
         //public int MenuId { get; set; }
+        public string Name { get; set; }
         public DateTime? ActiveFrom { get; set; }
         public DateTime? ActiveTo { get; set; }
         [Range(1, 365)]
