@@ -77,9 +77,9 @@ namespace BusinessLogic.Services
 
                 Array.ForEach(dishesIds, did => requestMenuDishes.Add(new MenuDish() {DishId = did, MenuId = id}));
 
-                var deletedMenuDishes = existingMenuDishes.FindAll(x => !requestMenuDishes.Exists(y => isEqualMenuDish(x, y)));
+                var deletedMenuDishes = existingMenuDishes.FindAll(x => !requestMenuDishes.Exists(y => IsEqualMenuDish(x, y)));
 
-                var addedMenuDishes = requestMenuDishes.FindAll(x => !existingMenuDishes.Exists(y => isEqualMenuDish(x, y)));
+                var addedMenuDishes = requestMenuDishes.FindAll(x => !existingMenuDishes.Exists(y => IsEqualMenuDish(x, y)));
 
                 deletedMenuDishes.ForEach(md => _uow.MenuDishes.Remove(md));
                 addedMenuDishes.ForEach(md => _uow.MenuDishes.Add(md));
@@ -88,10 +88,11 @@ namespace BusinessLogic.Services
             }
         }
 
-        private bool isEqualMenuDish(MenuDish x, MenuDish y)
+        private static bool IsEqualMenuDish(MenuDish x, MenuDish y)
         {
             return x.DishId == y.DishId && x.MenuId == y.MenuId;
         }
+
         public void DeleteMenu(int id)
         {
             Menu menu = _uow.Menus.Find(id);

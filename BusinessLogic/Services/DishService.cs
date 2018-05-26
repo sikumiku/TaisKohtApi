@@ -24,14 +24,15 @@ namespace BusinessLogic.Services
         {
             var newDish = _dishFactory.Create(dishDTO);
 
-            if (_uow.Menus.Exists(dishDTO.MenuId))
+            if (dishDTO.MenuId != null &&_uow.Menus.Exists((int)dishDTO.MenuId))
             {
                 MenuDish md = new MenuDish()
                 {
                     DishId = newDish.DishId,
-                    MenuId = dishDTO.MenuId
+                    MenuId = (int) dishDTO.MenuId
                 };
-                _uow.D
+
+                _uow.MenuDishes.Add(md);
             }
             
             newDish.UserId = userId;
