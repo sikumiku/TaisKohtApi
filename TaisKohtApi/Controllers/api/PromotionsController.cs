@@ -59,9 +59,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetPromotion(int id)
         {
-            var p = _promotionService.GetPromotionById(id);
-            if (p == null) return NotFound();
-            return Ok(p);
+            var promotionDTO = _promotionService.GetPromotionById(id);
+            if (promotionDTO == null) return NotFound();
+            return Ok(promotionDTO);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Promotions
-        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(typeof(PromotionDTO), 201)]
         [ProducesResponseType(400)]
@@ -123,7 +123,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Promotions/5
-        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -148,15 +148,15 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Promotion not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
         // DELETE: api/v1/Promotions/5
-        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult Delete(int id)
         {
-            var p = _promotionService.GetPromotionById(id);
-            if (p == null) return NotFound();
+            var promotionDTO = _promotionService.GetPromotionById(id);
+            if (promotionDTO == null) return NotFound();
             _promotionService.DeletePromotion(id);
             return NoContent();
         }

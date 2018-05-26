@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Initial91 : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,7 +36,7 @@ namespace DAL.TaisKoht.EF.Migrations
                 columns: table => new
                 {
                     RoleId = table.Column<string>(nullable: false),
-                    AccessLevel = table.Column<string>(maxLength: 50, nullable: false),
+                    AccessLevel = table.Column<string>(maxLength: 50, nullable: true),
                     Active = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
@@ -344,7 +344,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     ActiveFrom = table.Column<DateTime>(nullable: true),
                     ActiveTo = table.Column<DateTime>(nullable: true),
                     AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
                     PromotionId = table.Column<int>(nullable: true),
                     RepetitionInterval = table.Column<int>(nullable: true),
                     RestaurantId = table.Column<int>(nullable: false),
