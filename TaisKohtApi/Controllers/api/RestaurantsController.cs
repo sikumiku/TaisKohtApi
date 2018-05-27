@@ -32,8 +32,9 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all restaurants as a list
+        /// Gets all restaurants as a list.
         /// </summary>
+        /// <returns>All restaurants as a list</returns>
         /// <response code="200">Successful restaurant</response> 
         /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
@@ -52,10 +53,12 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets searched restaurants as a list
+        /// Gets searched restaurants as a list.
         /// </summary>
+        /// <param name="name">name of restaurant to return</param>
+        /// <returns>All searched restaurants as a list</returns>
         /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no restaurants can be found</response>
+        /// <response code="404">If no searched restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Restaurants/search?name=th
@@ -79,8 +82,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets top restaurants as a list
+        /// Gets top restaurants as a list.
         /// </summary>
+        /// <param name="amount">How many top rated restaurants to return</param>
+        /// <returns>All top rated restaurants as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
@@ -106,9 +111,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find restaurant by ID
+        /// Find restaurant by ID.
         /// </summary>
         /// <param name="id">ID of restaurant to return</param>
+        /// <returns>Restaurant by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Restaurant not found</response>
         /// <response code="429">Too many requests</response>
@@ -129,15 +135,20 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Add new user to restaurant's users list
+        /// Add new user to restaurant's users list.
         /// </summary>
-        /// <param name="id">ID of restaurant that you wanna add new user to</param>
-        /// <param name="userId">ID of user that you wanna add to restaurant</param>
-        /// <response code="200">Successful operation</response>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/v1/Restaurants/addUserToRestaurant?id=1&userId=5f8811f5-2a80-4a8d-891f-12282e185aea
+        /// </remarks>
+        /// <param name="id" name="userId">ID of restaurant that you wanna add new user to and ID of user that you wanna add to restaurant</param>
+        /// <response code="201">Successful operation</response>
+        /// <response code="403">No premission</response>
         /// <response code="404">Restaurant or user not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Restaurants/5
+        // POST: api/v1/Restaurants/addUserToRestaurant?id=1&userId=5f8811f5-2a80-4a8d-891f-12282e185aea
         [AllowAnonymous]
         [HttpPost]
         [Route("addUserToRestaurant")]
@@ -162,18 +173,27 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Creates a restaurant
+        /// Creates a restaurant.
         /// </summary>
-        /// <param name="restaurantDTO">Restaurant object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Restaurants
         ///     {
-        ///        ......
+        ///        "Name": "Chef",    
+        ///        "Url": "http://chef.com",    
+        ///        "ContactNumber": "8228723089984329",    
+        ///        "Email": "chef@gmail.com",
+        ///        "Address": {        
+        ///            "addressFirstLine": "Pärnu mnt 2",        
+        ///            "locality": "Tallinn",        
+        ///            "postCode": "12345",        
+        ///            "region": "Center",        
+        ///            "country": "Estonia"
+        ///            }
         ///     }
-        ///
         /// </remarks>
+        /// <param name="restaurantDTO">PostRestaurantDTO object to be added</param>
         /// <returns>A newly created restaurant</returns>
         /// <response code="201">Returns the newly created restaurant</response>
         /// <response code="400">Provided object is faulty</response>
@@ -207,19 +227,28 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Update an existing restaurant
+        /// Update an existing restaurant.
         /// </summary>
-        /// <param name="id">ID of restaurant to update</param>
-        /// <param name="restaurantDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Restaurants/{id}
         ///     {
-        ///         ...
+        ///        "Name": "Chef",    
+        ///        "Url": "http://chef.com",    
+        ///        "ContactNumber": "8228723089984329",    
+        ///        "Email": "chef@gmail.com",
+        ///        "Address": {        
+        ///            "addressFirstLine": "Pärnu mnt 12",        
+        ///            "locality": "Tallinn",        
+        ///            "postCode": "12345",        
+        ///            "region": "Center",        
+        ///            "country": "Estonia"
+        ///            }
         ///     }
-        ///
         /// </remarks>
+        /// <param name="id" name="restaurantDTO">ID of restaurant to update and updated PostRestaurantDTO object</param>
+        /// <returns>Updated restaurant</returns>
         /// <response code="200">Restaurant was successfully updated, updated Restaurant to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
@@ -260,6 +289,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteRestaurant(int id)
@@ -278,6 +308,11 @@ namespace TaisKohtApi.Controllers.api
             return NoContent();
         }
 
+        /// <summary>
+        /// Checks that logged in user is in role admin or one of reastaurant users.
+        /// </summary>
+        /// <param name="restaurant">RestaurantDTO</param>
+        /// <returns>true, if user is in role admin or one of reastaurant users</returns>
         private Boolean IsAuthorized(RestaurantDTO restaurant)
         {
             var users = _restaurantService.GetRestaurantUsersById(restaurant.RestaurantId);

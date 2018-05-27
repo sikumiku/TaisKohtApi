@@ -27,8 +27,9 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all ingredients as a list
+        /// Gets all user ingredients as a list (admin user gets all ingredients as a list).
         /// </summary>
+        /// <returns>All user ingredients as a list (for admin user all ingredients as a list)</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no ingredients can be found</response>
         /// <response code="429">Too many requests</response>
@@ -49,9 +50,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find ingredient by ID
+        /// Find user ingredient by ID (admin user can find all users ingredient by ID).
         /// </summary>
         /// <param name="id">ID of ingredient to return</param>
+        /// <returns>Ingredient by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Ingredient not found</response>
         /// <response code="429">Too many requests</response>
@@ -73,18 +75,20 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Creates a ingredient
+        /// Creates a ingredient.
         /// </summary>
-        /// <param name="ingredientDTO">Ingredient object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Ingredients
         ///     {
-        ///         ...
+        ///         "Name": "Milk",
+        ///         "Description": "Milk with 3% or more fat",
+        ///         "AmountUnit" : "l"
         ///     }
         ///
         /// </remarks>
+        /// <param name="ingredientDTO">PostIngredientDTO object to be added</param>
         /// <returns>A newly created ingredient</returns>
         /// <response code="201">Returns the newly created ingredient</response>
         /// <response code="400">Provided object is faulty</response>
@@ -108,19 +112,21 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Update an existing ingredient
+        /// Update an existing ingredient.
         /// </summary>
-        /// <param name="id">ID of ingredient to update</param>
-        /// <param name="ingredientDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Ingredients/{id}
         ///     {
-        ///         ...
+        ///         "Name": "Milk",
+        ///         "Description": "Milk with 2,5% fat",
+        ///         "AmountUnit" : "l"
         ///     }
         ///
         /// </remarks>
+        /// <param name="id" name="ingredientDTO">ID of ingredient to update and updated PostIngredientDTO object</param>
+        /// <returns>Updated ingredient</returns>
         /// <response code="200">Ingredient was successfully updated, updated Ingredient to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>

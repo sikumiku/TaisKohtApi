@@ -32,8 +32,9 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all dishes as a list
+        /// Gets all dishes as a list.
         /// </summary>
+        /// <returns>All dishes as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no dishes can be found</response>
         /// <response code="429">Too many requests</response>
@@ -52,10 +53,12 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets today daily dishes as a list
+        /// Gets today daily dishes as a list.
         /// </summary>
+        /// <param name="vegan" name="glutenFree" name="lactoseFree">parameters of dish to return</param>
+        /// <returns>All today daily dishes as a list</returns>
         /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no dishes can be found</response>
+        /// <response code="404">If no today daily dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Dishes/Daily
@@ -79,13 +82,17 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets searched dishes as a list
+        /// Gets searched dishes as a list by either title or price limit.
         /// </summary>
+        /// <param name="title">title of dish to return</param>
+        /// <param name="priceLimit">pricelimit of dish to return</param>
+        /// <returns>All searched dishes as a list</returns>
         /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no dishes can be found</response>
+        /// <response code="400">No title or price limit provided for search</response> 
+        /// <response code="404">If no searched dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/Search?title=th
+        // GET: api/v1/dishes/search?title=th&priceLimit=null
         [AllowAnonymous]
         [HttpGet]
         [Route("search")]
@@ -106,7 +113,6 @@ namespace TaisKohtApi.Controllers.api
 
                 return Ok(result);
             }
-
             if (priceLimit != null)
             {
                 _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/search", "SearchForDishesWithPriceLimit");
@@ -124,10 +130,12 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets top dishes as a list
+        /// Gets top dishes as a list.
         /// </summary>
+        /// <param name="amount">How many top rated dishes to return</param>
+        /// <returns>All top rated dishes as a list</returns>
         /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no dishes can be found</response>
+        /// <response code="404">If no top dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Dishes/Top
@@ -151,9 +159,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find dish by ID
+        /// Find dish by ID.
         /// </summary>
         /// <param name="id">ID of dish to return</param>
+        /// <returns>Dish by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Dish not found</response>
         /// <response code="429">Too many requests</response>
@@ -174,25 +183,32 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Creates a dish
+        /// Creates a dish.
         /// </summary>
-        /// <param name="dishDTO">Dish object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Dishes
         ///     {
-        ///         "title" : "Chicken Kiev",
-        ///         "description" : "Tasty meal",
-        ///         "vegan" : false,
-        ///         "price" : 5.25,
-        ///         "daily" : true,
-        ///         "glutenFree" : true,
-        ///         "restaurantId" : 4,
-        ///         "userId" : 12
+        ///         "Title" : "Chicken Kiev",
+        ///         "Description" : "Tasty meal",
+        ///         "AvailableFrom" : "2018-05-27T20:51:22.508Z",
+        ///         "AvailableTo" : "2018-05-27T20:51:22.508Z",
+        ///         "ServeTime" : "2018-05-27T20:51:22.508Z",
+        ///         "Vegan" : false,
+        ///         "LactoseFree" : false,
+        ///         "GlutenFree" : false,
+        ///         "Kcal" : 400.00,
+        ///         "WeightG" : 300.00,
+        ///         "Price" : 7.25,
+        ///         "DailyPrice" : 5.00,
+        ///         "Daily" : true,
+        ///         "RestaurantId" : 1,
+        ///         "MenuId" : 1,
+        ///         "PromotionId" : 1
         ///     }
-        ///
         /// </remarks>
+        /// <param name="dishDTO">PostDishDTO object to be added</param>
         /// <returns>A newly created dish</returns>
         /// <response code="201">Returns the newly created dish</response>
         /// <response code="400">Provided object is faulty</response>
@@ -222,56 +238,83 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Adds ingredient to dish
+        /// Adds ingredients to dish.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="PostIngredientForDishDTO"></param>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT api/v1/Dishes/{id}/Ingredients
+        ///     [{
+        ///         "Amount" : "2.5",
+        ///         "IngredientId" : 1
+        ///         
+        ///     },
+        ///     
+        ///     {
+        ///         "Amount" : "7.5",
+        ///         "IngredientId" : 2
+        ///     },
+        ///     
+        ///     {
+        ///         "Amount" : "5",
+        ///         "IngredientId" : 3
+        ///     }]
+        ///
+        /// </remarks>
+        /// <param name="id" name="ingredients">DishId and ingredients</param>
         /// <response code="204">Ingredients were successfully added to dish</response>
         /// <response code="400">Provided object is faulty</response>
         /// <response code="404">Dish not found by given Id</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Dishes/addIngredient
+        // PUT: api/v1/Dishes/{id}/Ingredients
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}/ingredients")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult AddIngredientsToDish(int id, [FromBody]PostIngredientForDishDTO[] dishes)
+        public IActionResult AddIngredientsToDish(int id, [FromBody]PostIngredientForDishDTO[] ingredients)
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/dishes/{id}/ingredients", "AddIngredientsToDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dishes can only be added by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Ingredients To Dish can only be added by admin or by restaurant user");
 
-            _dishService.UpdateDishIngredients(id, dishes);
+            _dishService.UpdateDishIngredients(id, ingredients);
 
             return NoContent();
         }
 
         /// <summary>
-        /// Update an existing dish
+        /// Update an existing dish.
         /// </summary>
-        /// <param name="id">ID of dish to update</param>
-        /// <param name="PostDishDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Dishes/{id}
         ///     {
-        ///         "title" : "Roast beef",
-        ///         "description" : "Tasty meal",
-        ///         "vegan" : false,
-        ///         "price" : 7.5,
-        ///         "daily" : false,
-        ///         "glutenFree" : true,
-        ///         "restaurantId" : 2,
-        ///         "userId" : 5
+        ///         "Title" : "Roast beef",
+        ///         "Description" : "Tasty meal",
+        ///         "AvailableFrom" : "2018-05-27T20:51:22.508Z",
+        ///         "AvailableTo" : "2018-05-27T20:51:22.508Z",
+        ///         "ServeTime" : "2018-05-27T20:51:22.508Z",
+        ///         "Vegan" : false,
+        ///         "LactoseFree" : false,
+        ///         "GlutenFree" : false,
+        ///         "Kcal" : 400.00,
+        ///         "WeightG" : 300.00,
+        ///         "Price" : 8.00,
+        ///         "DailyPrice" : 5.00,
+        ///         "Daily" : true,
+        ///         "RestaurantId" : 1,
+        ///         "MenuId" : 1,
+        ///         "PromotionId" : 1
         ///     }
-        ///
         /// </remarks>
+        /// <param name="id" name="dishDTO">ID of dish to update and updated PostDishDTO object</param>
+        /// <returns>Updated dish</returns>
         /// <response code="200">Dish was successfully updated, returns updated dish</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
@@ -326,6 +369,11 @@ namespace TaisKohtApi.Controllers.api
             return NoContent();
         }
 
+        /// <summary>
+        /// Checks that logged in user is in role admin or one of reastaurant users.
+        /// </summary>
+        /// <param name="restaurantId">ID of restaurant</param>
+        /// <returns>true, if user is in role admin or one of reastaurant users</returns>
         private Boolean IsRestaurantUserOrAdmin(int restaurantId)
         {
             var users = _restaurantService.GetRestaurantUsersById(restaurantId);

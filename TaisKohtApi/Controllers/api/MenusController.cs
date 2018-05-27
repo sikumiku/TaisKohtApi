@@ -30,8 +30,9 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all menus as a list
+        /// Gets all menus as a list.
         /// </summary>
+        /// <returns>All menus as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no menus can be found</response>
         /// <response code="429">Too many requests</response>
@@ -51,9 +52,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find menu by ID
+        /// Find menu by ID.
         /// </summary>
         /// <param name="id">ID of menu to return</param>
+        /// <returns>Menu by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Menu not found</response>
         /// <response code="429">Too many requests</response>
@@ -74,18 +76,23 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Creates a menu
+        /// Creates a menu.
         /// </summary>
-        /// <param name="menuDTO">Menu object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Menus
         ///     {
-        ///         ...
+        ///         "Name": "Special menu",
+        ///         "ActiveFrom": "2018-05-27T20:47:45.751Z",
+        ///         "ActiveTo": "2018-05-27T20:47:45.751Z",
+        ///         "RepetitionInterval": 7,
+        ///         "restaurantId": 1,
+        ///         "promotionId": 1
         ///     }
         ///
         /// </remarks>
+        /// <param name="menuDTO">PostMenuDTO object to be added</param>
         /// <returns>A newly created menu</returns>
         /// <response code="201">Returns the newly created menu</response>
         /// <response code="400">Menu object is faulty</response>
@@ -120,19 +127,24 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Update an existing menu
+        /// Update an existing menu.
         /// </summary>
-        /// <param name="id">ID of menu to update</param>
-        /// <param name="menuDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Menus/{id}
         ///     {
-        ///         ...
+        ///         "Name": "June menu",
+        ///         "ActiveFrom": "2018-06-01T20:47:45.751Z",
+        ///         "ActiveTo": "2018-06-30T20:47:45.751Z",
+        ///         "RepetitionInterval": 1,
+        ///         "restaurantId": 1,
+        ///         "promotionId": null
         ///     }
         ///
         /// </remarks>
+        /// <param name="id" name="menuDTO">ID of menu to update and updated PostMenuDTO object</param>
+        /// <returns>Updated menu</returns>
         /// <response code="200">Menu was successfully updated, updated Menu to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
@@ -190,7 +202,14 @@ namespace TaisKohtApi.Controllers.api
         /// <summary>
         /// Adds dishes to the menu by id.
         /// </summary>
-        /// <param name="id">ID of menu to add Dishes to</param>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT api/v1/Menus/{id}/Dishes
+        ///     [1, 2, 3]
+        ///
+        /// </remarks>
+        /// <param name="id" name="dishIds">MenuId and dishIds</param>
         /// <response code="204">MenuDishes were successfully updated</response>
         /// <response code="404">Menu not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
@@ -214,7 +233,11 @@ namespace TaisKohtApi.Controllers.api
         }
 
 
-
+        /// <summary>
+        /// Checks that logged in user is in role admin or one of reastaurant users.
+        /// </summary>
+        /// <param name="restaurantId">ID of restaurant</param>
+        /// <returns>true, if user is in role admin or one of reastaurant users</returns>
         private Boolean IsRestaurantUserOrAdmin(int restaurantId)
         {
             var users = _restaurantService.GetRestaurantUsersById(restaurantId);
