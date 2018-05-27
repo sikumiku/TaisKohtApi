@@ -29,3 +29,4 @@ Projektis osalejateks on:
 - Turvalisus on üles ehitatud Identity raamistiku peale
 - Admin kasutaja loomiseks logida sisse e-mailiga admin@gmail.com
 - Rollid luuakse programmi käivitamisel (normalUser, premiumUser, admin)
+- Kui IIS Express annab errori puuduva mooduli kohta, tuleb teha projekti alamprojektis TaisKohtApi ```npm install```
