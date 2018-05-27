@@ -12,10 +12,8 @@ export default class RestaurantList extends React.Component {
         let contents = this.state.loading ? <p><em>Loading...</em></p>
             : RestaurantList.renderRestaurantTable(this.state.restaurants);
 
-        return <div>
-            <h1>Restaurant List</h1>
-            <button onClick={() => { this.refreshData() }}>Refresh</button>
-            <p>This component fetches restaurant data from the server.</p>
+        return <div> 
+            <div className= "page-header">Restaurant List</div>
             {contents}
         </div>;
     }
