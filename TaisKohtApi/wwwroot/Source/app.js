@@ -6,6 +6,7 @@ import MainPage from './components/pages/mainPage/MainPage';
 import RestaurantList from './components/pages/restaurants/RestaurantList';
 import LoginForm from './components/pages/auth/login';
 import Logout from './components/pages/auth/logout';
+import Profile from './components/pages/profile/profile';
 
 import RegisterForm from './components/pages/auth/register';
 import PromotionsList from './components/pages/promotions/PromotionsList';
@@ -23,6 +24,7 @@ class App extends Component {
                     <Route exact path="/login" component={LoginForm} />
                     <Route exact path="/logout" component={Logout} />
                     <Route exact path="/register" component={RegisterForm} />
+                    <Route exact path="/profile" component={Profile} />
                 </div>
             </Router>
         );
