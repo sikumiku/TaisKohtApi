@@ -65,8 +65,6 @@ namespace BusinessLogic.DTO
     {
         public decimal Amount { get; set; }
         [Required]
-        public int DishId { get; set; }
-        [Required]
         public int IngredientId { get; set; }
     }
 }

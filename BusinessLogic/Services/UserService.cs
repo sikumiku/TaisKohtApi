@@ -29,7 +29,7 @@ namespace BusinessLogic.Services
         {
             var user = _uow.Users.Find(id);
             if (user == null) return null;
-            var roles = this.GetRolesForUser(user);
+            var roles = GetRolesForUser(user);
             return _userFactory.CreateComplex(user, roles);
         }
 
