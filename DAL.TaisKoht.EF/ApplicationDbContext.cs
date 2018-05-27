@@ -32,6 +32,7 @@ namespace DAL.TaisKoht.EF
         public DbSet<RestaurantUser> RestaurantUsers { get; set; }
         public new DbSet<User> Users { get; set; }
         public new DbSet<Role> Roles { get; set; }
+        public DbSet<RequestLog> RequestLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

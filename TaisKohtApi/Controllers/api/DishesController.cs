@@ -15,18 +15,20 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/Dishes")]
+    [Route("api/v1/dishes")]
     public class DishesController : Controller
     {
         private readonly IDishService _dishService;
         private readonly IRestaurantService _restaurantService;
         private readonly IIngredientService _ingredientService;
+        private readonly IRequestLogService _requestLogService;
 
-        public DishesController(IDishService dishService, IRestaurantService restaurantService, IIngredientService ingredientService)
+        public DishesController(IDishService dishService, IRestaurantService restaurantService, IIngredientService ingredientService, IRequestLogService requestLogService)
         {
             _dishService = dishService;
             _restaurantService = restaurantService;
             _ingredientService = ingredientService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
@@ -43,8 +45,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get()
+        public IActionResult GetAllDishes()
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes", "GetAllDishes");
             return Ok(_dishService.GetAllDishes());
         }
 
@@ -57,13 +60,15 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Dishes/Daily
         [AllowAnonymous]
-        [HttpGet("Daily")]
+        [HttpGet]
+        [Route("daily")]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult GetDailyDishes(bool vegan, bool glutenFree, bool lactoseFree)
+        public IActionResult GetDailyDishes([FromQuery(Name = "vegan")]bool vegan, [FromQuery(Name = "glutenFree")]bool glutenFree, [FromQuery(Name = "lactoseFree")]bool lactoseFree)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/daily", "GetDailyDishes");
             var result = _dishService.GetAllDailyDishes(vegan, glutenFree, lactoseFree);
             if (!result.Any())
             {
@@ -82,45 +87,40 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Dishes/Search?title=th
         [AllowAnonymous]
-        [HttpGet("Search")]
+        [HttpGet]
+        [Route("search")]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Search(string title)
+        public IActionResult SearchForDishes([FromQuery(Name = "title")]string title, [FromQuery(Name = "priceLimit")]decimal? priceLimit)
         {
-            var result = _dishService.SearchDishByTitle(title);
-            if (!result.Any())
+            if (title != null)
             {
-                return NotFound(title);
+                _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/search", "SearchForDishesWithTitle");
+                var result = _dishService.SearchDishByTitle(title);
+                if (!result.Any())
+                {
+                    return NotFound("Can't find by this title '" + title + "'.");
+                }
+
+                return Ok(result);
             }
 
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Gets price limited dishes as a list
-        /// </summary>
-        /// <response code="200">Successful operation</response> 
-        /// <response code="404">If no dishes can be found</response>
-        /// <response code="429">Too many requests</response>
-        /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/Pricelimit
-        [AllowAnonymous]
-        [HttpGet("Pricelimit")]
-        [ProducesResponseType(typeof(List<DishDTO>), 200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(429)]
-        [ProducesResponseType(500)]
-        public IActionResult PriceLimit(decimal priceLimit)
-        {
-            var result = _dishService.SearchDishByPriceLimit(priceLimit);
-            if (!result.Any())
+            if (priceLimit != null)
             {
-                return NotFound(priceLimit);
+                _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/search", "SearchForDishesWithPriceLimit");
+                var result = _dishService.SearchDishByPriceLimit(priceLimit);
+                if (!result.Any())
+                {
+                    return NotFound("Can't find by this price limit '" + priceLimit + "'.");
+                }
+                return Ok(result);
             }
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/search", "SearchForDishesWithoutParameters");
 
-            return Ok(result);
+            return BadRequest("For searching you need to provide either title or price limit.");
+
         }
 
         /// <summary>
@@ -132,13 +132,15 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Dishes/Top
         [AllowAnonymous]
-        [HttpGet("Top")]
+        [HttpGet]
+        [Route("top")]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult GetTopDishes(int amount)
+        public IActionResult GetTopDishes([FromQuery(Name = "amount")]int amount)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/top", "GetTopDishes");
             var result = _dishService.GetTopDishes(amount);
             if (!result.Any())
             {
@@ -165,6 +167,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetDish(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/{id}", "GetDish");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
             return Ok(dishDTO);
@@ -203,8 +206,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]PostDishDTO dishDTO)
+        public IActionResult PostDish([FromBody]PostDishDTO dishDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/dishes", "PostDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("New dish can only be added by admin or by restaurant user");
@@ -229,13 +233,14 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // PUT: api/v1/Dishes/addIngredient
         [Authorize(Roles = "admin, normalUser, premiumUser")]
-        [HttpPut("{id}/Ingredients")]
+        [HttpPut("{id}/ingredients")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult AddIngredientsToDish(int id, [FromBody]PostIngredientForDishDTO[] dishes)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/dishes/{id}/ingredients", "AddIngredientsToDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
@@ -278,8 +283,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PostDishDTO dishDTO)
+        public IActionResult UpdateDish(int id, [FromBody]PostDishDTO dishDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/dishes/{id}", "UpdateDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be updated by admin or by restaurant user");
@@ -310,8 +316,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteDish(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/dishes/{id}", "DeleteDish");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
             if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be deleted by admin or by restaurant user");

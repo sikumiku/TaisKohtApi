@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180527095215_Initial102")]
-    partial class Initial102
+    [Migration("20180527120112_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -296,6 +296,35 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RatingLogs");
+                });
+
+            modelBuilder.Entity("Domain.RequestLog", b =>
+                {
+                    b.Property<int>("RequestLogId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("AddTime");
+
+                    b.Property<string>("QueryString")
+                        .HasMaxLength(2000);
+
+                    b.Property<string>("RequestMethod")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("RequestName")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("UpdateTime");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("RequestLogId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RequestLogs");
                 });
 
             modelBuilder.Entity("Domain.Restaurant", b =>
@@ -662,6 +691,14 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.HasOne("Domain.User", "User")
                         .WithMany("RatingLogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Domain.RequestLog", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("RequestLogs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

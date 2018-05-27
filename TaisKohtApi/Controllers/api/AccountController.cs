@@ -31,17 +31,19 @@ namespace TaisKohtApi.Controllers.api
         private readonly Microsoft.AspNetCore.Identity.RoleManager<Role> _roleManager;
         private readonly ILogger _logger;
         private readonly IUserService _userService;
+        private readonly IRequestLogService _requestLogService;
 
         public AccountController(Microsoft.AspNetCore.Identity.UserManager<User> userManager,
             SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.RoleManager<Role> roleManager,
             ILogger<AccountController> logger, 
-            IUserService userService)
+            IUserService userService, IRequestLogService requestLogService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
             _userService = userService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
@@ -61,9 +63,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get([FromQuery(Name = "role")] string role)
+        public IActionResult GetUsersByRole([FromQuery(Name = "role")] string role)
         {
-            return Ok(_userManager.GetUsersInRoleAsync(role));
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/accounts/getAllUsersInRole", "GetUsersByRole");
+            return Ok(_userManager.GetUsersInRoleAsync(role).Result);
         }
 
         /// <summary>
@@ -84,6 +87,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetUser(string id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/accounts/{id}", "GetUser");
             var user = _userService.GetUserById(id);
             if (user == null) return NotFound();
             if (User.IsInRole("admin") || user.UserId == User.Identity.GetUserId())
@@ -121,6 +125,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public async Task<IActionResult> AddRole([FromQuery(Name = "role")] string role)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/accounts/addRole", "AddRole");
             if (role == null) { return BadRequest("Please add role as parameter in order to add role."); }
             if (!await _roleManager.RoleExistsAsync(role))
             {
@@ -161,6 +166,7 @@ namespace TaisKohtApi.Controllers.api
         [Route("addRoleToUser")]
         public async Task<IActionResult> AddRoleToUser([FromQuery(Name = "role")] string role, [FromQuery(Name = "userId")] string userId)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/accounts/addRoleToUser", "AddRoleToUser");
             if (role == null || userId == null) return BadRequest();
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null && await _roleManager.RoleExistsAsync(role))
@@ -208,8 +214,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(string id, [FromBody]UpdateUserDTO userDTO)
+        public IActionResult UpdateUserData(string id, [FromBody]UpdateUserDTO userDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/accounts/{id}", "UpdateUserData");
             if (!ModelState.IsValid) return BadRequest();
             var user = _userService.GetUserById(id);
 
@@ -237,8 +244,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Delete(string id)
+        public IActionResult DeleteUser(string id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/accounts/{id}", "DeleteUser");
             var user = _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
             _userService.DeactivateUser(id);
