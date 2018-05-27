@@ -24,21 +24,11 @@ export default class RestaurantListItem extends React.Component {
             }
        
         return (
-            <div>
-                <a href="#" onClick={() => { this.getRestaurantInfo() }}>{this.state.restaurant.name}</a>
-              
-                {this.state.restaurant.url}
-                {this.state.restaurant.contactNumber}
-                {this.state.restaurant.email}
-                <div>
-                    <ReactCSSTransitionGroup
-                        transitionName="example"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={300}>
-                        {contents}  
-                    </ReactCSSTransitionGroup>
-                    </div>
-          
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><a href="#" onClick={() => { this.getRestaurantInfo() }}>{this.state.restaurant.name} {this.state.restaurant.url} {this.state.restaurant.contactNumber} {this.state.restaurant.email}</a></h3>
+                </div>
+                   {contents}  
             </div>
 
         );
@@ -55,15 +45,10 @@ export default class RestaurantListItem extends React.Component {
 
     static renderExpandedInfo(restaurantInfo) {
         console.log(restaurantInfo);
-        return <div>
-            <div>
-                <b>Menus :</b> 
-                {restaurantInfo.menus.map(menu =>
-                    <RestaurantMenu menu={menu}/>
-                )}
-            </div>
-           
-               <b>Dishes :</b> 
+        return <div class="panel-body">
+                    {restaurantInfo.menus.map(menu =>
+                        <RestaurantMenu menu={menu}/>
+                    )}
                 {restaurantInfo.dishes.map(dish =>
                     <Dish dish={dish}/>
                 )}
