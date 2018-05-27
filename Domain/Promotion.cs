@@ -15,7 +15,9 @@ namespace Domain
         public string Description { get; set; }
         [MaxLength(50)]
         public string Type { get; set; }
-        public DateTime ValidTo { get; set; }
+        [MaxLength(50)]
+        public string ClassName { get; set; }
+        public DateTime? ValidTo { get; set; }
         //foreign keys
         [Required]
         public string UserId { get; set; }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using BusinessLogic.DTO;
 using BusinessLogic.Factories;
 using DAL.TaisKoht.Interfaces;
@@ -23,21 +22,23 @@ namespace BusinessLogic.Services
         public DishDTO AddNewDish(PostDishDTO dishDTO, string userId)
         {
             var newDish = _dishFactory.Create(dishDTO);
-
-            if (dishDTO.MenuId != null &&_uow.Menus.Exists((int)dishDTO.MenuId))
-            {
-                MenuDish md = new MenuDish()
-                {
-                    DishId = newDish.DishId,
-                    MenuId = (int) dishDTO.MenuId
-                };
-
-                _uow.MenuDishes.Add(md);
-            }
-            
             newDish.UserId = userId;
             _uow.Dishes.Add(newDish);
             _uow.SaveChanges();
+
+            if (dishDTO.MenuId != null &&_uow.Menus.Exists((int)dishDTO.MenuId))
+            {
+                MenuDish md = new MenuDish
+                {
+                    DishId = newDish.DishId,
+                    MenuId = dishDTO.MenuId.Value
+                };
+
+                _uow.MenuDishes.Add(md);
+                _uow.SaveChanges();
+            }
+            
+            
             return _dishFactory.CreateComplex(newDish);
         }
 
@@ -100,6 +101,7 @@ namespace BusinessLogic.Services
                 dish.Price = updatedDishDTO.Price;
                 dish.DailyPrice = updatedDishDTO.DailyPrice;
                 dish.Daily = updatedDishDTO.Daily;
+                dish.PromotionId = updatedDishDTO.PromotionId;
                 _uow.Dishes.Update(dish);
                 _uow.SaveChanges();
             }
@@ -144,25 +146,20 @@ namespace BusinessLogic.Services
             return dishes.Take(amount);
         }
 
-        public IEnumerable<DishDTO> GetAllDailyDishes(bool vegan, bool glutenFree, bool lactoseFree)
+        public IEnumerable<SimpleDishDTO> GetAllDailyDishes(bool vegan, bool glutenFree, bool lactoseFree)
         {
-            var dishes = _uow.Dishes.All().Where(x => x.Daily == true && x.AvailableFrom <= DateTime.Today && x.AvailableTo >= DateTime.Today);
+            var dishes = _uow.Dishes.All().Where(
+                x => x.Daily == true &&
+                     (x.AvailableFrom == null || x.AvailableFrom <= DateTime.UtcNow) &&
+                     (x.AvailableTo == null || x.AvailableTo >= DateTime.UtcNow));
 
-            if (vegan == true && glutenFree == true && lactoseFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
+            if (vegan) dishes = dishes.Where(d => d.Vegan == true);
 
-            if (vegan == true && glutenFree == true) return dishes.Where(x => x.Vegan == true && x.GlutenFree == true).Select(dish => _dishFactory.Create(dish));
+            if (glutenFree) dishes = dishes.Where(d => d.GlutenFree == true);
 
-            if (vegan == true && lactoseFree == true) return dishes.Where(x => x.Vegan == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
+            if (lactoseFree) dishes = dishes.Where(d => d.LactoseFree == true);
 
-            if (glutenFree == true && lactoseFree == true) return dishes.Where(x => x.GlutenFree == true && x.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
-
-            if (vegan == true) return dishes.Where(v => v.Vegan == true).Select(dish => _dishFactory.Create(dish));
-
-            if (glutenFree == true) return dishes.Where(g => g.GlutenFree == true).Select(dish => _dishFactory.Create(dish));
-
-            if (lactoseFree == true) return dishes.Where(l => l.LactoseFree == true).Select(dish => _dishFactory.Create(dish));
-
-            return dishes.Select(dish => _dishFactory.Create(dish));
+            return dishes.Select(dish => _dishFactory.CreateSimple(dish));
         }
     }
 }

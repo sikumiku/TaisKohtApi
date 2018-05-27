@@ -101,9 +101,13 @@ namespace TaisKohtApi.Controllers.api
             if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("New menu can only be added by admin or by restaurant user");
 
             int userMenus = _menuService.GetUserMenuCount(User.Identity.GetUserId());
-            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin") && userMenus >= 1)
+            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin"))
             {
-                return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
+                if (userMenus >= 1)
+                    return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
+
+                if (menuDTO.PromotionId != null)
+                    return BadRequest("New menu with promotion can only be added by admin or premium user");
             }
             var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
@@ -144,6 +148,11 @@ namespace TaisKohtApi.Controllers.api
             var m = _menuService.GetMenuById(id);
 
             if (m == null) return NotFound();
+
+            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+                menuDTO.PromotionId != null && menuDTO.PromotionId != m.PromotionId)
+                return BadRequest("Promotions to menu can only be added by admin or premium user");
+
             MenuDTO updatedMenu = _menuService.UpdateMenu(id, menuDTO);
 
             return Ok(updatedMenu);
@@ -188,7 +197,8 @@ namespace TaisKohtApi.Controllers.api
         {
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Dishes can only be added by admin or by restaurant user");
+
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Dishes can only be added to menu by admin or by restaurant user");
 
             _menuService.UpdateMenuDishes(id, dishIds);
 

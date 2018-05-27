@@ -86,7 +86,7 @@ namespace DAL.TaisKoht.EF
                 // Implement soft Delete for all Entities
                 // https://www.meziantou.net/2017/07/10/entity-framework-core-soft-delete-using-query-filters
                 // 1. Add the Active property
-                if (!IsLinkingEntity(entityType.GetType()))
+                if (!IsLinkingEntity(entityType.ClrType))
                 {
                     entityType.GetOrAddProperty("Active", typeof(bool));
 
@@ -109,14 +109,7 @@ namespace DAL.TaisKoht.EF
 
                 // Add default values to timestamps
                 entityType.GetOrAddProperty("AddTime", typeof(DateTime));
-
-                builder.Entity(entityType.ClrType).Property("AddTime").
-                    HasComputedColumnSql("GetUtcDate()");
-
                 entityType.GetOrAddProperty("UpdateTime", typeof(DateTime));
-
-                builder.Entity(entityType.ClrType).Property("UpdateTime").
-                    HasComputedColumnSql("GetUtcDate()");
             }
 
 
@@ -143,7 +136,9 @@ namespace DAL.TaisKoht.EF
         {
             return entityType == typeof(MenuDish) || entityType == typeof(RestaurantUser) ||
                    entityType == typeof(DishIngredient) ||
-                   entityType == typeof(IdentityUserRole<string>);
+                   entityType == typeof(IdentityUserRole<string>) ||
+                   entityType == typeof(IdentityRoleClaim<string>) ||
+                    entityType == typeof(IdentityUserClaim<string>);
         }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -162,6 +157,8 @@ namespace DAL.TaisKoht.EF
                         {
                             entry.CurrentValues["Active"] = true;
                         }
+                        entry.CurrentValues["AddTime"] = DateTime.UtcNow;
+                        entry.CurrentValues["UpdateTime"] = DateTime.UtcNow;
                         break;
 
                     case EntityState.Deleted:

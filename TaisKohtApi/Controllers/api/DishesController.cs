@@ -208,6 +208,9 @@ namespace TaisKohtApi.Controllers.api
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("New dish can only be added by admin or by restaurant user");
+            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+                dishDTO.PromotionId != null)
+                return BadRequest("New dish with promotion can only be added by admin or premium user");
 
             var newDish = _dishService.AddNewDish(dishDTO, User.Identity.GetUserId());
 
@@ -284,6 +287,11 @@ namespace TaisKohtApi.Controllers.api
             var d = _dishService.GetDishById(id);
 
             if (d == null) return NotFound();
+
+            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+                dishDTO.PromotionId != null && dishDTO.PromotionId != d.PromotionId)
+                return BadRequest("Promotions to dishes can only be added by admin or premium user");
+
             DishDTO updatedDish =_dishService.UpdateDish(id, dishDTO);
 
             return Ok(updatedDish);

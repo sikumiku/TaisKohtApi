@@ -11,6 +11,7 @@ namespace BusinessLogic.Factories
         DishDTO Create(Dish dish);
         DishDTO CreateComplex(Dish dish);
         Dish Create(PostDishDTO dishDTO);
+        SimpleDishDTO CreateSimple(Dish dish);
     }
 
     public class DishFactory : IDishFactory
@@ -23,6 +24,11 @@ namespace BusinessLogic.Factories
         public DishDTO CreateComplex(Dish dish)
         {
             return DishDTO.CreateFromDomainWithAssociatedTables(dish);
+        }
+
+        public SimpleDishDTO CreateSimple(Dish dish)
+        {
+            return SimpleDishDTO.CreateFromDomain(dish);
         }
 
         public Dish Create(PostDishDTO dishDTO)
