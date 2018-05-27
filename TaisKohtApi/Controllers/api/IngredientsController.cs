@@ -18,10 +18,12 @@ namespace TaisKohtApi.Controllers.api
     public class IngredientsController : Controller
     {
         private readonly IIngredientService _ingredientService;
+        private readonly IRequestLogService _requestLogService;
 
-        public IngredientsController(IIngredientService ingredientService)
+        public IngredientsController(IIngredientService ingredientService, IRequestLogService requestLogService)
         {
             _ingredientService = ingredientService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
@@ -39,8 +41,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get()
+        public IActionResult GetAllIngredientsCreatedByUser()
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ingredients", "GetAllIngredientsCreatedByUser");
             if (!User.IsInRole("admin")) return Ok(_ingredientService.GetAllUserIngredients(User.Identity.GetUserId()));
 
             return Ok(_ingredientService.GetAllIngredients());
@@ -62,8 +65,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult GetIngredient(int id)
+        public IActionResult GetIngredientCreatedByUser(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ingredients/{id}", "GetIngredientCreatedByUser");
             var i = _ingredientService.GetIngredientById(id);
             if (i.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be showed by admin or by logged in user who created the ingredient.");
             if (i == null) return NotFound();
@@ -97,8 +101,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]PostIngredientDTO ingredientDTO)
+        public IActionResult PostIngredient([FromBody]PostIngredientDTO ingredientDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/ingredients", "PostIngredient");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO, User.Identity.GetUserId());
@@ -133,8 +138,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PostIngredientDTO ingredientDTO)
+        public IActionResult UpdateIngredient(int id, [FromBody]PostIngredientDTO ingredientDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/ingredients", "UpdateIngredient");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var i = _ingredientService.GetIngredientById(id);
 
@@ -157,8 +163,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteIngredient(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/ingredients", "DeleteIngredient");
             var ingredient = _ingredientService.GetIngredientById(id);
             if (ingredient == null) return NotFound();
             if (ingredient.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be deleted by admin or by logged in user who created the ingredient.");

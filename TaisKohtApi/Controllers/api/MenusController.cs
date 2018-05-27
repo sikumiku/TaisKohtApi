@@ -20,11 +20,13 @@ namespace TaisKohtApi.Controllers.api
     {
         private readonly IMenuService _menuService;
         private readonly IRestaurantService _restaurantService;
+        private readonly IRequestLogService _requestLogService;
 
-        public MenusController(IMenuService menuService, IRestaurantService restaurantService)
+        public MenusController(IMenuService menuService, IRestaurantService restaurantService, IRequestLogService requestLogService)
         {
             _menuService = menuService;
             _restaurantService = restaurantService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
@@ -43,8 +45,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get()
+        public IActionResult GetAllMenus()
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/menus", "GetAllMenus");
             return Ok(_menuService.GetAllMenus());
         }
 
@@ -66,6 +69,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetMenu(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/menus/{id}", "GetMenu");
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
             return Ok(menuDTO);
@@ -101,8 +105,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]PostMenuDTO menuDTO)
+        public IActionResult PostMenu([FromBody]PostMenuDTO menuDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/menus", "PostMenu");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (menuDTO.RestaurantId.Equals(null)) return BadRequest("Menu is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("New menu can only be added by admin or by restaurant user");
@@ -151,8 +156,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PostMenuDTO menuDTO)
+        public IActionResult UpdateMenu(int id, [FromBody]PostMenuDTO menuDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/menus/{id}", "UpdateMenu");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (menuDTO.RestaurantId.Equals(null)) return BadRequest("Menu is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be updated by admin or by restaurant user");
@@ -183,8 +189,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteMenu(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/menus/{id}", "DeleteMenu");
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
             if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be deleted by admin or by restaurant user");
@@ -212,8 +219,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]int[] dishIds)
+        public IActionResult AddDishesToMenu(int id, [FromBody]int[] dishIds)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/menus/{id}/dishes", "AddDishesToMenu");
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
 

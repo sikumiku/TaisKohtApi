@@ -38,6 +38,7 @@ namespace DAL.TaisKoht.EF
         public IUserRoleRepository UserRoles => GetCustomRepository<IUserRoleRepository>();
         public IRoleRepository Roles => GetCustomRepository<IRoleRepository>();
         public IDishIngredientRepository DishIngredients => GetCustomRepository<IDishIngredientRepository>();
+        public IRequestLogRepository RequestLogs => GetCustomRepository<IRequestLogRepository>();
 
         public void SaveChanges()
         {
