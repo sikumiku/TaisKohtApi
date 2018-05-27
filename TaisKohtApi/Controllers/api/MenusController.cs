@@ -188,7 +188,7 @@ namespace TaisKohtApi.Controllers.api
         {
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be deleted by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Dishes can only be added by admin or by restaurant user");
 
             _menuService.UpdateMenuDishes(id, dishIds);
 
