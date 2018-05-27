@@ -43,8 +43,14 @@ namespace BusinessLogic.Services
         public void UpdateUser(string id, UpdateUserDTO updatedUserDTO)
         {
             User user = _uow.Users.Find(id);
-            user.UserName = updatedUserDTO.UserName;
-            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, updatedUserDTO.Password);
+            if (updatedUserDTO.UserName != null) { user.UserName = updatedUserDTO.UserName; }
+            if (updatedUserDTO.FirstName != null) { user.FirstName = updatedUserDTO.FirstName; }
+            if (updatedUserDTO.LastName != null) { user.LastName = updatedUserDTO.LastName; }
+            if(updatedUserDTO.PhoneNumber != null) { user.PhoneNumber = updatedUserDTO.PhoneNumber; }
+            if (updatedUserDTO.Password != null)
+            {
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, updatedUserDTO.Password);
+            }
             _uow.Users.Update(user);
             _uow.SaveChanges();
         }

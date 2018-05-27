@@ -13,3 +13,19 @@ Projektis osalejateks on:
 - Martin Kask
 - Evelin Jõgi
 - Marko Nõu
+
+## Kasutusjuhend
+
+- Kloonida kohalikku arvutisse repository aadressilt https://github.com/sikumiku/TaisKohtApi
+- Installida NodeJS
+- ```npm install webpack -g```
+- ```npm install -cli -g```
+- Frontend rakenduse kasutamiseks valida Startup meetoditest IIS Express, veebiteenuse ja Swaggeri kasutamiseks käivitada Api Swagger
+
+## Projekti tehnilise poole kohta
+
+- Frontend on üles ehitatud Reacti peal
+- Backend kasutab Asp.net Core 2.0 raamistikku 
+- Turvalisus on üles ehitatud Identity raamistiku peale
+- Admin kasutaja loomiseks logida sisse e-mailiga admin@gmail.com
+- Rollid luuakse programmi käivitamisel (normalUser, premiumUser, admin)
