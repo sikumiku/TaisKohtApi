@@ -34,9 +34,26 @@ namespace BusinessLogic.Services
             return _ratingLogFactory.Create(ratingLog);
         }
 
-        public RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO)
+        public RatingLogDTO GetRestaurantRatingLog(int? restaurantId, string userId)
+        {
+            var ratingLog = _uow.RatingLogs.FindUsersRestaurantRating(restaurantId, userId);
+            if (ratingLog == null) return null;
+
+            return _ratingLogFactory.Create(ratingLog);
+        }
+
+        public RatingLogDTO GetDishRatingLog(int? dishId, string userId)
+        {
+            var ratingLog = _uow.RatingLogs.FindUsersDishRating(dishId, userId);
+            if (ratingLog == null) return null;
+
+            return _ratingLogFactory.Create(ratingLog);
+        }
+
+        public RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO, string userId)
         {
             var newRatingLog = _ratingLogFactory.Create(ratingLogDTO);
+            newRatingLog.UserId = userId;
             _uow.RatingLogs.Add(newRatingLog);
             _uow.SaveChanges();
 

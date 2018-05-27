@@ -39,7 +39,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Restaurants
+        // GET: api/v1/restaurants
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
@@ -61,7 +61,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no searched restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Restaurants/search?name=th
+        // GET: api/v1/restaurants/search?name=th
         [AllowAnonymous]
         [HttpGet]
         [Route("search")]
@@ -90,7 +90,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Restaurants/Top
+        // GET: api/v1/restaurants/Top
         [AllowAnonymous]
         [HttpGet]
         [Route("top")]
@@ -119,7 +119,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Restaurant not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Restaurants/5
+        // GET: api/v1/restaurants/5
         [AllowAnonymous]
         [HttpGet("{id}", Name = "GetRestaurant")]
         [ProducesResponseType(typeof(RestaurantDTO), 200)]
@@ -148,11 +148,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Restaurant or user not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Restaurants/addUserToRestaurant?id=1&userId=5f8811f5-2a80-4a8d-891f-12282e185aea
-        [AllowAnonymous]
+        // POST: api/v1/restaurants/addUserToRestaurant?id=1&userId=5f8811f5-2a80-4a8d-891f-12282e185aea
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [Route("addUserToRestaurant")]
         [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -199,11 +201,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Restaurants
+        // POST: api/v1/restaurants
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [ProducesResponseType(typeof(RestaurantDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostRestaurant([FromBody]PostRestaurantDTO restaurantDTO)
@@ -223,7 +227,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetRestaurant", new { id = newRestaurant.RestaurantId }, newRestaurant);
+            return CreatedAtAction(nameof(GetRestaurant), new { id = newRestaurant.RestaurantId }, newRestaurant);
         }
 
         /// <summary>
@@ -232,7 +236,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Restaurants/{id}
+        ///     PUT api/v1/restaurants/{id}
         ///     {
         ///        "Name": "Chef",    
         ///        "Url": "http://chef.com",    
@@ -253,11 +257,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Restaurants/5
+        // PUT: api/v1/restaurants/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateRestaurant(int id, [FromBody]PostRestaurantDTO restaurantDTO)
@@ -269,11 +275,11 @@ namespace TaisKohtApi.Controllers.api
             if (restaurant == null) return NotFound();
 
             if (!IsAuthorized(restaurant))
-                return StatusCode(403, "This action is forbidden to unauthorized user.");
+                return StatusCode(403, "You have to be logged in as one of the restaurant users to update restaurant information.");
 
             if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
                 restaurantDTO.PromotionId != null && restaurantDTO.PromotionId != restaurant.PromotionId)
-                return BadRequest("Promotions to restaurant can only be added by admin or premium user");
+                return StatusCode(403, "Promotions to restaurant can only be added by admin or premium user");
 
             return Ok(_restaurantService.UpdateRestaurant(id, restaurantDTO));
         }
@@ -285,10 +291,11 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Restaurant was successfully deleted, no content to be returned</response>
         /// <response code="404">Restaurant not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Restaurants/5
+        // DELETE: api/v1/restaurants/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -303,7 +310,7 @@ namespace TaisKohtApi.Controllers.api
             }
             else
             {
-                return StatusCode(403, Json("This action is forbidden to unauthorized user."));
+                return StatusCode(403, "This action is forbidden to unauthorized user.");
             }
             return NoContent();
         }

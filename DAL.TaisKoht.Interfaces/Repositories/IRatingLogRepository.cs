@@ -11,5 +11,10 @@ namespace DAL.TaisKoht.Interfaces.Repositories
         /// <param name="id">RatingLog PK value</param>
         /// <returns></returns>
         bool Exists(int id);
+
+        RatingLog FindUsersRestaurantRating(int? restaurantId, string userId);
+
+        RatingLog FindUsersDishRating(int? dishId, string userId);
+
     }
 }

@@ -11,6 +11,6 @@ namespace BusinessLogic.Services
     {
         UserDTO GetUserById(string id);
         void UpdateUser(string id, UpdateUserDTO dto);
-        void DeactivateUser(string id);
+        void RemoveUser(string id);
     }
 }

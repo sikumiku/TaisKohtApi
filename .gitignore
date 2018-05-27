@@ -261,7 +261,5 @@ paket-files/
 __pycache__/
 *.pyc
 
-# Client related files
-wwwroot/dist/
-node_modules
-
+#Generated Service files
+TaisKohtApi/wwwroot/dist

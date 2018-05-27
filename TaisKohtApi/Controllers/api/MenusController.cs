@@ -15,7 +15,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/Menus")]
+    [Route("api/v1/menus")]
     public class MenusController : Controller
     {
         private readonly IMenuService _menuService;
@@ -30,16 +30,15 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all menus as a list.
+        /// Gets all menus as a list, only accessible as admin
         /// </summary>
         /// <returns>All menus as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no menus can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Menus
-        [Obsolete("Get() is pointless. We are fetching menus associated with one restaurant. Can keep for sake of variety.")]
-        [AllowAnonymous]
+        // GET: api/v1/menus
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDTO>), 200)]
         [ProducesResponseType(404)]
@@ -60,7 +59,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Menu not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Menus/5
+        // GET: api/v1/menus/5
         [AllowAnonymous]
         [HttpGet("{id}", Name="GetMenu")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
@@ -81,7 +80,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Menus
+        ///     POST api/v1/menus
         ///     {
         ///         "Name": "Special menu",
         ///         "ActiveFrom": "2018-05-27T20:47:45.751Z",
@@ -98,11 +97,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Menu object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Menus
+        // POST: api/v1/menus
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostMenu")]
         [ProducesResponseType(typeof(MenuDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostMenu([FromBody]PostMenuDTO menuDTO)
@@ -116,14 +117,14 @@ namespace TaisKohtApi.Controllers.api
             if (!User.IsInRole("premiumUser") && !User.IsInRole("admin"))
             {
                 if (userMenus >= 1)
-                    return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
+                    return StatusCode(403, "Regular user can only create 1 menu. Please sign up for premium services to add more.");
 
                 if (menuDTO.PromotionId != null)
-                    return BadRequest("New menu with promotion can only be added by admin or premium user");
+                    return StatusCode(403, "New menu with promotion can only be added by admin or premium user");
             }
             var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetMenu", new { id = newMenu.MenuId }, newMenu);
+            return CreatedAtAction(nameof(GetMenu), new { id = newMenu.MenuId }, newMenu);
         }
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Menus/{id}
+        ///     PUT api/v1/menus/{id}
         ///     {
         ///         "Name": "June menu",
         ///         "ActiveFrom": "2018-06-01T20:47:45.751Z",
@@ -154,6 +155,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateMenu(int id, [FromBody]PostMenuDTO menuDTO)
@@ -167,9 +170,9 @@ namespace TaisKohtApi.Controllers.api
 
             if (m == null) return NotFound();
 
-            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+            if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 menuDTO.PromotionId != null && menuDTO.PromotionId != m.PromotionId)
-                return BadRequest("Promotions to menu can only be added by admin or premium user");
+                return StatusCode(403, "Promotions to menu can only be added by admin or premium user");
 
             MenuDTO updatedMenu = _menuService.UpdateMenu(id, menuDTO);
 
@@ -183,10 +186,11 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Menu was successfully deleted, no content to be returned</response>
         /// <response code="404">Menu not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Menus/5
+        // DELETE: api/v1/menus/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteMenu(int id)
@@ -194,7 +198,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/menus/{id}", "DeleteMenu");
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be deleted by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return StatusCode(403, "Menu can only be deleted by admin or by restaurant user");
             _menuService.DeleteMenu(id);
             return NoContent();
         }
@@ -205,7 +209,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Menus/{id}/Dishes
+        ///     PUT api/v1/menus/{id}/Dishes
         ///     [1, 2, 3]
         ///
         /// </remarks>
@@ -213,10 +217,11 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">MenuDishes were successfully updated</response>
         /// <response code="404">Menu not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Menus/5/Dishes
+        // PUT: api/v1/menus/5/dishes
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}/Dishes")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult AddDishesToMenu(int id, [FromBody]int[] dishIds)
@@ -225,7 +230,7 @@ namespace TaisKohtApi.Controllers.api
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
 
-            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Dishes can only be added to menu by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return StatusCode(403, "Dishes can only be added to menu by admin or by restaurant user");
 
             _menuService.UpdateMenuDishes(id, dishIds);
 

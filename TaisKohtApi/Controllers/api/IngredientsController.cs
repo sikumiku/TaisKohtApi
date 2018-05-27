@@ -14,7 +14,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] //spetsifitseerime authenticationschemei, siis ei toimu reroutingut
     [Produces("application/json")]
-    [Route("api/v1/Ingredients")]
+    [Route("api/v1/ingredients")]
     public class IngredientsController : Controller
     {
         private readonly IIngredientService _ingredientService;
@@ -34,10 +34,11 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no ingredients can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ingredients
-        [AllowAnonymous]
+        // GET: api/v1/ingredients
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpGet]
         [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -58,20 +59,19 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Ingredient not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ingredients/5
+        // GET: api/v1/ingredients/5
         [AllowAnonymous]
         [HttpGet("{id}", Name = "GetIngredient")]
         [ProducesResponseType(typeof(IngredientDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult GetIngredientCreatedByUser(int id)
+        public IActionResult GetIngredient(int id)
         {
-            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ingredients/{id}", "GetIngredientCreatedByUser");
-            var i = _ingredientService.GetIngredientById(id);
-            if (i.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be showed by admin or by logged in user who created the ingredient.");
-            if (i == null) return NotFound();
-            return Ok(i);
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ingredients/{id}", "GetIngredient");
+            var ingredient = _ingredientService.GetIngredientById(id);
+            if (ingredient == null) return NotFound();
+            return Ok(ingredient);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Ingredients
+        ///     POST api/v1/ingredients
         ///     {
         ///         "Name": "Milk",
         ///         "Description": "Milk with 3% or more fat",
@@ -94,11 +94,12 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Ingredients
+        // POST: api/v1/ingredients
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [ProducesResponseType(typeof(IngredientDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostIngredient([FromBody]PostIngredientDTO ingredientDTO)
@@ -108,7 +109,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetIngredient", new { id = newIngredient.IngredientId }, newIngredient);
+            return CreatedAtAction(nameof(GetIngredient), new { id = newIngredient.IngredientId }, newIngredient);
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Ingredients/{id}
+        ///     PUT api/v1/ingredients/{id}
         ///     {
         ///         "Name": "Milk",
         ///         "Description": "Milk with 2,5% fat",
@@ -131,20 +132,24 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Ingredients/5
+        // PUT: api/v1/ingredients/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(IngredientDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateIngredient(int id, [FromBody]PostIngredientDTO ingredientDTO)
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/ingredients", "UpdateIngredient");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
-            var i = _ingredientService.GetIngredientById(id);
+            var ingredient = _ingredientService.GetIngredientById(id);
 
-            if (i == null) return NotFound();
+            if (ingredient == null) return NotFound();
+
+            if (ingredient.UserId != User.Identity.GetUserId()) { return StatusCode(403, "Ingredients can be amended only by admins or users that created them. Please provide id of ingredient that is created by user."); }
 
             IngredientDTO updatedIngredient = _ingredientService.UpdateIngredient(id, ingredientDTO);
             return Ok(updatedIngredient);
@@ -157,10 +162,12 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Ingredient was successfully deleted, no content to be returned</response>
         /// <response code="404">Ingredient not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Ingredients/5
+        // DELETE: api/v1/ingredients/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteIngredient(int id)
@@ -168,7 +175,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/ingredients", "DeleteIngredient");
             var ingredient = _ingredientService.GetIngredientById(id);
             if (ingredient == null) return NotFound();
-            if (ingredient.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be deleted by admin or by logged in user who created the ingredient.");
+            if (ingredient.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return StatusCode(403, "Ingredient can only be deleted by admin or by logged in user who created the ingredient.");
             _ingredientService.DeleteIngredient(id);
             return NoContent();
         }

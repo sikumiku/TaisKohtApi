@@ -14,7 +14,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/Ratings")]
+    [Route("api/v1/ratings")]
     public class RatingLogsController : Controller
     {
         private readonly IRatingLogService _ratingLogService;
@@ -27,18 +27,19 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all ratings as a list.
+        /// Gets all ratings as a list, only accessible to admins.
         /// </summary>
         /// <returns>All ratings as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no ratings can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ratings
-        [Obsolete("Get() is pointless. To be removed.")]
-        [AllowAnonymous]
+        // GET: api/v1/ratings
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(List<RatingLogDTO>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -49,7 +50,7 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find rating by ID.
+        /// Find rating by ID. Only accessbile to admins.
         /// </summary>
         /// <param name="id">ID of rating to return</param>
         /// <returns>Rating by ID</returns>
@@ -57,10 +58,12 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Rating not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ratings/5
-        [AllowAnonymous]
+        // GET: api/v1/ratings/5
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}", Name = "GetRatingLog")]
         [ProducesResponseType(typeof(RatingLogDTO), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -78,11 +81,11 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Ratings
+        ///     POST api/v1/ratings
         ///     {
         ///         "Rating" : 3,
         ///         "Comment" : "Tasty meal",
-        ///         "RestaurantId" : 1,
+        ///         "RestaurantId" : null,
         ///         "DishId" : 1,
         ///         "UserId" : "5f8811f5-2a80-4a8d-891f-12282e185aea"
         ///     }
@@ -93,11 +96,12 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Rating object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Ratings
+        // POST: api/v1/ratings
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostRatingLog")]
         [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostRatingLog([FromBody]RatingLogForEntityDTO ratingDTO)
@@ -105,9 +109,27 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/ratingLogs", "PostRatingLog");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
-            var newRating = _ratingLogService.AddNewRatingLog(ratingDTO);
-
-            return CreatedAtRoute("GetRatingLog", new { id = newRating.RatingLogId }, newRating);
+            if (ratingDTO.RestaurantId != null)
+            {
+                var existingRestaurantRating = _ratingLogService.GetRestaurantRatingLog(ratingDTO.RestaurantId, User.Identity.GetUserId());
+                if (existingRestaurantRating.Comment != null && existingRestaurantRating.Rating != null)
+                {
+                    return BadRequest("User has already given this restaurant a rating.");
+                }
+                var newRating = _ratingLogService.AddNewRatingLog(ratingDTO, User.Identity.GetUserId());
+                return CreatedAtAction(nameof(GetRatingLog), new { id = newRating.RatingLogId }, newRating);
+            }
+            if (ratingDTO.DishId != null)
+            {
+                var existingDishRating = _ratingLogService.GetDishRatingLog(ratingDTO.DishId, User.Identity.GetUserId());
+                if (existingDishRating.Comment != null && existingDishRating.Rating != null)
+                {
+                    return BadRequest("User has already given this dish a rating.");
+                }
+                var newRating = _ratingLogService.AddNewRatingLog(ratingDTO, User.Identity.GetUserId());
+                return CreatedAtAction(nameof(GetRatingLog), new { id = newRating.RatingLogId }, newRating);
+            }
+            return BadRequest("No dish or restaurant id provided to rate.");
         }
 
         /// <summary>
@@ -116,7 +138,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Ratings/{id}
+        ///     PUT api/v1/ratings/{id}
         ///     {
         ///         "Rating" : 5,
         ///         "Comment" : "Tasty meal",
@@ -132,20 +154,26 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Ratings/5
+        // PUT: api/v1/ratings/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateRestaurantRatingLog(int id, [FromBody]RatingLogForEntityDTO ratingDTO)
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/ratingLogs/{id}", "UpdateRestaurantRatingLog");
             if (!ModelState.IsValid) return BadRequest();
-            var dto = _ratingLogService.GetRatingLogById(id);
+            var ratingLog = _ratingLogService.GetRatingLogById(id);
 
-            if (dto == null) return NotFound();
+            if (ratingLog == null) return NotFound("No existing rating found.");
+            if (ratingLog.UserId != User.Identity.GetUserId())
+            {
+                return StatusCode(403, "Users can only update their own rating. Please provide ratingLog id that belongs to logged in user.");
+            }
             RatingLogDTO updatedRating = _ratingLogService.UpdateRatingLog(id, ratingDTO);
 
             return Ok(updatedRating);
@@ -158,17 +186,23 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Rating was successfully deleted, no content to be returned</response>
         /// <response code="404">Rating not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Ratings/5
+        // DELETE: api/v1/ratings/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteRatingLog(int id)
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/ratingLogs/{id}", "DeleteRatingLog");
-            var dto = _ratingLogService.GetRatingLogById(id);
-            if (dto == null) return NotFound();
+            var ratingLog = _ratingLogService.GetRatingLogById(id);
+            if (ratingLog == null) return NotFound();
+            if (ratingLog.UserId == User.Identity.GetUserId())
+            {
+                return StatusCode(403, "RatingLog can only be deleted by admin or by user that posted it.");
+            }
             _ratingLogService.DeleteRatingLog(id);
             return NoContent();
         }

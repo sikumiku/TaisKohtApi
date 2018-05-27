@@ -20,6 +20,16 @@ namespace DAL.TaisKoht.EF.Repositories
             return RepositoryDbSet.Any(e => e.RatingLogId == id);
         }
 
+        public RatingLog FindUsersRestaurantRating(int? restaurantId, string userId)
+        {
+            return RepositoryDbSet.SingleOrDefault(log => log.RestaurantId == restaurantId && log.UserId == userId);
+        }
+
+        public RatingLog FindUsersDishRating(int? dishId, string userId)
+        {
+            return RepositoryDbSet.SingleOrDefault(log => log.DishId == dishId && log.UserId == userId);
+        }
+
         public override RatingLog Find(params object[] id)
         {
             return RepositoryDbSet

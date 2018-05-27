@@ -11,13 +11,13 @@ namespace BusinessLogic.Services
 
         RatingLogDTO GetRatingLogById(int id);
 
-        RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO);
+        RatingLogDTO GetRestaurantRatingLog(int? restaurantId, string userId);
+
+        RatingLogDTO GetDishRatingLog(int? dishId, string userId);
+
+        RatingLogDTO AddNewRatingLog(RatingLogForEntityDTO ratingLogDTO, string userId);
 
         RatingLogDTO UpdateRatingLog(int id, RatingLogForEntityDTO dto);
-
-        //RatingLogDTO AddNewRatingLog(RatingLogDTO dto);
-
-        //void UpdateRatingLog(int id, RatingLogDTO dto);
 
         void DeleteRatingLog(int id);
     }

@@ -141,8 +141,6 @@ namespace BusinessLogic.Services
             var dishes = _uow.Dishes.All().OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
                 .Select(dish => _dishFactory.Create(dish));
 
-            if (dishes.Count() < amount) return null;
-
             return dishes.Take(amount);
         }
 

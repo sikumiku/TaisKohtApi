@@ -14,7 +14,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/Promotions")]
+    [Route("api/v1/promotions")]
     public class PromotionsController : Controller
     {
         private readonly IPromotionService _promotionService;
@@ -34,7 +34,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no promotions can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Promotions
+        // GET: api/v1/promotions
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<PromotionDTO>), 200)]
@@ -56,7 +56,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Promotion not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Promotions/5
+        // GET: api/v1/promotions/5
         [AllowAnonymous]
         [HttpGet("{id}", Name = "GetPromotion")]
         [ProducesResponseType(typeof(PromotionDTO), 200)]
@@ -77,7 +77,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Promotions
+        ///     POST api/v1/promotions
         ///     {
         ///         "Name" : "Chicken Sandvich",
         ///         "Description" : "Tender chicken sandvich with Marinara sauce between",
@@ -93,11 +93,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Promotions
+        // POST: api/v1/promotions
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(typeof(PromotionDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostPromotion([FromBody]PromotionDTO promotionDTO)
@@ -107,7 +109,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newPromotion = _promotionService.AddNewPromotion(promotionDTO);
 
-            return CreatedAtRoute("GetPromotion", new { id = newPromotion.PromotionId }, newPromotion);
+            return CreatedAtAction(nameof(GetPromotion), new { id = newPromotion.PromotionId }, newPromotion);
         }
 
         /// <summary>
@@ -116,7 +118,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Promotions/{id}
+        ///     PUT api/v1/promotions/{id}
         ///     {
         ///         "Name" : "Pasta Carbonara",
         ///         "Description" : "Classic pasta Carbonara with bacon and cheese",
@@ -132,11 +134,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Promotions/5
+        // PUT: api/v1/promotions/5
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdatePromotion(int id, [FromBody]PromotionDTO promotionDTO)
@@ -158,7 +162,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Promotion was successfully deleted, no content to be returned</response>
         /// <response code="404">Promotion not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Promotions/5
+        // DELETE: api/v1/promotions/5
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]

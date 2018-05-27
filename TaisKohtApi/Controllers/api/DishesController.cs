@@ -39,7 +39,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes
+        // GET: api/v1/dishes
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
@@ -61,7 +61,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no today daily dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/Daily
+        // GET: api/v1/dishes/daily
         [AllowAnonymous]
         [HttpGet]
         [Route("daily")]
@@ -138,7 +138,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no top dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/Top
+        // GET: api/v1/dishes/top
         [AllowAnonymous]
         [HttpGet]
         [Route("top")]
@@ -167,7 +167,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Dish not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/5
+        // GET: api/v1/dishes/5
         [AllowAnonymous]
         [HttpGet("{id}", Name = "GetDish")]
         [ProducesResponseType(typeof(DishDTO), 200)]
@@ -214,12 +214,14 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Dishes
+        // POST: api/v1/dishes
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostDish")]
         [ProducesResponseType(typeof(DishDTO), 201)]
         [ProducesResponseType(typeof(PostDishDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostDish([FromBody]PostDishDTO dishDTO)
@@ -227,14 +229,14 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/dishes", "PostDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("New dish can only be added by admin or by restaurant user");
-            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "New dish can only be added by admin or by restaurant user");
+            if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 dishDTO.PromotionId != null)
                 return BadRequest("New dish with promotion can only be added by admin or premium user");
 
             var newDish = _dishService.AddNewDish(dishDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetDish", new { id = newDish.DishId }, newDish);
+            return CreatedAtAction(nameof(GetDish), new { id = newDish.DishId }, newDish);
         }
 
         /// <summary>
@@ -271,6 +273,8 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}/ingredients")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -280,7 +284,7 @@ namespace TaisKohtApi.Controllers.api
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Ingredients To Dish can only be added by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "Ingredients To Dish can only be added by admin or by restaurant user");
 
             _dishService.UpdateDishIngredients(id, ingredients);
 
@@ -319,11 +323,13 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Dishes/5
+        // PUT: api/v1/dishes/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(DishDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateDish(int id, [FromBody]PostDishDTO dishDTO)
@@ -331,13 +337,13 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/dishes/{id}", "UpdateDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be updated by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "Dish can only be updated by admin or by restaurant user");
 
             var d = _dishService.GetDishById(id);
 
             if (d == null) return NotFound();
 
-            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+            if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 dishDTO.PromotionId != null && dishDTO.PromotionId != d.PromotionId)
                 return BadRequest("Promotions to dishes can only be added by admin or premium user");
 
@@ -353,10 +359,11 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Dish was successfully deleted, no content to be returned</response>
         /// <response code="404">Dish not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Dishes/5
+        // DELETE: api/v1/dishes/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteDish(int id)
@@ -364,7 +371,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/dishes/{id}", "DeleteDish");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be deleted by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "Dish can only be deleted by admin or by restaurant user");
             _dishService.DeleteDish(id);
             return NoContent();
         }

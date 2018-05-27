@@ -33,7 +33,7 @@ namespace BusinessLogic.Services
             return _userFactory.CreateComplex(user, roles);
         }
 
-        public void DeactivateUser(string id)
+        public void RemoveUser(string id)
         {
             var user = _uow.Users.Find(id);
             _uow.Users.Remove(user);

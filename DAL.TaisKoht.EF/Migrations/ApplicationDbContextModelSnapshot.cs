@@ -277,7 +277,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("DishId");
 
-                    b.Property<int>("Rating");
+                    b.Property<int?>("Rating");
 
                     b.Property<int?>("RestaurantId");
 
