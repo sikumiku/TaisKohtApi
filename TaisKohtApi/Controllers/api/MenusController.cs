@@ -30,7 +30,7 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all menus as a list.
+        /// Gets all menus as a list, only accessible as admin
         /// </summary>
         /// <returns>All menus as a list</returns>
         /// <response code="200">Successful operation</response> 
@@ -38,8 +38,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Menus
-        [Obsolete("Get() is pointless. We are fetching menus associated with one restaurant. Can keep for sake of variety.")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDTO>), 200)]
         [ProducesResponseType(404)]

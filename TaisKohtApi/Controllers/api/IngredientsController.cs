@@ -35,7 +35,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/Ingredients
-        [AllowAnonymous]
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpGet]
         [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
         [ProducesResponseType(404)]
@@ -65,13 +65,12 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult GetIngredientCreatedByUser(int id)
+        public IActionResult GetIngredient(int id)
         {
-            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ingredients/{id}", "GetIngredientCreatedByUser");
-            var i = _ingredientService.GetIngredientById(id);
-            if (i.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be showed by admin or by logged in user who created the ingredient.");
-            if (i == null) return NotFound();
-            return Ok(i);
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ingredients/{id}", "GetIngredient");
+            var ingredient = _ingredientService.GetIngredientById(id);
+            if (ingredient == null) return NotFound();
+            return Ok(ingredient);
         }
 
         /// <summary>
@@ -142,9 +141,11 @@ namespace TaisKohtApi.Controllers.api
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/ingredients", "UpdateIngredient");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
-            var i = _ingredientService.GetIngredientById(id);
+            var ingredient = _ingredientService.GetIngredientById(id);
 
-            if (i == null) return NotFound();
+            if (ingredient == null) return NotFound();
+
+            if (ingredient.UserId != User.Identity.GetUserId()) { return BadRequest("Ingredients can be amended only by admins or users that created them. Please provide id of ingredient that is created by user."); }
 
             IngredientDTO updatedIngredient = _ingredientService.UpdateIngredient(id, ingredientDTO);
             return Ok(updatedIngredient);

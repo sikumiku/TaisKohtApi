@@ -96,7 +96,7 @@ namespace TaisKohtApi.Controllers.api
             {
                 return Ok(user);
             }
-            return StatusCode(403, Json("Unauthorized access."));
+            return StatusCode(403, "Unauthorized access.");
         }
 
         /// <summary>
@@ -172,7 +172,11 @@ namespace TaisKohtApi.Controllers.api
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null && await _roleManager.RoleExistsAsync(role))
             {
-                if (User.IsInRole("normalUser") && user.Id == User.Identity.GetUserId() && role == "premiumUser" || User.IsInRole("admin"))
+                if (User.IsInRole(role))
+                {
+                    return StatusCode(400, "User is already in this role.");
+                }
+                if (user.Id == User.Identity.GetUserId() && role != "admin" || User.IsInRole("admin"))
                 {
                     await _userManager.AddToRoleAsync(user, role);
                 }
@@ -226,7 +230,7 @@ namespace TaisKohtApi.Controllers.api
                 _userService.UpdateUser(id, userDTO);
                 return NoContent();
             }
-            return StatusCode(403, Json("Users can only be amended by themselves or by admins."));
+            return StatusCode(403, "Users can only be amended by themselves or by admins.");
         }
 
         /// <summary>
@@ -249,7 +253,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/accounts/{id}", "DeleteUser");
             var user = _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
-            _userService.DeactivateUser(id);
+            _userService.RemoveUser(id);
             return NoContent();
         }
 

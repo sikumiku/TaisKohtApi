@@ -61,7 +61,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no today daily dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/Daily
+        // GET: api/v1/dishes/daily
         [AllowAnonymous]
         [HttpGet]
         [Route("daily")]
@@ -228,7 +228,7 @@ namespace TaisKohtApi.Controllers.api
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
             if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("New dish can only be added by admin or by restaurant user");
-            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+            if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 dishDTO.PromotionId != null)
                 return BadRequest("New dish with promotion can only be added by admin or premium user");
 
@@ -337,7 +337,7 @@ namespace TaisKohtApi.Controllers.api
 
             if (d == null) return NotFound();
 
-            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+            if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 dishDTO.PromotionId != null && dishDTO.PromotionId != d.PromotionId)
                 return BadRequest("Promotions to dishes can only be added by admin or premium user");
 
