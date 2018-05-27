@@ -48,7 +48,21 @@ export default class RestaurantListItem extends React.Component {
     static renderExpandedInfo(restaurantInfo) {
         console.log(restaurantInfo);
         return <div>
-           restorani extended info.
+            <div>
+                <b>Menus :</b> 
+                {restaurantInfo.menus.map(menu =>
+                    <div> {menu.name} </div>
+                )}
+            </div>
+           
+               <b>Dishes :</b> 
+                 {restaurantInfo.dishes.map(dish =>
+                <div>
+                    <div> {dish.name} </div>
+                    <div> {dish.description} </div>
+                    <div> {dish.price} </div>
+                </div>
+                )}
         </div>;
     }
 }

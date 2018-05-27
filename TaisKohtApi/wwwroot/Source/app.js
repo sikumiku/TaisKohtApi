@@ -20,7 +20,6 @@ class App extends Component {
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/promotions" component={PromotionsList} />
                     <Route exact path="/restaurants" component={RestaurantList} />
-                    <Route exact path="/restaurant/:restaurantId" component={RestaurantMenu} />
                     <Route exact path="/login" component={LoginForm} />
                     <Route exact path="/logout" component={Logout} />
                     <Route exact path="/register" component={RegisterForm} />
