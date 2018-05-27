@@ -149,10 +149,12 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Restaurants/addUserToRestaurant?id=1&userId=5f8811f5-2a80-4a8d-891f-12282e185aea
-        [AllowAnonymous]
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [Route("addUserToRestaurant")]
         [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -204,6 +206,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPost]
         [ProducesResponseType(typeof(RestaurantDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostRestaurant([FromBody]PostRestaurantDTO restaurantDTO)
@@ -258,6 +262,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(RestaurantDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateRestaurant(int id, [FromBody]PostRestaurantDTO restaurantDTO)
@@ -269,11 +275,11 @@ namespace TaisKohtApi.Controllers.api
             if (restaurant == null) return NotFound();
 
             if (!IsAuthorized(restaurant))
-                return StatusCode(403, "This action is forbidden to unauthorized user.");
+                return StatusCode(403, "You have to be logged in as one of the restaurant users to update restaurant information.");
 
             if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
                 restaurantDTO.PromotionId != null && restaurantDTO.PromotionId != restaurant.PromotionId)
-                return BadRequest("Promotions to restaurant can only be added by admin or premium user");
+                return StatusCode(403, "Promotions to restaurant can only be added by admin or premium user");
 
             return Ok(_restaurantService.UpdateRestaurant(id, restaurantDTO));
         }
@@ -289,6 +295,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -303,7 +310,7 @@ namespace TaisKohtApi.Controllers.api
             }
             else
             {
-                return StatusCode(403, Json("This action is forbidden to unauthorized user."));
+                return StatusCode(403, "This action is forbidden to unauthorized user.");
             }
             return NoContent();
         }

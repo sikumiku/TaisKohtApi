@@ -42,7 +42,8 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin")]
         [HttpGet("{userId}")]
         [ProducesResponseType(typeof(List<RequestLogDTO>), 200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult GetRequestLogsForUser(string userId)

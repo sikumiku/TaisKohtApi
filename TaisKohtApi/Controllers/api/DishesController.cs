@@ -220,6 +220,8 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(typeof(DishDTO), 201)]
         [ProducesResponseType(typeof(PostDishDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostDish([FromBody]PostDishDTO dishDTO)
@@ -227,7 +229,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/dishes", "PostDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("New dish can only be added by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "New dish can only be added by admin or by restaurant user");
             if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 dishDTO.PromotionId != null)
                 return BadRequest("New dish with promotion can only be added by admin or premium user");
@@ -271,6 +273,8 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}/ingredients")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -280,7 +284,7 @@ namespace TaisKohtApi.Controllers.api
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Ingredients To Dish can only be added by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "Ingredients To Dish can only be added by admin or by restaurant user");
 
             _dishService.UpdateDishIngredients(id, ingredients);
 
@@ -324,6 +328,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(DishDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateDish(int id, [FromBody]PostDishDTO dishDTO)
@@ -331,7 +337,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/dishes/{id}", "UpdateDish");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             if (dishDTO.RestaurantId.Equals(null)) return BadRequest("Dish is not related any Restaurant");
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be updated by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "Dish can only be updated by admin or by restaurant user");
 
             var d = _dishService.GetDishById(id);
 
@@ -357,6 +363,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteDish(int id)
@@ -364,7 +371,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/dishes/{id}", "DeleteDish");
             var dishDTO = _dishService.GetDishById(id);
             if (dishDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dish can only be deleted by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return StatusCode(403, "Dish can only be deleted by admin or by restaurant user");
             _dishService.DeleteDish(id);
             return NoContent();
         }

@@ -61,13 +61,25 @@ namespace TaisKohtApi.Controllers.api
         [HttpGet(Name = "GetUsersByRole")]
         [Route("getAllUsersInRole")]
         [ProducesResponseType(typeof(List<UserDTO>), 200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult GetUsersByRole([FromQuery(Name = "role")] string role)
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/accounts/getAllUsersInRole", "GetUsersByRole");
-            return Ok(_userManager.GetUsersInRoleAsync(role).Result);
+            var users = _userManager.GetUsersInRoleAsync(role).Result;
+            List<UserDTO> userDtos = new List<UserDTO>();
+            if (users != null)
+            {
+                foreach (User user in users)
+                {
+                    userDtos.Add(UserDTO.CreateFromDomain(user));
+                }
+                return Ok(userDtos);
+            }
+            return NotFound();
         }
 
         /// <summary>
@@ -84,6 +96,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpGet("{id}"), ActionName("GetUser")]
         [ProducesResponseType(typeof(UserDTO), 200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -113,7 +126,7 @@ namespace TaisKohtApi.Controllers.api
         /// </remarks>
         /// <param name="role">Name of the role to be added</param>
         /// <returns>All the existing roles</returns>
-        /// <response code="201">Returns all roles</response>
+        /// <response code="204">Role was added successfully</response>
         /// <response code="403">Unauthorized access, role must be added by admin only</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
@@ -122,6 +135,7 @@ namespace TaisKohtApi.Controllers.api
         [HttpPost]
         [Route("addRole")]
         [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -134,7 +148,7 @@ namespace TaisKohtApi.Controllers.api
                 await _roleManager.CreateAsync(new Role{Name = role});
             }
 
-            return StatusCode(201, Json(_roleManager.Roles)); 
+            return NoContent(); 
         }
 
         /// <summary>
@@ -161,6 +175,7 @@ namespace TaisKohtApi.Controllers.api
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(UserDTO))]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -215,6 +230,7 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(UserDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -245,6 +261,7 @@ namespace TaisKohtApi.Controllers.api
         [HttpDelete]
         [Route("deactivate")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]

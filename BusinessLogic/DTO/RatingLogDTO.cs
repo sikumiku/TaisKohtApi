@@ -10,9 +10,10 @@ namespace BusinessLogic.DTO
     {
         public int RatingLogId { get; set; }
         [Range(0, 10)]
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
         [MaxLength(2000)]
         public string Comment { get; set; }
+        public string UserId { get; set; }
 
         public static RatingLogDTO CreateFromDomain(RatingLog ratingLog)
         {
@@ -21,7 +22,8 @@ namespace BusinessLogic.DTO
             {
                 RatingLogId = ratingLog.RatingLogId,
                 Rating = ratingLog.Rating,
-                Comment = ratingLog.Comment
+                Comment = ratingLog.Comment,
+                UserId = ratingLog.UserId
             };
         }
     }
@@ -29,14 +31,12 @@ namespace BusinessLogic.DTO
     public class RatingLogForEntityDTO
     {
         [Range(0, 10)]
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
         [MaxLength(2000)]
         public string Comment { get; set; }
         //foreign keys
         public int? RestaurantId { get; set; }
         public int? DishId { get; set; }
-        [Required]
-        public string UserId { get; set; }
 
         public static RatingLogForEntityDTO CreateFromDomain(RatingLog ratingLog)
         {
@@ -46,8 +46,7 @@ namespace BusinessLogic.DTO
                 Rating = ratingLog.Rating,
                 Comment = ratingLog.Comment,
                 RestaurantId = ratingLog.RestaurantId,
-                DishId = ratingLog.DishId,
-                UserId = ratingLog.UserId
+                DishId = ratingLog.DishId
             };
         }
     }

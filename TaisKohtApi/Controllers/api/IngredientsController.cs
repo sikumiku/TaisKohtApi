@@ -38,6 +38,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpGet]
         [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
@@ -98,6 +99,7 @@ namespace TaisKohtApi.Controllers.api
         [HttpPost]
         [ProducesResponseType(typeof(IngredientDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostIngredient([FromBody]PostIngredientDTO ingredientDTO)
@@ -135,6 +137,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(IngredientDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateIngredient(int id, [FromBody]PostIngredientDTO ingredientDTO)
@@ -145,7 +149,7 @@ namespace TaisKohtApi.Controllers.api
 
             if (ingredient == null) return NotFound();
 
-            if (ingredient.UserId != User.Identity.GetUserId()) { return BadRequest("Ingredients can be amended only by admins or users that created them. Please provide id of ingredient that is created by user."); }
+            if (ingredient.UserId != User.Identity.GetUserId()) { return StatusCode(403, "Ingredients can be amended only by admins or users that created them. Please provide id of ingredient that is created by user."); }
 
             IngredientDTO updatedIngredient = _ingredientService.UpdateIngredient(id, ingredientDTO);
             return Ok(updatedIngredient);
@@ -162,6 +166,8 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteIngredient(int id)
@@ -169,7 +175,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/ingredients", "DeleteIngredient");
             var ingredient = _ingredientService.GetIngredientById(id);
             if (ingredient == null) return NotFound();
-            if (ingredient.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return BadRequest("Ingredient can only be deleted by admin or by logged in user who created the ingredient.");
+            if (ingredient.UserId != User.Identity.GetUserId() && !User.IsInRole("admin")) return StatusCode(403, "Ingredient can only be deleted by admin or by logged in user who created the ingredient.");
             _ingredientService.DeleteIngredient(id);
             return NoContent();
         }

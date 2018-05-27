@@ -8,7 +8,7 @@ namespace BusinessLogic.Helpers
 {
     public class Rating
     {
-        public double RatingValue { get; set; }
+        public double? RatingValue { get; set; }
         public List<Comment> Comments { get; set; } = new List<Comment>();
 
         public static Rating Create(IEnumerable<RatingLog> ratingLogs)

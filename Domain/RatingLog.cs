@@ -10,7 +10,7 @@ namespace Domain
     {
         public int RatingLogId { get; set; }
         [Range(0, 10)]
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
         [MaxLength(2000)]
         public string Comment { get; set; }
         //foreign keys

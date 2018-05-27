@@ -98,6 +98,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPost]
         [ProducesResponseType(typeof(PromotionDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostPromotion([FromBody]PromotionDTO promotionDTO)
@@ -137,6 +139,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdatePromotion(int id, [FromBody]PromotionDTO promotionDTO)

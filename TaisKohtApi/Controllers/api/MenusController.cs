@@ -102,6 +102,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPost(Name = "PostMenu")]
         [ProducesResponseType(typeof(MenuDTO), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult PostMenu([FromBody]PostMenuDTO menuDTO)
@@ -115,10 +117,10 @@ namespace TaisKohtApi.Controllers.api
             if (!User.IsInRole("premiumUser") && !User.IsInRole("admin"))
             {
                 if (userMenus >= 1)
-                    return BadRequest("Regular user can only create 1 menu. Please sign up for premium services to add more.");
+                    return StatusCode(403, "Regular user can only create 1 menu. Please sign up for premium services to add more.");
 
                 if (menuDTO.PromotionId != null)
-                    return BadRequest("New menu with promotion can only be added by admin or premium user");
+                    return StatusCode(403, "New menu with promotion can only be added by admin or premium user");
             }
             var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
@@ -153,6 +155,8 @@ namespace TaisKohtApi.Controllers.api
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
         public IActionResult UpdateMenu(int id, [FromBody]PostMenuDTO menuDTO)
@@ -166,9 +170,9 @@ namespace TaisKohtApi.Controllers.api
 
             if (m == null) return NotFound();
 
-            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+            if (!(User.IsInRole("premiumUser") && !User.IsInRole("admin")) &&
                 menuDTO.PromotionId != null && menuDTO.PromotionId != m.PromotionId)
-                return BadRequest("Promotions to menu can only be added by admin or premium user");
+                return StatusCode(403, "Promotions to menu can only be added by admin or premium user");
 
             MenuDTO updatedMenu = _menuService.UpdateMenu(id, menuDTO);
 
@@ -186,6 +190,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult DeleteMenu(int id)
@@ -193,7 +198,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/menus/{id}", "DeleteMenu");
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
-            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be deleted by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return StatusCode(403, "Menu can only be deleted by admin or by restaurant user");
             _menuService.DeleteMenu(id);
             return NoContent();
         }
@@ -216,6 +221,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}/Dishes")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult AddDishesToMenu(int id, [FromBody]int[] dishIds)
@@ -224,7 +230,7 @@ namespace TaisKohtApi.Controllers.api
             var menuDTO = _menuService.GetMenuById(id);
             if (menuDTO == null) return NotFound();
 
-            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Dishes can only be added to menu by admin or by restaurant user");
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return StatusCode(403, "Dishes can only be added to menu by admin or by restaurant user");
 
             _menuService.UpdateMenuDishes(id, dishIds);
 
