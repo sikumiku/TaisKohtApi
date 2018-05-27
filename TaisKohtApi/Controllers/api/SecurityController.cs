@@ -20,6 +20,7 @@ using TaisKohtApi.Models.AccountViewModels;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/account/")]
     [AllowAnonymous]
@@ -42,6 +43,7 @@ namespace TaisKohtApi.Controllers.api
             _requestLogService = requestLogService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -84,6 +86,7 @@ namespace TaisKohtApi.Controllers.api
             return BadRequest("Could not create token.");
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel registerViewModel)
@@ -143,11 +146,12 @@ namespace TaisKohtApi.Controllers.api
             await _userManager.AddToRoleAsync(currentUser, role);
         }
 
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [Route("logout")]
         public async Task<IActionResult> LogOut()
         {
-            _requestLogService.SaveRequest(IdentityExtensions.GetUserId(User.Identity), "POST", "api/v1/logout", "Logout");
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/logout", "Logout");
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
             return Ok("User successfully logged out.");
