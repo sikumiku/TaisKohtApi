@@ -5,7 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.Services;
 using Domain;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,31 +20,53 @@ using TaisKohtApi.Models.AccountViewModels;
 
 namespace TaisKohtApi.Controllers.api
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/account/")]
-    [AllowAnonymous]
     public class SecurityController : Controller
     {
         private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<Role> _roleManager;
+        private readonly IRequestLogService _requestLogService;
 
-        public SecurityController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, ILogger<SecurityController> logger, RoleManager<Role> roleManager)
+        public SecurityController(SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.UserManager<User> userManager, IConfiguration configuration, ILogger<SecurityController> logger, Microsoft.AspNetCore.Identity.RoleManager<Role> roleManager, IRequestLogService requestLogService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
             _roleManager = roleManager;
+            _requestLogService = requestLogService;
         }
 
+        /// <summary>
+        /// Login user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/account/login
+        ///     {
+        ///         "Email":"test@test.ee",    
+        ///         "Password":"Aa12345678."
+        ///     }
+        /// </remarks>
+        /// <param name="model">LoginViewModel object</param>
+        /// <returns>A newly created token</returns>
+        /// <response code="200">Success login</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+            _requestLogService.SaveRequest(user.Id, "POST", "api/v1/login", "Login");
             if (user != null)
             {
                 var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
@@ -79,10 +103,31 @@ namespace TaisKohtApi.Controllers.api
             return BadRequest("Could not create token.");
         }
 
+        /// <summary>
+        /// Register user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/account/register
+        ///     {
+        ///         "Email":"test2@test2.ee",    
+        ///         "Password":"Aa12345678.",    
+        ///         "ConfirmPassword":"Aa12345678."
+        ///     }
+        /// </remarks>
+        /// <param name="registerViewModel">RegisterViewModel object</param>
+        /// <returns>A newly created token</returns>
+        /// <response code="200">Success register</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        [AllowAnonymous]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel registerViewModel)
         {
+            _requestLogService.SaveRequest(null, "POST", "api/v1/register", "Register");
             var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
             if (user == null && ModelState.IsValid)
             {
@@ -137,10 +182,24 @@ namespace TaisKohtApi.Controllers.api
             await _userManager.AddToRoleAsync(currentUser, role);
         }
 
+        /// <summary>
+        /// Logout user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/account/logout
+        /// </remarks>
+        /// <response code="200">Success register</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        [AllowAnonymous]
         [HttpPost]
         [Route("logout")]
         public async Task<IActionResult> LogOut()
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/logout", "Logout");
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
             return Ok("User successfully logged out.");

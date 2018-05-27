@@ -25,5 +25,6 @@ namespace Domain
         public List<RestaurantUser> RestaurantUsers { get; set; } 
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public List<RequestLog> RequestLogs { get; set; }
     }
 }

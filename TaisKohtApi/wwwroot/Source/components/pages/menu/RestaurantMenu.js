@@ -23,12 +23,12 @@ export default class RestaurantMenu extends React.Component {
         }
 
         return (
-            <div>
-                <b>
-                    <a href="#" onClick={() => { this.getMenuContent() }}>{this.state.menu.name}</a></b>
-                {contents}
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                    <a href="#" onClick={() => { this.getMenuContent() }}>{this.state.menu.name}</a>
             </div>
-
+            {contents}
+           </div>      
         );
     }
 
@@ -44,8 +44,7 @@ export default class RestaurantMenu extends React.Component {
 
     static renderExpandedInfo(menuContent) {
         console.log(menuContent);
-        return <div>
-            <b>Dishes :</b>
+        return <div class = "panel-body">
             {menuContent.dishes.map(dish =>
                 <Dish dish={dish} />
             )}

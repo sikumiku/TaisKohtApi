@@ -117,6 +117,7 @@ namespace TaisKohtApi
             services.AddScoped<IUserFactory, UserFactory>();
             services.AddScoped<IRatingLogService, RatingLogService>();
             services.AddScoped<IRatingLogFactory, RatingLogFactory>();
+            services.AddScoped<IRequestLogService, RequestLogService>();
 
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();

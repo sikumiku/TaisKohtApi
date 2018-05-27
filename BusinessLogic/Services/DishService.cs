@@ -124,7 +124,7 @@ namespace BusinessLogic.Services
                 .Select(dish => _dishFactory.Create(dish));
         }
 
-        public IEnumerable<DishDTO> SearchDishByPriceLimit(decimal dishPrice)
+        public IEnumerable<DishDTO> SearchDishByPriceLimit(decimal? dishPrice)
         {
             decimal price;
             if (!decimal.TryParse(dishPrice.ToString(), out price)) return null;

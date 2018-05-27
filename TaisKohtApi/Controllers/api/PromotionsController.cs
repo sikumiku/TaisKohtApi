@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,15 +18,18 @@ namespace TaisKohtApi.Controllers.api
     public class PromotionsController : Controller
     {
         private readonly IPromotionService _promotionService;
+        private readonly IRequestLogService _requestLogService;
 
-        public PromotionsController(IPromotionService promotionService)
+        public PromotionsController(IPromotionService promotionService, IRequestLogService requestLogService)
         {
             _promotionService = promotionService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
-        /// Gets all promotions as a list
+        /// Gets all promotions as a list.
         /// </summary>
+        /// <returns>All promotions as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no promotions can be found</response>
         /// <response code="429">Too many requests</response>
@@ -37,15 +41,17 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get()
+        public IActionResult GetAllPromotions()
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/promotions", "GetAllPromotions");
             return Ok(_promotionService.GetAllPromotions());
         }
 
         /// <summary>
-        /// Find promotion by ID
+        /// Find promotion by ID.
         /// </summary>
         /// <param name="id">ID of promotion to return</param>
+        /// <returns>Promotion by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Promotion not found</response>
         /// <response code="429">Too many requests</response>
@@ -59,27 +65,29 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetPromotion(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/promotions/{id}", "GetPromotion");
             var promotionDTO = _promotionService.GetPromotionById(id);
             if (promotionDTO == null) return NotFound();
             return Ok(promotionDTO);
         }
 
         /// <summary>
-        /// Creates a promotion
+        /// Creates a promotion.
         /// </summary>
-        /// <param name="promotionDTO">Promotion object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Promotions
         ///     {
-        ///         "name": "Chicken Sandvich",
-        ///         "description": "Tender chicken sandvich with Marinara sauce between",
-        ///         "type": "daily",
-        ///         "validTo": "12/05/2018"
+        ///         "Name" : "Chicken Sandvich",
+        ///         "Description" : "Tender chicken sandvich with Marinara sauce between",
+        ///         "Type": "daily",
+        ///         "validTo": "2018-06-30T20:51:22.508Z",
+        ///         "ClassName" : "Main"
         ///     }
         ///
         /// </remarks>
+        /// <param name="promotionDTO">PromotionDTO object to be added</param>
         /// <returns>A newly created promotion</returns>
         /// <response code="201">Returns the newly created promotion</response>
         /// <response code="400">Provided object is faulty</response>
@@ -92,8 +100,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]PromotionDTO promotionDTO)
+        public IActionResult PostPromotion([FromBody]PromotionDTO promotionDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/promotions", "PostPromotion");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newPromotion = _promotionService.AddNewPromotion(promotionDTO);
@@ -102,22 +111,23 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Update an existing promotion
+        /// Update an existing promotion.
         /// </summary>
-        /// <param name="id">ID of promotion to update</param>
-        /// <param name="promotionDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Promotions/{id}
         ///     {
-        ///         "name": "Pasta Carbonara",
-        ///         "description": "Classic pasta Carbonara with bacon and cheese",
-        ///         "type": "weekly",
-        ///         "validTo": "24/05/2018"
+        ///         "Name" : "Pasta Carbonara",
+        ///         "Description" : "Classic pasta Carbonara with bacon and cheese",
+        ///         "Type": "weekly",
+        ///         "validTo": "2018-06-30T20:51:22.508Z",
+        ///         "ClassName" : "Main"
         ///     }
         ///
         /// </remarks>
+        /// <param name="id" name="promotionDTO">ID of promotion to update and Updated PromotionDTO object</param>
+        /// <returns>Updated promotion</returns>
         /// <response code="200">Promotion was successfully updated, updated Promotion to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
@@ -129,8 +139,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]PromotionDTO promotionDTO)
+        public IActionResult UpdatePromotion(int id, [FromBody]PromotionDTO promotionDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/promotions/{id}", "UpdatePromotion");
             if (!ModelState.IsValid) return BadRequest();
             var p = _promotionService.GetPromotionById(id);
 
@@ -153,8 +164,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Delete(int id)
+        public IActionResult DeletePromotion(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/promotions/{id}", "DeletePromotion");
             var promotionDTO = _promotionService.GetPromotionById(id);
             if (promotionDTO == null) return NotFound();
             _promotionService.DeletePromotion(id);
