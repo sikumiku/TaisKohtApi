@@ -46,13 +46,33 @@ namespace DAL.TaisKoht.EF
 
             builder.Entity<RestaurantUser>()
                 .HasOne(ru => ru.Restaurant)
-                .WithMany(ru => ru.RestaurantUsers)
+                .WithMany(r => r.RestaurantUsers)
                 .HasForeignKey(ru => ru.RestaurantId);
 
             builder.Entity<RestaurantUser>()
                 .HasOne(ru => ru.User)
-                .WithMany(ru => ru.RestaurantUsers)
+                .WithMany(u => u.RestaurantUsers)
                 .HasForeignKey(ru => ru.UserId);
+
+            builder.Entity<MenuDish>()
+                .HasOne(md => md.Dish)
+                .WithMany(d => d.MenuDishes)
+                .HasForeignKey(md => md.DishId);
+
+            builder.Entity<MenuDish>()
+                .HasOne(md => md.Menu)
+                .WithMany(m => m.MenuDishes)
+                .HasForeignKey(md => md.MenuId);
+
+            builder.Entity<DishIngredient>()
+                .HasOne(di => di.Ingredient)
+                .WithMany(i => i.DishIngredients)
+                .HasForeignKey(di => di.IngredientId);
+
+            builder.Entity<DishIngredient>()
+                .HasOne(di => di.Dish)
+                .WithMany(d => d.DishIngredients)
+                .HasForeignKey(di => di.DishId);
 
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
@@ -63,8 +83,8 @@ namespace DAL.TaisKoht.EF
             
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
-                // https://www.meziantou.net/2017/07/10/entity-framework-core-soft-delete-using-query-filters
                 // Implement soft Delete for all Entities
+                // https://www.meziantou.net/2017/07/10/entity-framework-core-soft-delete-using-query-filters
                 // 1. Add the Active property
                 if (!IsLinkingEntity(entityType.GetType()))
                 {
@@ -88,7 +108,6 @@ namespace DAL.TaisKoht.EF
                     
 
                 // Add default values to timestamps
-                // 1. Add the properties
                 entityType.GetOrAddProperty("AddTime", typeof(DateTime));
 
                 builder.Entity(entityType.ClrType).Property("AddTime").

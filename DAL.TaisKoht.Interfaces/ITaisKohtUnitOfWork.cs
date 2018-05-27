@@ -7,6 +7,7 @@ namespace DAL.TaisKoht.Interfaces
     public interface ITaisKohtUnitOfWork : IUnitOfWork
     {
         IDishRepository Dishes { get; }
+        IMenuDishRepository MenuDishes { get; }
         IIngredientRepository Ingredients { get; }
         IMenuRepository Menus { get; }
         IPromotionRepository Promotions { get; }

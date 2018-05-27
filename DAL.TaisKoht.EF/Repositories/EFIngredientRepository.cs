@@ -23,6 +23,8 @@ namespace DAL.TaisKoht.EF.Repositories
         public override Ingredient Find(params object[] id)
         {
             return RepositoryDbSet
+                .Include(d => d.DishIngredients)
+                    .ThenInclude(di => di.Dish)
                 .SingleOrDefault(x => (int)id[0] == x.IngredientId);
         }
 

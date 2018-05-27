@@ -28,7 +28,7 @@ namespace BusinessLogic.DTO
 
         public static AddressDTO CreateFromDomain(Address address)
         {
-            if (address == null || !address.Active) { return null; }
+            if (address == null) { return null; }
             return new AddressDTO
             {
                 AddressId = address.AddressId,

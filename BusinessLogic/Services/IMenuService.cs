@@ -17,6 +17,8 @@ namespace BusinessLogic.Services
 
         MenuDTO UpdateMenu(int id, PostMenuDTO dto);
 
+        void UpdateMenuDishes(int id, int[] dishIds);
+
         void DeleteMenu(int id);
     }
 }
