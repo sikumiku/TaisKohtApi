@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180527184953_Initial104")]
-    partial class Initial104
+    [Migration("20180527200817_Initial666")]
+    partial class Initial666
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -278,7 +278,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("DishId");
 
-                    b.Property<int>("Rating");
+                    b.Property<int?>("Rating");
 
                     b.Property<int?>("RestaurantId");
 
