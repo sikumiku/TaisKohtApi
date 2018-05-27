@@ -3,10 +3,10 @@ import 'es6-promise';
 import 'isomorphic-fetch';
 import MenuItem from './MenuItem';
 export default class RestaurantMenu extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { menu: [], loading: true };
-        this.restaurantId = this.props.restaurantId;
+        this.restaurantId = this.props.match.params.restaurantId;
         this.refreshData();
     }
     render() {
@@ -21,7 +21,7 @@ export default class RestaurantMenu extends React.Component {
         </div>;
     }
     refreshData() {
-        fetch('api/v1/Restaurants/' + this.restaurantId)
+        fetch('/api/v1/Restaurants/' + this.restaurantId)
             .then(response => response.json())
             .then(data => {
                 this.setState({ menu: data, loading: false });
