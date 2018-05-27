@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Initial101 : Migration
+    public partial class Initial102 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     AddressId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     AddressFirstLine = table.Column<string>(maxLength: 50, nullable: true),
                     Country = table.Column<string>(maxLength: 50, nullable: true),
                     Locality = table.Column<string>(maxLength: 50, nullable: true),
@@ -24,7 +24,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     LocationLongitude = table.Column<decimal>(type: "decimal(9, 6)", nullable: true),
                     PostCode = table.Column<string>(maxLength: 20, nullable: true),
                     Region = table.Column<string>(maxLength: 50, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,12 +38,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     RoleId = table.Column<string>(nullable: false),
                     AccessLevel = table.Column<string>(maxLength: 50, nullable: true),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Description = table.Column<string>(maxLength: 200, nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     UserId = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
@@ -72,7 +72,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -86,12 +86,11 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     RoleClaimId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     RoleId = table.Column<string>(nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,11 +110,11 @@ namespace DAL.TaisKoht.EF.Migrations
                     IngredientId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     AmountUnit = table.Column<string>(maxLength: 10, nullable: true),
                     Description = table.Column<string>(maxLength: 255, nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -136,13 +135,14 @@ namespace DAL.TaisKoht.EF.Migrations
                     PromotionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    ClassName = table.Column<string>(maxLength: 50, nullable: true),
                     Description = table.Column<string>(maxLength: 255, nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     Type = table.Column<string>(maxLength: 50, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    ValidTo = table.Column<DateTime>(nullable: false)
+                    ValidTo = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -161,11 +161,10 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     UserClaimId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -186,9 +185,9 @@ namespace DAL.TaisKoht.EF.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -208,9 +207,8 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     RoleId = table.Column<string>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,8 +235,8 @@ namespace DAL.TaisKoht.EF.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -259,13 +257,13 @@ namespace DAL.TaisKoht.EF.Migrations
                     RestaurantId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     AddressId = table.Column<int>(nullable: true),
                     ContactNumber = table.Column<string>(maxLength: 50, nullable: true),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     PromotionId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     Url = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
@@ -292,7 +290,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     DishId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     AvailableFrom = table.Column<DateTime>(nullable: true),
                     AvailableTo = table.Column<DateTime>(nullable: true),
                     Daily = table.Column<bool>(nullable: true),
@@ -306,7 +304,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     RestaurantId = table.Column<int>(nullable: false),
                     ServeTime = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(maxLength: 40, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
                     Vegan = table.Column<bool>(nullable: true),
                     WeightG = table.Column<decimal>(type: "decimal(8, 2)", nullable: true)
@@ -343,12 +341,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     Active = table.Column<bool>(nullable: false),
                     ActiveFrom = table.Column<DateTime>(nullable: true),
                     ActiveTo = table.Column<DateTime>(nullable: true),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     PromotionId = table.Column<int>(nullable: true),
                     RepetitionInterval = table.Column<int>(nullable: true),
                     RestaurantId = table.Column<int>(nullable: false),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -380,10 +378,9 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     RestaurantId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     StartedAt = table.Column<DateTime>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -409,12 +406,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     RatingLogId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     Comment = table.Column<string>(maxLength: 2000, nullable: true),
                     DishId = table.Column<int>(nullable: true),
                     Rating = table.Column<int>(nullable: false),
                     RestaurantId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -446,11 +443,10 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     IngredientId = table.Column<int>(nullable: false),
                     DishId = table.Column<int>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
+                    AddTime = table.Column<DateTime>(nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
                     MenuId = table.Column<int>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -481,9 +477,8 @@ namespace DAL.TaisKoht.EF.Migrations
                 {
                     MenuId = table.Column<int>(nullable: false),
                     DishId = table.Column<int>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    AddTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()"),
-                    UpdateTime = table.Column<DateTime>(nullable: false, computedColumnSql: "GetUtcDate()")
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

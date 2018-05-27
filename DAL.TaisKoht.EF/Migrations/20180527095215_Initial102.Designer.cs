@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180527072440_Initial101")]
-    partial class Initial101
+    [Migration("20180527095215_Initial102")]
+    partial class Initial102
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,9 +28,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("AddressFirstLine")
                         .HasMaxLength(50);
@@ -53,9 +51,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("Region")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("AddressId");
 
@@ -69,9 +65,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<DateTime?>("AvailableFrom");
 
@@ -104,9 +98,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("Title")
                         .HasMaxLength(40);
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -133,20 +125,14 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("DishId");
 
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<int?>("MenuId");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("IngredientId", "DishId");
 
@@ -164,9 +150,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("AmountUnit")
                         .HasMaxLength(10);
@@ -178,9 +162,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -203,9 +185,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<DateTime?>("ActiveTo");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50);
@@ -216,9 +196,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("RestaurantId");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -240,15 +218,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int>("DishId");
 
-                    b.Property<bool>("Active");
+                    b.Property<DateTime>("AddTime");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("MenuId", "DishId");
 
@@ -264,9 +236,10 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
+
+                    b.Property<string>("ClassName")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Description")
                         .HasMaxLength(255);
@@ -277,14 +250,12 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("Type")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
 
-                    b.Property<DateTime>("ValidTo");
+                    b.Property<DateTime?>("ValidTo");
 
                     b.HasKey("PromotionId");
 
@@ -300,9 +271,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("Comment")
                         .HasMaxLength(2000);
@@ -313,9 +282,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("RestaurantId");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -338,9 +305,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<int?>("AddressId");
 
@@ -356,9 +321,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<int?>("PromotionId");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("Url")
                         .HasMaxLength(255);
@@ -378,17 +341,11 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<DateTime?>("StartedAt");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("RestaurantId", "UserId");
 
@@ -408,9 +365,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -424,9 +379,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("Id");
 
@@ -448,9 +401,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -486,9 +437,7 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -512,11 +461,7 @@ namespace DAL.TaisKoht.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("RoleClaimId");
 
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("ClaimType");
 
@@ -525,9 +470,7 @@ namespace DAL.TaisKoht.EF.Migrations
                     b.Property<string>("RoleId")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("Id");
 
@@ -542,19 +485,13 @@ namespace DAL.TaisKoht.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("UserClaimId");
 
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -574,15 +511,11 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -600,15 +533,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<string>("RoleId");
 
-                    b.Property<bool>("Active");
+                    b.Property<DateTime>("AddTime");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -627,13 +554,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("AddTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("AddTime");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("GetUtcDate()");
+                    b.Property<DateTime>("UpdateTime");
 
                     b.Property<string>("Value");
 
