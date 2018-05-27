@@ -26,8 +26,7 @@ namespace BusinessLogic.Factories
             {
                 Id = userDTO.UserId,
                 UserName = userDTO.UserName,
-                Email = userDTO.Email,
-                Active = userDTO.Active
+                Email = userDTO.Email
             };
         }
 
