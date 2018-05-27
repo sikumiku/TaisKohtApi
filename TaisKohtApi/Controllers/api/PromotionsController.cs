@@ -24,8 +24,9 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all promotions as a list
+        /// Gets all promotions as a list.
         /// </summary>
+        /// <returns>All promotions as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no promotions can be found</response>
         /// <response code="429">Too many requests</response>
@@ -43,9 +44,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find promotion by ID
+        /// Find promotion by ID.
         /// </summary>
         /// <param name="id">ID of promotion to return</param>
+        /// <returns>Promotion by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Promotion not found</response>
         /// <response code="429">Too many requests</response>
@@ -65,21 +67,22 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Creates a promotion
+        /// Creates a promotion.
         /// </summary>
-        /// <param name="promotionDTO">Promotion object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Promotions
         ///     {
-        ///         "name": "Chicken Sandvich",
-        ///         "description": "Tender chicken sandvich with Marinara sauce between",
-        ///         "type": "daily",
-        ///         "validTo": "12/05/2018"
+        ///         "Name" : "Chicken Sandvich",
+        ///         "Description" : "Tender chicken sandvich with Marinara sauce between",
+        ///         "Type": "daily",
+        ///         "validTo": "2018-06-30T20:51:22.508Z",
+        ///         "ClassName" : "Main"
         ///     }
         ///
         /// </remarks>
+        /// <param name="promotionDTO">PromotionDTO object to be added</param>
         /// <returns>A newly created promotion</returns>
         /// <response code="201">Returns the newly created promotion</response>
         /// <response code="400">Provided object is faulty</response>
@@ -102,22 +105,23 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Update an existing promotion
+        /// Update an existing promotion.
         /// </summary>
-        /// <param name="id">ID of promotion to update</param>
-        /// <param name="promotionDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Promotions/{id}
         ///     {
-        ///         "name": "Pasta Carbonara",
-        ///         "description": "Classic pasta Carbonara with bacon and cheese",
-        ///         "type": "weekly",
-        ///         "validTo": "24/05/2018"
+        ///         "Name" : "Pasta Carbonara",
+        ///         "Description" : "Classic pasta Carbonara with bacon and cheese",
+        ///         "Type": "weekly",
+        ///         "validTo": "2018-06-30T20:51:22.508Z",
+        ///         "ClassName" : "Main"
         ///     }
         ///
         /// </remarks>
+        /// <param name="id" name="promotionDTO">ID of promotion to update and Updated PromotionDTO object</param>
+        /// <returns>Updated promotion</returns>
         /// <response code="200">Promotion was successfully updated, updated Promotion to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>

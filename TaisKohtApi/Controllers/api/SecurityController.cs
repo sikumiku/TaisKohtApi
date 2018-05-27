@@ -38,6 +38,24 @@ namespace TaisKohtApi.Controllers.api
             _roleManager = roleManager;
         }
 
+        /// <summary>
+        /// Login user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/account/login
+        ///     {
+        ///         "Email":"test@test.ee",    
+        ///         "Password":"Aa12345678."
+        ///     }
+        /// </remarks>
+        /// <param name="model">LoginViewModel object</param>
+        /// <returns>A newly created token</returns>
+        /// <response code="200">Success login</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -79,6 +97,25 @@ namespace TaisKohtApi.Controllers.api
             return BadRequest("Could not create token.");
         }
 
+        /// <summary>
+        /// Register user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/account/register
+        ///     {
+        ///         "Email":"test2@test2.ee",    
+        ///         "Password":"Aa12345678.",    
+        ///         "ConfirmPassword":"Aa12345678."
+        ///     }
+        /// </remarks>
+        /// <param name="registerViewModel">RegisterViewModel object</param>
+        /// <returns>A newly created token</returns>
+        /// <response code="200">Success register</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel registerViewModel)
@@ -137,6 +174,18 @@ namespace TaisKohtApi.Controllers.api
             await _userManager.AddToRoleAsync(currentUser, role);
         }
 
+        /// <summary>
+        /// Logout user.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/account/logout
+        /// </remarks>
+        /// <response code="200">Success register</response>
+        /// <response code="400">Provided object is faulty</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
         [HttpPost]
         [Route("logout")]
         public async Task<IActionResult> LogOut()

@@ -24,8 +24,9 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Gets all ratings as a list
+        /// Gets all ratings as a list.
         /// </summary>
+        /// <returns>All ratings as a list</returns>
         /// <response code="200">Successful operation</response> 
         /// <response code="404">If no ratings can be found</response>
         /// <response code="429">Too many requests</response>
@@ -44,9 +45,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Find rating by ID
+        /// Find rating by ID.
         /// </summary>
         /// <param name="id">ID of rating to return</param>
+        /// <returns>Rating by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">Rating not found</response>
         /// <response code="429">Too many requests</response>
@@ -66,24 +68,27 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Creates a rating
+        /// Creates a rating.
         /// </summary>
-        /// <param name="ratingDTO">Rating object to be added</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST api/v1/Ratings
         ///     {
-        ///         ...
+        ///         "Rating" : 3,
+        ///         "Comment" : "Tasty meal",
+        ///         "RestaurantId" : 1,
+        ///         "DishId" : 1,
+        ///         "UserId" : "5f8811f5-2a80-4a8d-891f-12282e185aea"
         ///     }
-        ///
         /// </remarks>
+        /// <param name="ratingDTO">Rating object to be added</param>
         /// <returns>A newly created rating</returns>
         /// <response code="201">Returns the newly created rating</response>
         /// <response code="400">Rating object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Rating
+        // POST: api/v1/Ratings
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostRestaurantRatingLog")]
         [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
@@ -100,19 +105,23 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Update an existing rating
+        /// Update an existing rating.
         /// </summary>
-        /// <param name="id">ID of rating to update</param>
-        /// <param name="ratingDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT api/v1/Ratings/{id}
         ///     {
-        ///         ...
+        ///         "Rating" : 5,
+        ///         "Comment" : "Tasty meal",
+        ///         "RestaurantId" : 1,
+        ///         "DishId" : 1,
+        ///         "UserId" : "5f8811f5-2a80-4a8d-891f-12282e185aea"
         ///     }
         ///
         /// </remarks>
+        /// <param name="id" name="ratingDTO">ID of rating to update and Updated RatingLogForEntityDTO object</param>
+        /// <returns>Updated rating</returns>
         /// <response code="200">Rating was successfully updated, updated Rating to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>

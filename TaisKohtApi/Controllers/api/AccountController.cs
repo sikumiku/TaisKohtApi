@@ -45,9 +45,10 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
-        /// Get all users in specific role
+        /// Get all users in specific role.
         /// </summary>
         /// <param name="role">Role of the requested users</param>
+        /// <returns>All users in specific role</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="403">Unauthorized request, all users are visible only to admin access</response>
         /// <response code="429">Too many requests</response>
@@ -70,6 +71,7 @@ namespace TaisKohtApi.Controllers.api
         /// Find user by ID
         /// </summary>
         /// <param name="id">ID of user to return</param>
+        /// <returns>User by ID</returns>
         /// <response code="200">Successful operation</response>
         /// <response code="404">User not found</response>
         /// <response code="429">Too many requests</response>
@@ -96,7 +98,6 @@ namespace TaisKohtApi.Controllers.api
         /// <summary>
         /// Creates a new role
         /// </summary>
-        /// <param name="role">Name of the role to be added</param>
         /// <remarks>
         /// Sample request:
         ///
@@ -106,6 +107,7 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
+        /// <param name="role">Name of the role to be added</param>
         /// <returns>All the existing roles</returns>
         /// <response code="201">Returns all roles</response>
         /// <response code="403">Unauthorized access, role must be added by admin only</response>
@@ -133,8 +135,6 @@ namespace TaisKohtApi.Controllers.api
         /// <summary>
         /// Creates a new role
         /// </summary>
-        /// <param name="role">Name of the role to be added</param>
-        /// <param name="email">User's e-mail</param>
         /// <remarks>
         /// Sample request:
         ///
@@ -145,6 +145,7 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
+        /// <param name="role" name="email">Name of the role to be added and user's e-mail</param>
         /// <returns>User with newly assigned role</returns>
         /// <response code="201">Returns user with newly assigned role</response>
         /// <response code="403">Unauthorized access, role must be added to user by admin only</response>
@@ -184,8 +185,6 @@ namespace TaisKohtApi.Controllers.api
         /// <summary>
         /// Update an existing user. Users can only be amended by themselves or admin.
         /// </summary>
-        /// <param name="id">ID of user to update</param>
-        /// <param name="UserDTO">Updated object</param>
         /// <remarks>
         /// Sample request:
         ///
@@ -196,6 +195,7 @@ namespace TaisKohtApi.Controllers.api
         ///     }
         ///
         /// </remarks>
+        /// <param name="id" name="UserDTO">ID of user to update and updated UpdateUserDTO object</param>
         /// <response code="204">User was successfully updated, no content to be returned</response>
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
