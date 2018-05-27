@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Initial102 : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -149,6 +149,31 @@ namespace DAL.TaisKoht.EF.Migrations
                     table.PrimaryKey("PK_Promotions", x => x.PromotionId);
                     table.ForeignKey(
                         name: "FK_Promotions_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequestLogs",
+                columns: table => new
+                {
+                    RequestLogId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(nullable: false),
+                    AddTime = table.Column<DateTime>(nullable: false),
+                    QueryString = table.Column<string>(maxLength: 2000, nullable: true),
+                    RequestMethod = table.Column<string>(maxLength: 10, nullable: true),
+                    RequestName = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestLogs", x => x.RequestLogId);
+                    table.ForeignKey(
+                        name: "FK_RequestLogs_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "UserId",
@@ -568,6 +593,11 @@ namespace DAL.TaisKoht.EF.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RequestLogs_UserId",
+                table: "RequestLogs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Restaurants_AddressId",
                 table: "Restaurants",
                 column: "AddressId");
@@ -632,6 +662,9 @@ namespace DAL.TaisKoht.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "RatingLogs");
+
+            migrationBuilder.DropTable(
+                name: "RequestLogs");
 
             migrationBuilder.DropTable(
                 name: "RestaurantUsers");

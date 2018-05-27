@@ -31,17 +31,19 @@ namespace TaisKohtApi.Controllers.api
         private readonly Microsoft.AspNetCore.Identity.RoleManager<Role> _roleManager;
         private readonly ILogger _logger;
         private readonly IUserService _userService;
+        private readonly IRequestLogService _requestLogService;
 
         public AccountController(Microsoft.AspNetCore.Identity.UserManager<User> userManager,
             SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.RoleManager<Role> roleManager,
             ILogger<AccountController> logger, 
-            IUserService userService)
+            IUserService userService, IRequestLogService requestLogService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
             _userService = userService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
@@ -61,9 +63,10 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(403)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get([FromQuery(Name = "role")] string role)
+        public IActionResult GetUsersByRole([FromQuery(Name = "role")] string role)
         {
-            return Ok(_userManager.GetUsersInRoleAsync(role));
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/getAllUsersInRole", "GetUsersByRole");
+            return Ok(_userManager.GetUsersInRoleAsync(role).Result);
         }
 
         /// <summary>
