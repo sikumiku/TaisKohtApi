@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Link , Route} from 'react-router-dom';
 import RestaurantMenu from '../menu/RestaurantMenu';
+import { ReactCSSTransitionGroup } from 'react-addons-css-transition-group';
 import Dish from '../menu/Dish';
 
 export default class RestaurantListItem extends React.Component {
@@ -25,12 +26,19 @@ export default class RestaurantListItem extends React.Component {
         return (
             <div>
                 <a href="#" onClick={() => { this.getRestaurantInfo() }}>{this.state.restaurant.name}</a>
+              
                 {this.state.restaurant.url}
                 {this.state.restaurant.contactNumber}
                 {this.state.restaurant.email}
                 <div>
-                    {contents}  
-                </div>
+                    <ReactCSSTransitionGroup
+                        transitionName="example"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={300}>
+                        {contents}  
+                    </ReactCSSTransitionGroup>
+                    </div>
+          
             </div>
 
         );
