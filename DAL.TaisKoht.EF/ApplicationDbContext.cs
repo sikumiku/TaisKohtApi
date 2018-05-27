@@ -66,22 +66,26 @@ namespace DAL.TaisKoht.EF
                 // https://www.meziantou.net/2017/07/10/entity-framework-core-soft-delete-using-query-filters
                 // Implement soft Delete for all Entities
                 // 1. Add the Active property
-                entityType.GetOrAddProperty("Active", typeof(bool));
+                if (!IsLinkingEntity(entityType.GetType()))
+                {
+                    entityType.GetOrAddProperty("Active", typeof(bool));
 
-                // 2. Create the query filter
-                var parameter = Expression.Parameter(entityType.ClrType);
+                    // 2. Create the query filter
+                    var parameter = Expression.Parameter(entityType.ClrType);
 
-                // EF.Property<bool>(post, "Active")
-                var boolPropertyMethodInfo = typeof(Microsoft.EntityFrameworkCore.EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
-                var activeProperty = Expression.Call(boolPropertyMethodInfo, parameter, Expression.Constant("Active"));
+                    // EF.Property<bool>(post, "Active")
+                    var boolPropertyMethodInfo = typeof(Microsoft.EntityFrameworkCore.EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
+                    var activeProperty = Expression.Call(boolPropertyMethodInfo, parameter, Expression.Constant("Active"));
 
-                // EF.Property<bool>(post, "Active") == true
-                BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, activeProperty, Expression.Constant(true));
+                    // EF.Property<bool>(post, "Active") == true
+                    BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, activeProperty, Expression.Constant(true));
 
-                // post => EF.Property<bool>(post, "Active") == true
-                var lambda = Expression.Lambda(compareExpression, parameter);
+                    // post => EF.Property<bool>(post, "Active") == true
+                    var lambda = Expression.Lambda(compareExpression, parameter);
 
-                builder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+                    builder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+                }
+                    
 
                 // Add default values to timestamps
                 // 1. Add the properties
@@ -116,6 +120,12 @@ namespace DAL.TaisKoht.EF
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
+        private static bool IsLinkingEntity(Type entityType)
+        {
+            return entityType == typeof(MenuDish) || entityType == typeof(RestaurantUser) ||
+                   entityType == typeof(DishIngredient) ||
+                   entityType == typeof(IdentityUserRole<string>);
+        }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
             OnBeforeSaving();
@@ -129,13 +139,19 @@ namespace DAL.TaisKoht.EF
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.CurrentValues["Active"] = true;
+                        if (!IsLinkingEntity(entry.Entity.GetType()))
+                        {
+                            entry.CurrentValues["Active"] = true;
+                        }
                         break;
 
                     case EntityState.Deleted:
-                        entry.State = EntityState.Modified;
-                        entry.CurrentValues["Active"] = false;
-                        entry.CurrentValues["UpdateTime"] = DateTime.UtcNow;
+                        if (!IsLinkingEntity(entry.Entity.GetType()))
+                        {
+                            entry.State = EntityState.Modified;
+                            entry.CurrentValues["Active"] = false;
+                            entry.CurrentValues["UpdateTime"] = DateTime.UtcNow;
+                        }
                         break;
 
                     case EntityState.Modified:

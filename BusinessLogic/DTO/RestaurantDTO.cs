@@ -102,6 +102,7 @@ namespace BusinessLogic.DTO
         [MaxLength(50)]
         public string Email { get; set; }
         public AddressDTO Address { get; set; }
+        public PostMenuDTO Menu { get; set; }
 
         public static PostRestaurantDTO CreateFromDomain(Restaurant restaurant)
         {
