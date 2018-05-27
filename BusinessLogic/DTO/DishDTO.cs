@@ -37,6 +37,7 @@ namespace BusinessLogic.DTO
         //foreign keys
         [Required]
         public int RestaurantId { get; set; }
+        public int PromotionId { get; set; }
         //additional data
         public SimplePromotionDTO Promotion { get; set; }
         public List<IngredientDTO> Ingredients { get; set; }

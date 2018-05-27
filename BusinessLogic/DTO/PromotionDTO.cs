@@ -16,7 +16,9 @@ namespace BusinessLogic.DTO
         public string Description { get; set; }
         [MaxLength(50)]
         public string Type { get; set; }
-        public DateTime ValidTo { get; set; }
+        public DateTime? ValidTo { get; set; }
+        [MaxLength(50)]
+        public string ClassName { get; set; }
         //OneToMany
         public List<MenuDTO> Menus { get; set; } = new List<MenuDTO>();
         public List<DishDTO> Dishes { get; set; } = new List<DishDTO>();
@@ -24,21 +26,22 @@ namespace BusinessLogic.DTO
 
         public static PromotionDTO CreateFromDomain(Promotion promotion)
         {
-            if(promotion == null) { return null; }
+            if(promotion == null || (promotion.ValidTo != null && ((DateTime)promotion.ValidTo).CompareTo(DateTime.UtcNow) < 0)) { return null; }
             return new PromotionDTO()
             {
                 PromotionId = promotion.PromotionId,
                 Name = promotion.Name,
                 Description = promotion.Description,
                 Type = promotion.Type,
-                ValidTo = promotion.ValidTo
+                ValidTo = promotion.ValidTo,
+                ClassName = promotion.ClassName
             };
         }
 
         public static PromotionDTO CreateFromDomainWithAssociatedTables(Promotion p)
         {
             var promotion = CreateFromDomain(p);
-            if (promotion == null) { return null; }
+            if (promotion == null || (promotion.ValidTo != null && ((DateTime)promotion.ValidTo).CompareTo(DateTime.UtcNow) < 0)) { return null; }
 
             promotion.Menus = p.Menus
                 .Select(MenuDTO.CreateFromDomain).ToList();
@@ -60,18 +63,20 @@ namespace BusinessLogic.DTO
         public string Description { get; set; }
         [MaxLength(50)]
         public string Type { get; set; }
-        public DateTime ValidTo { get; set; }
+        public DateTime? ValidTo { get; set; }
+        public string ClassName { get; set; }
 
         public static SimplePromotionDTO CreateFromDomain(Promotion promotion)
         {
-            if (promotion == null) { return null; }
+            if (promotion == null || (promotion.ValidTo != null && ((DateTime)promotion.ValidTo).CompareTo(DateTime.UtcNow) < 0)) { return null; }
             return new SimplePromotionDTO()
             {
                 PromotionId = promotion.PromotionId,
                 Name = promotion.Name,
                 Description = promotion.Description,
                 Type = promotion.Type,
-                ValidTo = promotion.ValidTo
+                ValidTo = promotion.ValidTo,
+                ClassName = promotion.ClassName
             };
         }
     }

@@ -51,7 +51,7 @@ namespace BusinessLogic.Services
                 promotion.Description = updatedPromotionDTO.Description;
                 promotion.Type = updatedPromotionDTO.Type;
                 promotion.ValidTo = updatedPromotionDTO.ValidTo;
-                promotion.UpdateTime = DateTime.UtcNow;
+                promotion.ClassName = updatedPromotionDTO.ClassName;
                 _uow.Promotions.Update(promotion);
                 _uow.SaveChanges();
             }
