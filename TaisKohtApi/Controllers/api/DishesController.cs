@@ -65,7 +65,7 @@ namespace TaisKohtApi.Controllers.api
         [AllowAnonymous]
         [HttpGet]
         [Route("daily")]
-        [ProducesResponseType(typeof(List<DishDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleDishDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
