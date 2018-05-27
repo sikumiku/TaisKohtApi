@@ -31,7 +31,7 @@ class Header extends Component {
         let userName; 
         if (Auth.loggedIn()) {
             console.log(Auth.getProfile());
-            userName = <LinkContainer to="/restaurants">
+            userName = <LinkContainer to="/profile">
                             <NavItem eventKey={1}>Profile : {Auth.getProfile().sub} </NavItem>
                         </LinkContainer>
         } else {
