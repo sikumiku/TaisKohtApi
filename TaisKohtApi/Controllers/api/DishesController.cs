@@ -138,7 +138,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no top dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/dishes/Top
+        // GET: api/v1/dishes/top
         [AllowAnonymous]
         [HttpGet]
         [Route("top")]
@@ -236,7 +236,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newDish = _dishService.AddNewDish(dishDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetDish", new { id = newDish.DishId }, newDish);
+            return CreatedAtAction(nameof(GetDish), new { id = newDish.DishId }, newDish);
         }
 
         /// <summary>

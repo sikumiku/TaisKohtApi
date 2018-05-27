@@ -124,7 +124,7 @@ namespace TaisKohtApi.Controllers.api
             }
             var newMenu = _menuService.AddNewMenu(menuDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetMenu", new { id = newMenu.MenuId }, newMenu);
+            return CreatedAtAction(nameof(GetMenu), new { id = newMenu.MenuId }, newMenu);
         }
 
         /// <summary>

@@ -227,7 +227,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetRestaurant", new { id = newRestaurant.RestaurantId }, newRestaurant);
+            return CreatedAtAction(nameof(GetRestaurant), new { id = newRestaurant.RestaurantId }, newRestaurant);
         }
 
         /// <summary>

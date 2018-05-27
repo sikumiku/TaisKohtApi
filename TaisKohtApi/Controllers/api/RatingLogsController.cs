@@ -117,7 +117,7 @@ namespace TaisKohtApi.Controllers.api
                     return BadRequest("User has already given this restaurant a rating.");
                 }
                 var newRating = _ratingLogService.AddNewRatingLog(ratingDTO, User.Identity.GetUserId());
-                return CreatedAtRoute("GetRatingLog", new { id = newRating.RatingLogId }, newRating);
+                return CreatedAtAction(nameof(GetRatingLog), new { id = newRating.RatingLogId }, newRating);
             }
             if (ratingDTO.DishId != null)
             {
@@ -127,7 +127,7 @@ namespace TaisKohtApi.Controllers.api
                     return BadRequest("User has already given this dish a rating.");
                 }
                 var newRating = _ratingLogService.AddNewRatingLog(ratingDTO, User.Identity.GetUserId());
-                return CreatedAtRoute("GetRatingLog", new { id = newRating.RatingLogId }, newRating);
+                return CreatedAtAction(nameof(GetRatingLog), new { id = newRating.RatingLogId }, newRating);
             }
             return BadRequest("No dish or restaurant id provided to rate.");
         }

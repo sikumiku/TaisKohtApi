@@ -204,7 +204,7 @@ namespace TaisKohtApi.Controllers.api
             {
                 return BadRequest("No such user and/or role exists. Please double check parameters.");
             }
-            return CreatedAtRoute(nameof(GetUser), new { id = user.Id }, UserDTO.CreateFromDomain(user));
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, UserDTO.CreateFromDomain(user));
         }
 
         /// <summary>

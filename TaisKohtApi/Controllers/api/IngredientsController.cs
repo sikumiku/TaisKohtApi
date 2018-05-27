@@ -109,7 +109,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newIngredient = _ingredientService.AddNewIngredient(ingredientDTO, User.Identity.GetUserId());
 
-            return CreatedAtRoute("GetIngredient", new { id = newIngredient.IngredientId }, newIngredient);
+            return CreatedAtAction(nameof(GetIngredient), new { id = newIngredient.IngredientId }, newIngredient);
         }
 
         /// <summary>

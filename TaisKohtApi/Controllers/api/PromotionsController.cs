@@ -109,7 +109,7 @@ namespace TaisKohtApi.Controllers.api
 
             var newPromotion = _promotionService.AddNewPromotion(promotionDTO);
 
-            return CreatedAtRoute("GetPromotion", new { id = newPromotion.PromotionId }, newPromotion);
+            return CreatedAtAction(nameof(GetPromotion), new { id = newPromotion.PromotionId }, newPromotion);
         }
 
         /// <summary>
