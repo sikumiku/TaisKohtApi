@@ -18,7 +18,6 @@ using TaisKohtApi.Models.AccountViewModels;
 
 namespace TaisKohtApi.Controllers.api
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/account/")]
     [AllowAnonymous]

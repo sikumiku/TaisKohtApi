@@ -220,30 +220,30 @@ namespace TaisKohtApi.Controllers.api
         /// <summary>
         /// Adds ingredient to dish
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="PostIngredientForDishDTO"></param>
-        /// <returns>Dish with new Ingredient added to it</returns>
-        /// <response code="201">Returns the newly updated dish</response>
+        /// <response code="204">Ingredients were successfully added to dish</response>
         /// <response code="400">Provided object is faulty</response>
+        /// <response code="404">Dish not found by given Id</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Dishes/addIngredient
+        // PUT: api/v1/Dishes/addIngredient
         [Authorize(Roles = "admin, normalUser, premiumUser")]
-        [HttpPost]
-        [Route("addIngredient")]
-        [ProducesResponseType(typeof(DishDTO), 201)]
-        [ProducesResponseType(400)]
+        [HttpPut("{id}/Ingredients")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult AddIngredientToDish([FromBody]PostIngredientForDishDTO dishIngredientDTO)
+        public IActionResult AddIngredientsToDish(int id, [FromBody]PostIngredientForDishDTO[] dishes)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
-            var dish = _dishService.GetDishById(dishIngredientDTO.DishId);
-            var ingredient = _ingredientService.GetIngredientById(dishIngredientDTO.IngredientId);
-            if (dish == null || ingredient == null) { BadRequest("Invalid dish or ingredient identifier."); }
-            if (!IsRestaurantUserOrAdmin(dish.RestaurantId)) return BadRequest("Ingredient can be added to dish only by users of restaurant that the dish belongs to.");
-            var updatedDish = _dishService.AddIngredientToDish(dishIngredientDTO);
+            var dishDTO = _dishService.GetDishById(id);
+            if (dishDTO == null) return NotFound();
+            if (!IsRestaurantUserOrAdmin(dishDTO.RestaurantId)) return BadRequest("Dishes can only be added by admin or by restaurant user");
 
-            return CreatedAtRoute("GetDish", new { id = dish.DishId }, updatedDish);
+            _dishService.UpdateDishIngredients(id, dishes);
+
+            return NoContent();
         }
 
         /// <summary>

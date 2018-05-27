@@ -42,13 +42,31 @@ namespace BusinessLogic.Services
             return _dishFactory.CreateComplex(newDish);
         }
 
-        public DishDTO AddIngredientToDish(PostIngredientForDishDTO postIngredientForDishDTO)
+        public void UpdateDishIngredients(int dishId, PostIngredientForDishDTO[] postIngredientForDishDTOs)
         {
-            _uow.DishIngredients.Add(new DishIngredient { Amount = postIngredientForDishDTO.Amount, DishId = postIngredientForDishDTO.DishId, IngredientId = postIngredientForDishDTO.DishId });
-            _uow.SaveChanges();
-            var updatedDish = _uow.Dishes.Find(postIngredientForDishDTO.DishId);
-            if (updatedDish == null) return null;
-            return _dishFactory.CreateComplex(updatedDish);
+            if (_uow.Dishes.Exists(dishId))
+            {
+                Dish dish = _uow.Dishes.Find(dishId);
+                var existingDishIngredients = dish.DishIngredients;
+
+                var requestDishIngredients = new List<DishIngredient>();
+
+                Array.ForEach(postIngredientForDishDTOs, pid => requestDishIngredients.Add(new DishIngredient { DishId = dishId, IngredientId = pid.IngredientId, Amount = pid.Amount}));
+
+                var deletedDishIngredients = existingDishIngredients.FindAll(x => !requestDishIngredients.Exists(y => IsEqualDishIngredient(x, y)));
+
+                var addedDishIngredients = requestDishIngredients.FindAll(x => !existingDishIngredients.Exists(y => IsEqualDishIngredient(x, y)));
+
+                deletedDishIngredients.ForEach(di => _uow.DishIngredients.Remove(di));
+                addedDishIngredients.ForEach(di => _uow.DishIngredients.Add(di));
+
+                _uow.SaveChanges();
+            }
+        }
+
+        private static bool IsEqualDishIngredient(DishIngredient x, DishIngredient y)
+        {
+            return x.DishId == y.DishId && x.IngredientId == y.IngredientId;
         }
 
         public IEnumerable<DishDTO> GetAllDishes()
