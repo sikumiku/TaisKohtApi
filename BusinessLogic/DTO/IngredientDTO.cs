@@ -60,4 +60,13 @@ namespace BusinessLogic.DTO
         [MaxLength(10)]
         public string AmountUnit { get; set; }
     }
+
+    public class PostIngredientForDishDTO
+    {
+        public decimal Amount { get; set; }
+        [Required]
+        public int DishId { get; set; }
+        [Required]
+        public int IngredientId { get; set; }
+    }
 }

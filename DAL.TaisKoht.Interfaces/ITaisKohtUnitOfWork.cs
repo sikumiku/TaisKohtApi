@@ -17,6 +17,7 @@ namespace DAL.TaisKoht.Interfaces
         IUserRepository Users { get; }
         IUserRoleRepository UserRoles { get; }
         IRoleRepository Roles { get; }
+        IDishIngredientRepository DishIngredients { get; }
     }
     
 }
