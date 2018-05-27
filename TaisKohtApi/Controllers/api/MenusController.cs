@@ -171,6 +171,32 @@ namespace TaisKohtApi.Controllers.api
             return NoContent();
         }
 
+        /// <summary>
+        /// Adds dishes to the menu by id.
+        /// </summary>
+        /// <param name="id">ID of menu to add Dishes to</param>
+        /// <response code="204">MenuDishes were successfully updated</response>
+        /// <response code="404">Menu not found by given ID</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // PUT: api/v1/Menus/5/Dishes
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [HttpPut("{id}/Dishes")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult Put(int id, [FromBody]int[] dishIds)
+        {
+            var menuDTO = _menuService.GetMenuById(id);
+            if (menuDTO == null) return NotFound();
+            if (!IsRestaurantUserOrAdmin(menuDTO.RestaurantId)) return BadRequest("Menu can only be deleted by admin or by restaurant user");
+
+            _menuService.UpdateMenuDishes(id, dishIds);
+
+            return NoContent();
+        }
+
+
+
         private Boolean IsRestaurantUserOrAdmin(int restaurantId)
         {
             var users = _restaurantService.GetRestaurantUsersById(restaurantId);

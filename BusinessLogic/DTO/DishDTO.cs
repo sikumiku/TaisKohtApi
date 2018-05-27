@@ -44,7 +44,7 @@ namespace BusinessLogic.DTO
 
         public static DishDTO CreateFromDomain(Dish dish)
         {
-            if (dish == null || !dish.Active) { return null; }
+            if (dish == null) { return null; }
             return new DishDTO()
             {
                 DishId = dish.DishId,
@@ -63,12 +63,12 @@ namespace BusinessLogic.DTO
                 Daily = dish.Daily,
                 RestaurantId = dish.RestaurantId,
                 Rating = dish.RatingLogs.Any() ? Rating.Create(dish.RatingLogs) : null
-        };
+            };
         }
 
         public static DishDTO CreateFromMenuDish(MenuDish md)
         {
-            if (md == null || !md.Active) { return null; }
+            if (md == null) { return null; }
 
             var dish = CreateFromDomain(md.Dish);
 
@@ -109,7 +109,7 @@ namespace BusinessLogic.DTO
 
         public static SimpleDishDTO CreateFromDomain(Dish dish)
         {
-            if (dish == null || !dish.Active) { return null; }
+            if (dish == null) { return null; }
             return new SimpleDishDTO()
             {
                 DishId = dish.DishId,
@@ -126,7 +126,7 @@ namespace BusinessLogic.DTO
 
         public static SimpleDishDTO CreateFromMenuDish(MenuDish md)
         {
-            if (md == null || !md.Active) { return null; }
+            if (md == null) { return null; }
 
             var dish = CreateFromDomain(md.Dish);
 

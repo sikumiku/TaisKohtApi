@@ -20,13 +20,12 @@ namespace BusinessLogic.DTO
 
         public static UserDTO CreateFromDomain(User user)
         {
-            if (user == null || !user.Active) { return null; }
+            if (user == null) { return null; }
             return new UserDTO()
             {
                 UserId = user.Id,
                 Email = user.Email,
-                UserName = user.UserName,
-                Active = user.Active
+                UserName = user.UserName
             };
         }
 

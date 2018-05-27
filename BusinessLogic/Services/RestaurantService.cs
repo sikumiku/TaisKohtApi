@@ -42,7 +42,7 @@ namespace BusinessLogic.Services
 
         public IEnumerable<SimpleRestaurantDTO> GetAllRestaurants()
         {
-            return _uow.Restaurants.All().Where(x => x.Active)
+            return _uow.Restaurants.All()
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
         }
 
@@ -108,7 +108,7 @@ namespace BusinessLogic.Services
             int topAmount;
             if (!int.TryParse(amount.ToString(), out topAmount)) return null;
 
-            var restaurants = _uow.Restaurants.All().Where(x => x.Active).OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
+            var restaurants = _uow.Restaurants.All().OrderByDescending(x => x.RatingLogs.Select(r => r.Rating))
                 .Select(restaurant => _restaurantFactory.Create(restaurant));
 
             if(restaurants.Count() < amount) return null;

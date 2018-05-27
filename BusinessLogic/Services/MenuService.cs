@@ -66,6 +66,33 @@ namespace BusinessLogic.Services
             return GetMenuById(id);
         }
 
+        public void UpdateMenuDishes(int id, int[] dishesIds)
+        {
+            if (_uow.Menus.Exists(id))
+            {
+                Menu menu = _uow.Menus.Find(id);
+                var existingMenuDishes = menu.MenuDishes;
+
+                var requestMenuDishes = new List<MenuDish>();
+
+                Array.ForEach(dishesIds, did => requestMenuDishes.Add(new MenuDish() {DishId = did, MenuId = id}));
+
+                var deletedMenuDishes = existingMenuDishes.FindAll(x => !requestMenuDishes.Exists(y => IsEqualMenuDish(x, y)));
+
+                var addedMenuDishes = requestMenuDishes.FindAll(x => !existingMenuDishes.Exists(y => IsEqualMenuDish(x, y)));
+
+                deletedMenuDishes.ForEach(md => _uow.MenuDishes.Remove(md));
+                addedMenuDishes.ForEach(md => _uow.MenuDishes.Add(md));
+
+                _uow.SaveChanges();
+            }
+        }
+
+        private static bool IsEqualMenuDish(MenuDish x, MenuDish y)
+        {
+            return x.DishId == y.DishId && x.MenuId == y.MenuId;
+        }
+
         public void DeleteMenu(int id)
         {
             Menu menu = _uow.Menus.Find(id);

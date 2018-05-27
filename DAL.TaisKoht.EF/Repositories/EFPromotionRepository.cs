@@ -23,16 +23,14 @@ namespace DAL.TaisKoht.EF.Repositories
         public override Promotion Find(params object[] id)
         {
             return RepositoryDbSet
-                //.Include(y => y.Menus)
-                //.Include(x => x.Dishes)
+                .Include(p => p.Menus)
+                .Include(p => p.Dishes)
                 .SingleOrDefault(x => (int)id[0] == x.PromotionId);
         }
 
         public override IEnumerable<Promotion> All()
         {
             return RepositoryDbSet.AsQueryable()
-                //.Include(x => x.Menus)
-                //.ThenInclude(y => y.Dishes)
                 .ToList();
         }
     }

@@ -36,9 +36,7 @@ namespace BusinessLogic.Services
         public void DeactivateUser(string id)
         {
             var user = _uow.Users.Find(id);
-            user.UpdateTime = DateTime.UtcNow;
-            user.Active = false;
-            _uow.Users.Update(user);
+            _uow.Users.Remove(user);
             _uow.SaveChanges();
         }
 
@@ -47,8 +45,6 @@ namespace BusinessLogic.Services
             User user = _uow.Users.Find(id);
             user.UserName = updatedUserDTO.UserName;
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, updatedUserDTO.Password);
-            user.Active = updatedUserDTO.Active;
-            user.UpdateTime = DateTime.UtcNow;
             _uow.Users.Update(user);
             _uow.SaveChanges();
         }
