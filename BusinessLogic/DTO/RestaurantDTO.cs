@@ -26,6 +26,7 @@ namespace BusinessLogic.DTO
         public List<SimpleMenuDTO> Menus { get; set; } = new List<SimpleMenuDTO>();
         public List<SimpleDishDTO> Dishes { get; set; } = new List<SimpleDishDTO>();
         //foreign keys
+        public int? PromotionId { get; set;}
         public PromotionDTO Promotion { get; set; }
         public AddressDTO Address { get; set; }
         public Rating Rating { get; set; }
@@ -42,6 +43,7 @@ namespace BusinessLogic.DTO
                 Email = restaurant.Email,
                 Address = AddressDTO.CreateFromDomain(restaurant.Address),
                 Promotion = PromotionDTO.CreateFromDomain(restaurant.Promotion),
+                PromotionId = restaurant.PromotionId,
                 Rating = restaurant.RatingLogs.Any() ? Rating.Create(restaurant.RatingLogs) : null
             };
         }
@@ -104,6 +106,7 @@ namespace BusinessLogic.DTO
         public string Email { get; set; }
         public AddressDTO Address { get; set; }
         public PostMenuDTO Menu { get; set; }
+        public int? PromotionId { get; set; }
 
         public static PostRestaurantDTO CreateFromDomain(Restaurant restaurant)
         {
@@ -113,7 +116,8 @@ namespace BusinessLogic.DTO
                 Url = restaurant.Url,
                 ContactNumber = restaurant.ContactNumber,
                 Email = restaurant.Email,
-                Address = AddressDTO.CreateFromDomain(restaurant.Address)
+                Address = AddressDTO.CreateFromDomain(restaurant.Address),
+                PromotionId = restaurant.PromotionId
             };
         }
     }

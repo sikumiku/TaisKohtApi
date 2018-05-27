@@ -171,7 +171,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Restaurants
-        [Authorize(Roles = "admin, normalUser, premiumUser")] // replace with [AllowAnonymous] while user generation is broken
+        [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [ProducesResponseType(typeof(RestaurantDTO), 201)]
         [ProducesResponseType(400)]
@@ -182,9 +182,13 @@ namespace TaisKohtApi.Controllers.api
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             int userRestaurants = _restaurantService.GetUserRestaurantCount(User.Identity.GetUserId());
-            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin") && userRestaurants >= 1)
+            if (!User.IsInRole("premiumUser") && !User.IsInRole("admin"))
             {
+                if(userRestaurants >= 1)
                 return BadRequest("Regular user can only create 1 Restaurant. Please sign up for premium services to add more.");
+
+                if (restaurantDTO.PromotionId != null)
+                    return BadRequest("New menu with promotion can only be added by admin or premium user");
             }
 
             var newRestaurant = _restaurantService.AddNewRestaurant(restaurantDTO, User.Identity.GetUserId());
@@ -219,22 +223,19 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult Put(int id, [FromBody]PostRestaurantDTO restaurantDTO)
         {
-            RestaurantDTO updatedRestaurant;
-
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
             var restaurant = _restaurantService.GetRestaurantById(id);
 
             if (restaurant == null) return NotFound();
-            if (IsAuthorized(restaurant))
-            {
-                updatedRestaurant = _restaurantService.UpdateRestaurant(id, restaurantDTO);
-            }
-            else
-            {
-                return StatusCode(403, "This action is forbidden to unauthorized user.");
-            }
 
-            return Ok(updatedRestaurant);
+            if (!IsAuthorized(restaurant))
+                return StatusCode(403, "This action is forbidden to unauthorized user.");
+
+            if (!(User.IsInRole("premiumUser") || User.IsInRole("admin")) &&
+                restaurantDTO.PromotionId != null && restaurantDTO.PromotionId != restaurant.PromotionId)
+                return BadRequest("Promotions to restaurant can only be added by admin or premium user");
+
+            return Ok(_restaurantService.UpdateRestaurant(id, restaurantDTO));
         }
 
         /// <summary>
