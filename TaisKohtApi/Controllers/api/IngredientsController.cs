@@ -14,7 +14,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] //spetsifitseerime authenticationschemei, siis ei toimu reroutingut
     [Produces("application/json")]
-    [Route("api/v1/Ingredients")]
+    [Route("api/v1/ingredients")]
     public class IngredientsController : Controller
     {
         private readonly IIngredientService _ingredientService;
@@ -34,7 +34,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no ingredients can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ingredients
+        // GET: api/v1/ingredients
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpGet]
         [ProducesResponseType(typeof(List<IngredientDTO>), 200)]
@@ -59,7 +59,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Ingredient not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ingredients/5
+        // GET: api/v1/ingredients/5
         [AllowAnonymous]
         [HttpGet("{id}", Name = "GetIngredient")]
         [ProducesResponseType(typeof(IngredientDTO), 200)]
@@ -80,7 +80,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Ingredients
+        ///     POST api/v1/ingredients
         ///     {
         ///         "Name": "Milk",
         ///         "Description": "Milk with 3% or more fat",
@@ -94,7 +94,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Ingredients
+        // POST: api/v1/ingredients
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost]
         [ProducesResponseType(typeof(IngredientDTO), 201)]
@@ -118,7 +118,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Ingredients/{id}
+        ///     PUT api/v1/ingredients/{id}
         ///     {
         ///         "Name": "Milk",
         ///         "Description": "Milk with 2,5% fat",
@@ -132,7 +132,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Ingredients/5
+        // PUT: api/v1/ingredients/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(IngredientDTO), 200)]
@@ -162,7 +162,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Ingredient was successfully deleted, no content to be returned</response>
         /// <response code="404">Ingredient not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Ingredients/5
+        // DELETE: api/v1/ingredients/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]

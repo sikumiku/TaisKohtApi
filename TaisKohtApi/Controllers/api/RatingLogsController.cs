@@ -14,7 +14,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/Ratings")]
+    [Route("api/v1/ratings")]
     public class RatingLogsController : Controller
     {
         private readonly IRatingLogService _ratingLogService;
@@ -34,7 +34,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no ratings can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ratings
+        // GET: api/v1/ratings
         [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(List<RatingLogDTO>), 200)]
@@ -58,7 +58,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Rating not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Ratings/5
+        // GET: api/v1/ratings/5
         [Authorize(Roles = "admin")]
         [HttpGet("{id}", Name = "GetRatingLog")]
         [ProducesResponseType(typeof(RatingLogDTO), 200)]
@@ -81,11 +81,11 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Ratings
+        ///     POST api/v1/ratings
         ///     {
         ///         "Rating" : 3,
         ///         "Comment" : "Tasty meal",
-        ///         "RestaurantId" : 1,
+        ///         "RestaurantId" : null,
         ///         "DishId" : 1,
         ///         "UserId" : "5f8811f5-2a80-4a8d-891f-12282e185aea"
         ///     }
@@ -96,7 +96,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Rating object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Ratings
+        // POST: api/v1/ratings
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostRatingLog")]
         [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
@@ -138,7 +138,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Ratings/{id}
+        ///     PUT api/v1/ratings/{id}
         ///     {
         ///         "Rating" : 5,
         ///         "Comment" : "Tasty meal",
@@ -154,7 +154,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Ratings/5
+        // PUT: api/v1/ratings/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
@@ -186,7 +186,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Rating was successfully deleted, no content to be returned</response>
         /// <response code="404">Rating not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Ratings/5
+        // DELETE: api/v1/ratings/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]

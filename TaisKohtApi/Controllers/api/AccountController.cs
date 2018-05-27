@@ -213,7 +213,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Restaurants/{id}
+        ///     PUT api/v1/accounts/{id}
         ///     {
         ///         "email":"user@gmail.com",
         ///         "userName":"NewUserName"

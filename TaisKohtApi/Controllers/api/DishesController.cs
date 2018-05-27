@@ -39,7 +39,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes
+        // GET: api/v1/dishes
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(List<DishDTO>), 200)]
@@ -138,7 +138,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no top dishes can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/Top
+        // GET: api/v1/dishes/Top
         [AllowAnonymous]
         [HttpGet]
         [Route("top")]
@@ -167,7 +167,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Dish not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Dishes/5
+        // GET: api/v1/dishes/5
         [AllowAnonymous]
         [HttpGet("{id}", Name = "GetDish")]
         [ProducesResponseType(typeof(DishDTO), 200)]
@@ -214,7 +214,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Provided object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Dishes
+        // POST: api/v1/dishes
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostDish")]
         [ProducesResponseType(typeof(DishDTO), 201)]
@@ -323,7 +323,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Faulty request, please review ID and content body</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Dishes/5
+        // PUT: api/v1/dishes/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(DishDTO), 200)]
@@ -359,7 +359,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Dish was successfully deleted, no content to be returned</response>
         /// <response code="404">Dish not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Dishes/5
+        // DELETE: api/v1/dishes/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]

@@ -15,7 +15,7 @@ namespace TaisKohtApi.Controllers.api
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/Menus")]
+    [Route("api/v1/menus")]
     public class MenusController : Controller
     {
         private readonly IMenuService _menuService;
@@ -37,7 +37,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no menus can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Menus
+        // GET: api/v1/menus
         [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDTO>), 200)]
@@ -59,7 +59,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">Menu not found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/Menus/5
+        // GET: api/v1/menus/5
         [AllowAnonymous]
         [HttpGet("{id}", Name="GetMenu")]
         [ProducesResponseType(typeof(MenuDTO), 200)]
@@ -80,7 +80,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST api/v1/Menus
+        ///     POST api/v1/menus
         ///     {
         ///         "Name": "Special menu",
         ///         "ActiveFrom": "2018-05-27T20:47:45.751Z",
@@ -97,7 +97,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="400">Menu object is faulty</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // POST: api/v1/Menus
+        // POST: api/v1/menus
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPost(Name = "PostMenu")]
         [ProducesResponseType(typeof(MenuDTO), 201)]
@@ -133,7 +133,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Menus/{id}
+        ///     PUT api/v1/menus/{id}
         ///     {
         ///         "Name": "June menu",
         ///         "ActiveFrom": "2018-06-01T20:47:45.751Z",
@@ -186,7 +186,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">Menu was successfully deleted, no content to be returned</response>
         /// <response code="404">Menu not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // DELETE: api/v1/Menus/5
+        // DELETE: api/v1/menus/5
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
@@ -209,7 +209,7 @@ namespace TaisKohtApi.Controllers.api
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT api/v1/Menus/{id}/Dishes
+        ///     PUT api/v1/menus/{id}/Dishes
         ///     [1, 2, 3]
         ///
         /// </remarks>
@@ -217,7 +217,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="204">MenuDishes were successfully updated</response>
         /// <response code="404">Menu not found by given ID</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // PUT: api/v1/Menus/5/Dishes
+        // PUT: api/v1/menus/5/dishes
         [Authorize(Roles = "admin, normalUser, premiumUser")]
         [HttpPut("{id}/Dishes")]
         [ProducesResponseType(204)]
