@@ -27,6 +27,6 @@ Projektis osalejateks on:
 - Frontend on üles ehitatud Reacti peal
 - Backend kasutab Asp.net Core 2.0 raamistikku 
 - Turvalisus on üles ehitatud Identity raamistiku peale
-- Admin kasutaja loomiseks logida sisse e-mailiga admin@gmail.com
+- Admin kasutaja loomiseks logida sisse e-mailiga admin@gmail.com (soovitatav parool peab sisaldama suurt tähte, väikest tähte, numbrit ja kirjamärki, a la Aa12345678.)
 - Rollid luuakse programmi käivitamisel (normalUser, premiumUser, admin)
 - Kui IIS Express annab errori puuduva mooduli kohta, tuleb teha projekti alamprojektis TaisKohtApi ```npm install```
