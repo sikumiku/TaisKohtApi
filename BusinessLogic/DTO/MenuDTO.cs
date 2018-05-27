@@ -57,6 +57,7 @@ namespace BusinessLogic.DTO
 
     public class SimpleMenuDTO
     {
+        public int MenuId { get; set; }
         public string Name { get; set; }
         public DateTime? ActiveFrom { get; set; }
         public DateTime? ActiveTo { get; set; }
@@ -68,6 +69,7 @@ namespace BusinessLogic.DTO
             if (menu == null) { return null; }
             return new SimpleMenuDTO()
             {
+                MenuId = menu.MenuId,
                 Name = menu.Name,
                 ActiveFrom = menu.ActiveFrom,
                 ActiveTo = menu.ActiveTo,
