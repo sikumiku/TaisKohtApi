@@ -19,6 +19,5 @@ namespace Domain
         public string Description { get; set; }
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
-        public bool Active { get; set; } = true;
     }
 }

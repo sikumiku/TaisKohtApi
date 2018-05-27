@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.TaisKoht.EF.Migrations
 {
-    public partial class Initial96 : Migration
+    public partial class Initial101 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

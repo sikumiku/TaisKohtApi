@@ -6,6 +6,5 @@ namespace Domain.Helpers
     {
         public DateTime AddTime { get; set; } = DateTime.UtcNow;
         public DateTime UpdateTime { get; set; } = DateTime.UtcNow;
-        public bool Active { get; set; } = true;
     }
 }

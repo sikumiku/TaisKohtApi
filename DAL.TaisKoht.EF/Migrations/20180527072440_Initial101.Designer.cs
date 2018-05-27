@@ -11,8 +11,8 @@ using System;
 namespace DAL.TaisKoht.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180527010713_Initial96")]
-    partial class Initial96
+    [Migration("20180527072440_Initial101")]
+    partial class Initial101
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
