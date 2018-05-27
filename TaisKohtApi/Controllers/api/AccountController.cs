@@ -226,7 +226,7 @@ namespace TaisKohtApi.Controllers.api
                 _userService.UpdateUser(id, userDTO);
                 return NoContent();
             }
-            return StatusCode(403, Json("Users can only be amended by themselves or by admins."));
+            return StatusCode(403, "Users can only be amended by themselves or by admins.");
         }
 
         /// <summary>
