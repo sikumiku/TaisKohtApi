@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Link , Route} from 'react-router-dom';
 import RestaurantMenu from '../menu/RestaurantMenu';
-
+import Dish from '../menu/Dish';
 
 export default class RestaurantListItem extends React.Component {
     constructor(props) {
@@ -51,17 +51,13 @@ export default class RestaurantListItem extends React.Component {
             <div>
                 <b>Menus :</b> 
                 {restaurantInfo.menus.map(menu =>
-                    <div> {menu.name} </div>
+                    <RestaurantMenu menu={menu}/>
                 )}
             </div>
            
                <b>Dishes :</b> 
-                 {restaurantInfo.dishes.map(dish =>
-                <div>
-                    <div> {dish.name} </div>
-                    <div> {dish.description} </div>
-                    <div> {dish.price} </div>
-                </div>
+                {restaurantInfo.dishes.map(dish =>
+                    <Dish dish={dish}/>
                 )}
         </div>;
     }

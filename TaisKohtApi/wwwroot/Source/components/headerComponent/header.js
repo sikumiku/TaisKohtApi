@@ -27,6 +27,17 @@ class Header extends Component {
                     <NavItem eventKey={1}>Login</NavItem>
                 </LinkContainer>;
         }
+
+        let userName; 
+        if (Auth.loggedIn()) {
+            console.log(Auth.getProfile());
+            userName = <LinkContainer to="/profile">
+                            <NavItem eventKey={1}>Profile : {Auth.getProfile().sub} </NavItem>
+                        </LinkContainer>
+        } else {
+            userName = "";
+        }
+
         return (
             <header>
                 <nav className="navbar navbar-inverse">
@@ -45,6 +56,8 @@ class Header extends Component {
                                 <NavItem eventKey={1}>Restaurants</NavItem>
                             </LinkContainer>
                             {authButton}
+
+                            {userName}
                         </ul>
                     </Navbar.Collapse>
                 </nav>
