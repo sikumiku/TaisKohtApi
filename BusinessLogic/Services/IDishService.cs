@@ -23,7 +23,7 @@ namespace BusinessLogic.Services
 
         IEnumerable<DishDTO> SearchDishByTitle(string title);
 
-        IEnumerable<DishDTO> SearchDishByPriceLimit(decimal dishPrice);
+        IEnumerable<DishDTO> SearchDishByPriceLimit(decimal? dishPrice);
 
         IEnumerable<DishDTO> GetTopDishes(int amount);
     }

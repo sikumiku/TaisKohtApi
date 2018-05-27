@@ -23,7 +23,6 @@ namespace TaisKohtApi.Controllers.api
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/account/")]
-    [AllowAnonymous]
     public class SecurityController : Controller
     {
         private readonly SignInManager<User> _signInManager;
@@ -146,7 +145,7 @@ namespace TaisKohtApi.Controllers.api
             await _userManager.AddToRoleAsync(currentUser, role);
         }
 
-        [Authorize(Roles = "admin, normalUser, premiumUser")]
+        [AllowAnonymous]
         [HttpPost]
         [Route("logout")]
         public async Task<IActionResult> LogOut()

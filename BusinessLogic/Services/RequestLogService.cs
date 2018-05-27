@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using BusinessLogic.DTO;
 using DAL.TaisKoht.Interfaces;
 using Domain;
 
@@ -16,9 +18,10 @@ namespace BusinessLogic.Services
             _uow = uow;
         }
 
-        public IEnumerable<RequestLog> GetAllRequestLogsForUser(string userId)
+        public IEnumerable<RequestLogDTO> GetAllRequestLogsForUser(string userId)
         {
-            throw new NotImplementedException();
+            return _uow.RequestLogs.All().Where(rq => rq.UserId != null && rq.UserId == userId)
+                .Select(RequestLogDTO.CreateFromDomain);
         }
 
         public void SaveRequest(string userId, string requestMethod, string queryString, string requestName)

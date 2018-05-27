@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTO;
 using BusinessLogic.Services;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +18,12 @@ namespace TaisKohtApi.Controllers.api
     public class RatingLogsController : Controller
     {
         private readonly IRatingLogService _ratingLogService;
+        private readonly IRequestLogService _requestLogService;
 
-        public RatingLogsController(IRatingLogService ratingLogService)
+        public RatingLogsController(IRatingLogService ratingLogService, IRequestLogService requestLogService)
         {
             _ratingLogService = ratingLogService;
+            _requestLogService = requestLogService;
         }
 
         /// <summary>
@@ -38,8 +41,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Get()
+        public IActionResult GetAllRatingLogs()
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ratingLogs", "GetAllRatingLogs");
             return Ok(_ratingLogService.GetAllRatingLogs());
         }
 
@@ -60,6 +64,7 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(500)]
         public IActionResult GetRatingLog(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/ratingLogs/{id}", "GetRatingLog");
             var dto = _ratingLogService.GetRatingLogById(id);
             if (dto == null) return NotFound();
             return Ok(dto);
@@ -85,13 +90,14 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="500">Internal error, unable to process request</response>
         // POST: api/v1/Rating
         [Authorize(Roles = "admin, normalUser, premiumUser")]
-        [HttpPost(Name = "PostRestaurantRatingLog")]
+        [HttpPost(Name = "PostRatingLog")]
         [ProducesResponseType(typeof(RatingLogForEntityDTO), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult PostRestaurantRatingLog([FromBody]RatingLogForEntityDTO ratingDTO)
+        public IActionResult PostRatingLog([FromBody]RatingLogForEntityDTO ratingDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "POST", "api/v1/ratingLogs", "PostRatingLog");
             if (!ModelState.IsValid) return BadRequest("Invalid fields provided, please double check the parameters");
 
             var newRating = _ratingLogService.AddNewRatingLog(ratingDTO);
@@ -124,8 +130,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(400)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]
-        public IActionResult Put(int id, [FromBody]RatingLogForEntityDTO ratingDTO)
+        public IActionResult UpdateRestaurantRatingLog(int id, [FromBody]RatingLogForEntityDTO ratingDTO)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "PUT", "api/v1/ratingLogs/{id}", "UpdateRestaurantRatingLog");
             if (!ModelState.IsValid) return BadRequest();
             var dto = _ratingLogService.GetRatingLogById(id);
 
@@ -148,8 +155,9 @@ namespace TaisKohtApi.Controllers.api
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteRatingLog(int id)
         {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "DELETE", "api/v1/ratingLogs/{id}", "DeleteRatingLog");
             var dto = _ratingLogService.GetRatingLogById(id);
             if (dto == null) return NotFound();
             _ratingLogService.DeleteRatingLog(id);
