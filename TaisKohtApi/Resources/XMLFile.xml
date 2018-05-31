@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<restaurants>
+  <restaurant id="1">
+    <name><![CDATA[Kuus Pelmeeni]]></name>
+    <url>https://kuuspelmeeni.ee</url>
+    <contactnumber>507783342</contactnumber>
+    <email>kuuspelmeeni@gmail.com</email>
+    <menus>
+      <menu id="1">
+        <name><![CDATA[Päevamenüü]]></name>
+        <activefrom>5/27/2018 12:00:00 PM</activefrom>
+        <activeto>5/28/2018 12:00:00 PM</activeto>
+        <repetitioninterval>30</repetitioninterval>
+        <dishes>
+          <dish id="1" vegan="false" lactosefree="false" glutenfree="false" daily="true">
+            <title><![CDATA[8 pelmeeni]]></title>
+            <description><![CDATA[8 pelmeeni 6 asemel serveeritud tervisliku koguse hapukoore ja tilliga]]></description>
+            <availablefrom>5/27/2018 12:00:00 PM</availablefrom>
+            <availableto>5/28/2018 12:00:00 PM</availableto>
+            <servetime/>
+            <kcal>550</kcal>
+            <weightg/>
+            <price/>
+            <dailyprice>4</dailyprice>
+            <ingredients>
+              <ingredient id="1">
+                <name>Sealiha</name>
+                <description>Rakvere sealiha</description>
+                <amountunit>g</amountunit>
+                <amount/>
+              </ingredient>
+            </ingredients>
+            <rating>
+              <ratingvalue>9</ratingvalue>
+              <comments>
+                <comment>
+                  <commenttext><![CDATA[Parim päevaroog viimasel ajal.]]></commenttext>
+                  <username>peeterpakiraam66</username>
+                  <userid>3a9dd653-30fb-40ab-97b1-33cb82d336eb</userid>
+                </comment>
+              </comments>
+            </rating>
+          </dish>
+          <dish id="2" vegan="true" lactosefree="true" glutenfree="true" daily="true">
+            <title><![CDATA[Kurgisalat]]></title>
+            <description><![CDATA[Erinevatel viisidel töödeldud kurk serveeritud koos jõhvikatega. Tervislik amps.]]></description>
+            <availablefrom>5/27/2018 12:00:00 PM</availablefrom>
+            <availableto>5/28/2018 12:00:00 PM</availableto>
+            <servetime/>
+            <kcal>320</kcal>
+            <weightg/>
+            <price>4</price>
+            <dailyprice/>
+            <ingredients/>
+            <rating>
+              <ratingvalue>4</ratingvalue>
+              <comments>
+                <comment>
+                  <commenttext><![CDATA[Jäin veel väga näljaseks peale selle söömist.]]></commenttext>
+                  <username>ingupingu22</username>
+                  <userid>45b09f05-33fd-4041-995e-ecdb7ec61939</userid>
+                </comment>
+              </comments>
+            </rating>
+          </dish>
+        </dishes>
+      </menu>
+      <menu id="2">
+        <name><![CDATA[Põhimenüü]]></name>
+        <activefrom/>
+        <activeto/>
+        <repetitioninterval/>
+        <dishes>
+          <dish id="4" vegan="false" lactosefree="false" glutenfree="false" daily="false">
+            <title><![CDATA[6 pelmeeni]]></title>
+            <description><![CDATA[6 pelmeeni serveeritud tervisliku koguse hapukoore ja tilliga]]></description>
+            <availablefrom/>
+            <availableto/>
+            <servetime/>
+            <kcal>550</kcal>
+            <weightg/>
+            <price>5</price>
+            <dailyprice/>
+            <ingredients>
+              <ingredient id="1">
+                <name>Sealiha</name>
+                <description>Rakvere sealiha</description>
+                <amountunit>g</amountunit>
+                <amount/>
+              </ingredient>
+            </ingredients>
+            <rating>
+              <ratingvalue>9.5</ratingvalue>
+              <comments>
+                <comment>
+                  <commenttext><![CDATA[Käin seda iga päev söömas.]]></commenttext>
+                  <username>ingupingu22</username>
+                  <userid>45b09f05-33fd-4041-995e-ecdb7ec61939</userid>
+                </comment>
+                <comment>
+                  <commenttext><![CDATA[Parim toit selles restoranis.]]></commenttext>
+                  <username>peeterpakiraam66</username>
+                  <userid>3a9dd653-30fb-40ab-97b1-33cb82d336eb</userid>
+                </comment>
+              </comments>
+            </rating>
+          </dish>
+          <dish id="5" vegan="false" lactosefree="false" glutenfree="true" daily="false">
+            <title><![CDATA[Kartulisalat]]></title>
+            <description><![CDATA[Sinki sisaldav traditsiooniline kartulisalat.]]></description>
+            <availablefrom/>
+            <availableto/>
+            <servetime/>
+            <kcal>460</kcal>
+            <weightg/>
+            <price>3.8</price>
+            <dailyprice/>
+            <ingredients/>
+            <rating/>            
+          </dish>
+          <dish id="6" vegan="false" lactosefree="false" glutenfree="false" daily="false">
+            <title><![CDATA[Šokolaadikook]]></title>
+            <description><![CDATA[Ahvatlev glasuuritud šokolaadikook.]]></description>
+            <availablefrom/>
+            <availableto/>
+            <servetime/>
+            <kcal>610</kcal>
+            <weightg/>
+            <price>3.9</price>
+            <dailyprice/>
+            <ingredients/>
+            <rating>
+              <ratingvalue>7.8</ratingvalue>
+              <comments>
+                <comment>
+                  <commenttext><![CDATA[Šokolaadikooki on keeruline metsa keerata.]]></commenttext>
+                  <username>mutikas3</username>
+                  <userid>3a29b94a-3f17-469d-a44d-f7d85e98dd3e</userid>
+                </comment>
+              </comments>
+            </rating>
+          </dish>
+        </dishes>
+      </menu>
+    </menus>
+    <dishes/>
+    <address id="1">
+      <addressfirstline>Tatari 12</addressfirstline>
+      <locality>Tallinn</locality>
+      <postcode>10132</postcode>
+      <region>Harjumaa</region>
+      <country>Eesti</country>
+    </address>
+    <rating>
+      <ratingvalue>7.5</ratingvalue>
+      <comments>
+        <comment>
+          <commenttext><![CDATA[Parim restoran üldse!]]></commenttext>
+          <username>peeterpakiraam66</username>
+          <userid>3a9dd653-30fb-40ab-97b1-33cb82d336eb</userid>
+        </comment>
+        <comment>
+          <commenttext><![CDATA[Ma sain ainult 5 pelmeeni. Ootasin kuute.]]></commenttext>
+          <username>kyllikekallike1</username>
+          <userid>6af271dd-0e11-4ae6-98be-111762664318</userid>
+        </comment>
+      </comments>
+    </rating>
+  </restaurant>
+  <restaurant>
+    <users>
+      <user>
+
+      </user>
+    </users>
+    <menus>
+      <menu>
+
+      </menu>
+    </menus>
+    <dishes>
+      <dish></dish>
+    </dishes>
+  </restaurant>
+  <restaurant>
+    <users>
+      <user>
+
+      </user>
+    </users>
+    <menus>
+      <menu>
+
+      </menu>
+    </menus>
+    <dishes>
+      <dish></dish>
+    </dishes>
+  </restaurant>
+  <restaurant>
+    <users>
+      <user>
+
+      </user>
+    </users>
+    <menus>
+      <menu>
+
+      </menu>
+    </menus>
+    <dishes>
+      <dish></dish>
+    </dishes>
+  </restaurant>
+</restaurants>
