@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="restaurants">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="restaurant">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string" />
+              <xs:element name="url" type="xs:string" />
+              <xs:element name="contactnumber" type="xs:unsignedInt" />
+              <xs:element name="email" type="xs:string" />
+              <xs:element name="menus">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <xs:element maxOccurs="unbounded" name="menu">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="name" type="xs:string" />
+                          <xs:element name="activefrom" type="xs:string" />
+                          <xs:element name="activeto" type="xs:string" />
+                          <xs:element name="repetitioninterval" type="xs:string" />
+                          <xs:element name="dishes">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="dish">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="title" type="xs:string" />
+                                      <xs:element name="description" type="xs:string" />
+                                      <xs:element name="availablefrom" type="xs:string" />
+                                      <xs:element name="availableto" type="xs:string" />
+                                      <xs:element name="servetime" />
+                                      <xs:element name="kcal" type="xs:unsignedShort" />
+                                      <xs:element name="weightg" />
+                                      <xs:element name="price" type="xs:string" />
+                                      <xs:element name="dailyprice" type="xs:string" />
+                                      <xs:element name="ingredients">
+                                        <xs:complexType>
+                                          <xs:sequence minOccurs="0">
+                                            <xs:element name="ingredient">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="name" type="xs:string" />
+                                                  <xs:element name="description" type="xs:string" />
+                                                  <xs:element name="amountunit" type="xs:string" />
+                                                  <xs:element name="amount" />
+                                                </xs:sequence>
+                                                <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element name="rating">
+                                        <xs:complexType>
+                                          <xs:sequence minOccurs="0">
+                                            <xs:element name="ratingvalue" type="xs:decimal" />
+                                            <xs:element name="comments">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded" name="comment">
+                                                    <xs:complexType>
+                                                      <xs:sequence>
+                                                        <xs:element name="commenttext" type="xs:string" />
+                                                        <xs:element name="username" type="xs:string" />
+                                                        <xs:element name="userid" type="xs:string" />
+                                                      </xs:sequence>
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element name="promotion" />
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="vegan" type="xs:boolean" use="required" />
+                                    <xs:attribute name="lactosefree" type="xs:boolean" use="required" />
+                                    <xs:attribute name="glutenfree" type="xs:boolean" use="required" />
+                                    <xs:attribute name="daily" type="xs:boolean" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="promotion" />
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="dishes">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <xs:element maxOccurs="unbounded" name="dish">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="title" type="xs:string" />
+                          <xs:element name="description" type="xs:string" />
+                          <xs:element name="availablefrom" type="xs:string" />
+                          <xs:element name="availableto" type="xs:string" />
+                          <xs:element name="servetime" />
+                          <xs:element name="kcal" type="xs:string" />
+                          <xs:element name="weightg" />
+                          <xs:element name="price" type="xs:string" />
+                          <xs:element name="dailyprice" type="xs:string" />
+                          <xs:element name="ingredients">
+                            <xs:complexType>
+                              <xs:sequence minOccurs="0">
+                                <xs:element maxOccurs="unbounded" name="ingredient">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="name" type="xs:string" />
+                                      <xs:element name="description" type="xs:string" />
+                                      <xs:element name="amountunit" type="xs:string" />
+                                      <xs:element name="amount" type="xs:string" />
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="rating">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="ratingvalue" type="xs:decimal" />
+                                <xs:element name="comments">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element maxOccurs="unbounded" name="comment">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="commenttext" type="xs:string" />
+                                            <xs:element name="username" type="xs:string" />
+                                            <xs:element name="userid" type="xs:string" />
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="promotion" />
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+                        <xs:attribute name="vegan" type="xs:boolean" use="required" />
+                        <xs:attribute name="lactosefree" type="xs:boolean" use="required" />
+                        <xs:attribute name="glutenfree" type="xs:boolean" use="required" />
+                        <xs:attribute name="daily" type="xs:boolean" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="address">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="addressfirstline" type="xs:string" />
+                    <xs:element name="locality" type="xs:string" />
+                    <xs:element name="postcode" type="xs:unsignedShort" />
+                    <xs:element name="region" type="xs:string" />
+                    <xs:element name="country" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="promotion" />
+              <xs:element name="rating">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ratingvalue" type="xs:decimal" />
+                    <xs:element name="comments">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element maxOccurs="unbounded" name="comment">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="commenttext" type="xs:string" />
+                                <xs:element name="username" type="xs:string" />
+                                <xs:element name="userid" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
