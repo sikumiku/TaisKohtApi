@@ -40,6 +40,7 @@
                 </comment>
               </comments>
             </rating>
+            <promotion/>
           </dish>
           <dish id="2" vegan="true" lactosefree="true" glutenfree="true" daily="true">
             <title><![CDATA[Kurgisalat]]></title>
@@ -62,8 +63,10 @@
                 </comment>
               </comments>
             </rating>
+            <promotion/>
           </dish>
         </dishes>
+        <promotion/>
       </menu>
       <menu id="2">
         <name><![CDATA[Põhimenüü]]></name>
@@ -104,6 +107,7 @@
                 </comment>
               </comments>
             </rating>
+            <promotion/>
           </dish>
           <dish id="5" vegan="false" lactosefree="false" glutenfree="true" daily="false">
             <title><![CDATA[Kartulisalat]]></title>
@@ -116,7 +120,8 @@
             <price>3.8</price>
             <dailyprice/>
             <ingredients/>
-            <rating/>            
+            <rating/>
+            <promotion/>
           </dish>
           <dish id="6" vegan="false" lactosefree="false" glutenfree="false" daily="false">
             <title><![CDATA[Šokolaadikook]]></title>
@@ -139,8 +144,10 @@
                 </comment>
               </comments>
             </rating>
+            <promotion/>
           </dish>
         </dishes>
+        <promotion/>
       </menu>
     </menus>
     <dishes/>
@@ -151,6 +158,7 @@
       <region>Harjumaa</region>
       <country>Eesti</country>
     </address>
+    <promotion/>
     <rating>
       <ratingvalue>7.5</ratingvalue>
       <comments>
@@ -167,49 +175,153 @@
       </comments>
     </rating>
   </restaurant>
-  <restaurant>
-    <users>
-      <user>
-
-      </user>
-    </users>
-    <menus>
-      <menu>
-
-      </menu>
-    </menus>
+  <restaurant id="2">
+    <name><![CDATA[Kolm kokka]]></name>
+    <url>https://kolmkokka.ee</url>
+    <contactnumber>6522351</contactnumber>
+    <email>kolmkokka@gmail.com</email>
+    <menus/>
     <dishes>
-      <dish></dish>
+      <dish id="7" vegan="false" lactosefree="true" glutenfree="false" daily="false">
+        <title><![CDATA[Ahjulõhe juurikatega]]></title>
+        <description><![CDATA[Ahjulõhe serveeritud püreestatud porgandite ja lillkapsaga.]]></description>
+        <availablefrom/>
+        <availableto/>
+        <servetime/>
+        <kcal>470</kcal>
+        <weightg/>
+        <price>14</price>
+        <dailyprice/>
+        <ingredients>
+          <ingredient id="11">
+            <name>Ahjulõhe</name>
+            <description>
+              <![CDATA[Värske ahjulõhe]]>
+            </description>
+            <amountunit>tk</amountunit>
+            <amount>1</amount>
+          </ingredient>
+          <ingredient id="12">
+            <name>Püreestatud porgand</name>
+            <description>
+              <![CDATA[Eesti porgand, mis on kergelt püreestatud]]>
+            </description>
+            <amountunit>g</amountunit>
+            <amount/>
+          </ingredient>
+          <ingredient id="13">
+            <name>Püreestatud lillkapsas</name>
+            <description>
+              <![CDATA[Eesti lillkapsas, mis on kergelt püreestatud ja maitsestatud]]></description>
+            <amountunit>g</amountunit>
+            <amount/>
+          </ingredient>
+        </ingredients>
+        <rating>
+          <ratingvalue>8.9</ratingvalue>
+          <comments>
+            <comment>
+              <commenttext><![CDATA[Kindlasti minu üks lemmikuid.]]></commenttext>
+              <username>ingupingu22</username>
+              <userid>45b09f05-33fd-4041-995e-ecdb7ec61939</userid>
+            </comment>
+            <comment>
+              <commenttext><![CDATA[Pole midagi halba öelda.]]></commenttext>
+              <username>tiiuviiu</username>
+              <userid>0730a7b7-3a9c-4e26-962f-da9a8daeab8a</userid>
+            </comment>
+          </comments>
+        </rating>
+        <promotion/>
+      </dish>
+      <dish id="8" vegan="true" lactosefree="true" glutenfree="true" daily="true">
+        <title><![CDATA[Ingverisupp]]></title>
+        <description><![CDATA[Ingveriga vürtsistatud ingverisupp, mis viib keele alla.]]></description>
+        <availablefrom>5/25/2018 12:00:00 PM</availablefrom>
+        <availableto>6/25/2018 12:00:00 PM</availableto>
+        <servetime/>
+        <kcal/>
+        <weightg/>
+        <price/>
+        <dailyprice>5</dailyprice>
+        <ingredients>
+          <ingredient id="14">
+            <name>Ingver</name>
+            <description>
+              <![CDATA[Tükeldatud ingver]]>
+            </description>
+            <amountunit>g</amountunit>
+            <amount>20</amount>
+          </ingredient>
+        </ingredients>
+        <rating>
+          <ratingvalue>6</ratingvalue>
+          <comments>
+            <comment>
+              <commenttext><![CDATA[Liiga palju ingverit.]]></commenttext>
+              <username>kyllikekallike1</username>
+              <userid>6af271dd-0e11-4ae6-98be-111762664318</userid>
+            </comment>
+          </comments>
+        </rating>
+        <promotion/>
+      </dish>
+      <dish id="9" vegan="false" lactosefree="false" glutenfree="true" daily="false">
+        <title><![CDATA[Apelsinijäätis]]></title>
+        <description><![CDATA[Apelsinimaitseline jäätis serveeritud riivitud apelsinikoorega.]]></description>
+        <availablefrom/>
+        <availableto/>
+        <servetime/>
+        <kcal>340</kcal>
+        <weightg/>
+        <price>4.5</price>
+        <dailyprice/>
+        <ingredients/>
+        <rating>
+          <ratingvalue>8</ratingvalue>
+          <comments>
+            <comment>
+              <commenttext><![CDATA[Väga huvitav magustoit, prooviks veel.]]></commenttext>
+              <username>mutikas3</username>
+              <userid>3a29b94a-3f17-469d-a44d-f7d85e98dd3e</userid>
+            </comment>
+            <comment>
+              <commenttext><![CDATA[Üks mu lemmikuid magustoite.]]></commenttext>
+              <username>ingupingu22</username>
+              <userid>45b09f05-33fd-4041-995e-ecdb7ec61939</userid>
+            </comment>
+          </comments>
+        </rating>
+        <promotion/>
+      </dish>
     </dishes>
-  </restaurant>
-  <restaurant>
-    <users>
-      <user>
-
-      </user>
-    </users>
-    <menus>
-      <menu>
-
-      </menu>
-    </menus>
-    <dishes>
-      <dish></dish>
-    </dishes>
-  </restaurant>
-  <restaurant>
-    <users>
-      <user>
-
-      </user>
-    </users>
-    <menus>
-      <menu>
-
-      </menu>
-    </menus>
-    <dishes>
-      <dish></dish>
-    </dishes>
+    <address id="2">
+      <addressfirstline>Laia 12</addressfirstline>
+      <locality>Tallinn</locality>
+      <postcode>13022</postcode>
+      <region>Harjumaa</region>
+      <country>Eesti</country>
+    </address>
+    <promotion/>
+    <rating>
+      <ratingvalue>8.1</ratingvalue>
+      <comments>
+        <comment>
+          <commenttext><![CDATA[Hinnad on natuke liiga kallid minu jaoks, aga toit om maitsev.]]></commenttext>
+          <username>peeterpakiraam66</username>
+          <userid>3a9dd653-30fb-40ab-97b1-33cb82d336eb</userid>
+        </comment>
+        <comment>
+          <commenttext><![CDATA[Ma kindlasti telliks kala uuesti. Väga mahlakas oli.]]></commenttext>
+          <username>kyllikekallike1</username>
+          <userid>6af271dd-0e11-4ae6-98be-111762664318</userid>
+        </comment>
+        <comment>
+          <commenttext><![CDATA[Asukoht oli päris tore. Miljöö ka.]]></commenttext>
+          <username>mutikas3</username>
+          <userid>3a29b94a-3f17-469d-a44d-f7d85e98dd3e</userid>
+        </comment>
+      </comments>
+    </rating>
   </restaurant>
 </restaurants>
