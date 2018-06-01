@@ -7,6 +7,9 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="name" type="xs:string" />
+              <xs:element name="url" type="xs:string" />
+              <xs:element name="contactnumber" type="xs:unsignedInt" />
+              <xs:element name="email" type="xs:string" />
               <xs:element name="menus">
                 <xs:complexType>
                   <xs:sequence minOccurs="0">
@@ -14,8 +17,9 @@
                       <xs:complexType>
                         <xs:sequence>
                           <xs:element name="name" type="xs:string" />
-                          <xs:element name="activefrom" type="xs:dateTime" />
-                          <xs:element name="activeto" type="xs:dateTime" />
+                          <xs:element name="activefrom" type="xs:string" />
+                          <xs:element name="activeto" type="xs:string" />
+                          <xs:element name="repetitioninterval" type="xs:string" />
                           <xs:element name="dishes">
                             <xs:complexType>
                               <xs:sequence>
@@ -24,9 +28,13 @@
                                     <xs:sequence>
                                       <xs:element name="title" type="xs:string" />
                                       <xs:element name="description" type="xs:string" />
-                                      <xs:element name="availablefrom" type="xs:dateTime" />
-                                      <xs:element name="availableto" type="xs:dateTime" />
-                                      <xs:element name="servetime" type="xs:dateTime" />
+                                      <xs:element name="availablefrom" type="xs:string" />
+                                      <xs:element name="availableto" type="xs:string" />
+                                      <xs:element name="servetime" />
+                                      <xs:element name="kcal" type="xs:unsignedShort" />
+                                      <xs:element name="weightg" />
+                                      <xs:element name="price" type="xs:string" />
+                                      <xs:element name="dailyprice" type="xs:string" />
                                       <xs:element name="ingredients">
                                         <xs:complexType>
                                           <xs:sequence minOccurs="0">
@@ -35,10 +43,10 @@
                                                 <xs:sequence>
                                                   <xs:element name="name" type="xs:string" />
                                                   <xs:element name="description" type="xs:string" />
+                                                  <xs:element name="amountunit" type="xs:string" />
+                                                  <xs:element name="amount" />
                                                 </xs:sequence>
-                                                <xs:attribute name="id" type="xs:int" use="required" />
-                                                <xs:attribute name="amountunit" type="xs:string" use="required" />
-                                                <xs:attribute name="amount" type="xs:decimal" use="optional" />
+                                                <xs:attribute name="id" type="xs:unsignedByte" use="required" />
                                               </xs:complexType>
                                             </xs:element>
                                           </xs:sequence>
@@ -46,8 +54,8 @@
                                       </xs:element>
                                       <xs:element name="rating">
                                         <xs:complexType>
-                                          <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                                            <xs:element minOccurs="0" name="ratingvalue" type="xs:decimal" />
+                                          <xs:sequence minOccurs="0">
+                                            <xs:element name="ratingvalue" type="xs:decimal" />
                                             <xs:element name="comments">
                                               <xs:complexType>
                                                 <xs:sequence>
@@ -64,31 +72,15 @@
                                               </xs:complexType>
                                             </xs:element>
                                           </xs:sequence>
-                                          <xs:attribute name="ratingvalue" type="xs:decimal" use="optional" />
                                         </xs:complexType>
                                       </xs:element>
-                                      <xs:element name="promotion">
-                                        <xs:complexType>
-                                          <xs:sequence minOccurs="0">
-                                            <xs:element name="name" type="xs:string" />
-                                            <xs:element name="description" type="xs:string" />
-                                            <xs:element name="validto" type="xs:string" />
-                                          </xs:sequence>
-                                          <xs:attribute name="id" type="xs:unsignedByte" use="optional" />
-                                          <xs:attribute name="type" type="xs:string" use="optional" />
-                                          <xs:attribute name="classname" type="xs:string" use="optional" />
-                                        </xs:complexType>
-                                      </xs:element>
+                                      <xs:element name="promotion" />
                                     </xs:sequence>
                                     <xs:attribute name="id" type="xs:unsignedByte" use="required" />
                                     <xs:attribute name="vegan" type="xs:boolean" use="required" />
                                     <xs:attribute name="lactosefree" type="xs:boolean" use="required" />
                                     <xs:attribute name="glutenfree" type="xs:boolean" use="required" />
                                     <xs:attribute name="daily" type="xs:boolean" use="required" />
-                                    <xs:attribute name="kcal" type="xs:unsignedShort" use="required" />
-                                    <xs:attribute name="weightg" type="xs:string" use="required" />
-                                    <xs:attribute name="price" type="xs:string" use="required" />
-                                    <xs:attribute name="dailyprice" type="xs:string" use="required" />
                                   </xs:complexType>
                                 </xs:element>
                               </xs:sequence>
@@ -97,7 +89,6 @@
                           <xs:element name="promotion" />
                         </xs:sequence>
                         <xs:attribute name="id" type="xs:unsignedByte" use="required" />
-                        <xs:attribute name="repetitioninterval" type="xs:string" use="required" />
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
@@ -114,6 +105,10 @@
                           <xs:element name="availablefrom" type="xs:string" />
                           <xs:element name="availableto" type="xs:string" />
                           <xs:element name="servetime" />
+                          <xs:element name="kcal" type="xs:string" />
+                          <xs:element name="weightg" />
+                          <xs:element name="price" type="xs:string" />
+                          <xs:element name="dailyprice" type="xs:string" />
                           <xs:element name="ingredients">
                             <xs:complexType>
                               <xs:sequence minOccurs="0">
@@ -122,10 +117,10 @@
                                     <xs:sequence>
                                       <xs:element name="name" type="xs:string" />
                                       <xs:element name="description" type="xs:string" />
+                                      <xs:element name="amountunit" type="xs:string" />
+                                      <xs:element name="amount" type="xs:string" />
                                     </xs:sequence>
                                     <xs:attribute name="id" type="xs:unsignedByte" use="required" />
-                                    <xs:attribute name="amountunit" type="xs:string" use="required" />
-                                    <xs:attribute name="amount" type="xs:string" use="required" />
                                   </xs:complexType>
                                 </xs:element>
                               </xs:sequence>
@@ -134,6 +129,7 @@
                           <xs:element name="rating">
                             <xs:complexType>
                               <xs:sequence>
+                                <xs:element name="ratingvalue" type="xs:decimal" />
                                 <xs:element name="comments">
                                   <xs:complexType>
                                     <xs:sequence>
@@ -150,7 +146,6 @@
                                   </xs:complexType>
                                 </xs:element>
                               </xs:sequence>
-                              <xs:attribute name="ratingvalue" type="xs:decimal" use="required" />
                             </xs:complexType>
                           </xs:element>
                           <xs:element name="promotion" />
@@ -160,10 +155,6 @@
                         <xs:attribute name="lactosefree" type="xs:boolean" use="required" />
                         <xs:attribute name="glutenfree" type="xs:boolean" use="required" />
                         <xs:attribute name="daily" type="xs:boolean" use="required" />
-                        <xs:attribute name="kcal" type="xs:string" use="required" />
-                        <xs:attribute name="weightg" type="xs:string" use="required" />
-                        <xs:attribute name="price" type="xs:string" use="required" />
-                        <xs:attribute name="dailyprice" type="xs:string" use="required" />
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
@@ -176,15 +167,16 @@
                     <xs:element name="locality" type="xs:string" />
                     <xs:element name="postcode" type="xs:unsignedShort" />
                     <xs:element name="region" type="xs:string" />
+                    <xs:element name="country" type="xs:string" />
                   </xs:sequence>
                   <xs:attribute name="id" type="xs:unsignedByte" use="required" />
-                  <xs:attribute name="country" type="xs:string" use="required" />
                 </xs:complexType>
               </xs:element>
               <xs:element name="promotion" />
               <xs:element name="rating">
                 <xs:complexType>
                   <xs:sequence>
+                    <xs:element name="ratingvalue" type="xs:decimal" />
                     <xs:element name="comments">
                       <xs:complexType>
                         <xs:sequence>
@@ -201,14 +193,10 @@
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
-                  <xs:attribute name="ratingvalue" type="xs:decimal" use="required" />
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
             <xs:attribute name="id" type="xs:unsignedByte" use="required" />
-            <xs:attribute name="url" type="xs:string" use="required" />
-            <xs:attribute name="contactnumber" type="xs:unsignedInt" use="required" />
-            <xs:attribute name="email" type="xs:string" use="required" />
           </xs:complexType>
         </xs:element>
       </xs:sequence>
