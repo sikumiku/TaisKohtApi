@@ -5,17 +5,16 @@
     <menus>
       <menu id="1" repetitioninterval="30">
         <name><![CDATA[Päevamenüü]]></name>
-        <activefrom>5/27/2018 12:00:00 PM</activefrom>
-        <activeto>5/28/2018 12:00:00 PM</activeto>
+        <activefrom>2018-05-27T12:00:00</activefrom>
+        <activeto>2018-05-28T12:00:00</activeto>
         <dishes>
-          <dish id="1" vegan="false" lactosefree="false" glutenfree="false" daily="true" kcal="550" weightg="" price="" dailyprice="4">
+          <dish id="1" vegan="false" lactosefree="false" glutenfree="false" daily="true" kcal="550" dailyprice="4">
             <title><![CDATA[8 pelmeeni]]></title>
             <description><![CDATA[8 pelmeeni 6 asemel serveeritud tervisliku koguse hapukoore ja tilliga]]></description>
-            <availablefrom>5/27/2018 12:00:00 PM</availablefrom>
-            <availableto>5/28/2018 12:00:00 PM</availableto>
-            <servetime/>
+            <availablefrom>2018-05-27T12:00:00</availablefrom>
+            <availableto>2018-05-28T12:00:00</availableto>
             <ingredients>
-              <ingredient id="1" amountunit="g" amount="">
+              <ingredient id="1" amountunit="g">
                 <name>Sealiha</name>
                 <description>Rakvere sealiha</description>
               </ingredient>
@@ -32,18 +31,16 @@
             <promotion id="1" type="visual" classname="bold-red-border-2px">
               <name>2px red border</name>
               <description><![CDATA[Displays a 2px wide red border around the component that is promoted.]]></description>
-              <validto>6/25/2018 12:00:00 PM</validto>
+              <validto>2018-06-25T12:00:00</validto>
             </promotion>
           </dish>
-          <dish id="2" vegan="true" lactosefree="true" glutenfree="true" daily="true" kcal="320" weightg="" price="4" dailyprice="">
+          <dish id="2" vegan="true" lactosefree="true" glutenfree="true" daily="true" kcal="320" price="4">
             <title><![CDATA[Kurgisalat]]></title>
             <description><![CDATA[Erinevatel viisidel töödeldud kurk serveeritud koos jõhvikatega. Tervislik amps.]]></description>
-            <availablefrom>5/27/2018 12:00:00 PM</availablefrom>
-            <availableto>5/28/2018 12:00:00 PM</availableto>
-            <servetime/>
+            <availablefrom>2018-05-27T12:00:00</availablefrom>
+            <availableto>2018-05-28T12:00:00</availableto>
             <ingredients/>
-            <rating>
-              <ratingvalue>4</ratingvalue>
+            <rating ratingvalue="4">
               <comments>
                 <comment>
                   <commenttext><![CDATA[Jäin veel väga näljaseks peale selle söömist.]]></commenttext>
@@ -52,24 +49,17 @@
                 </comment>
               </comments>
             </rating>
-            <promotion/>
           </dish>
         </dishes>
-        <promotion/>
       </menu>
-      <menu id="2" repetitioninterval="">
+      <menu id="2">
         <name><![CDATA[Põhimenüü]]></name>
-        <activefrom/>
-        <activeto/>
         <dishes>
-          <dish id="4" vegan="false" lactosefree="false" glutenfree="false" daily="false" kcal="550" weightg="" price="5" dailyprice="">
+          <dish id="4" vegan="false" lactosefree="false" glutenfree="false" daily="false" kcal="550" price="5">
             <title><![CDATA[6 pelmeeni]]></title>
             <description><![CDATA[6 pelmeeni serveeritud tervisliku koguse hapukoore ja tilliga]]></description>
-            <availablefrom/>
-            <availableto/>
-            <servetime/>
             <ingredients>
-              <ingredient id="1" amountunit="g" amount="">
+              <ingredient id="1" amountunit="g">
                 <name>Sealiha</name>
                 <description>Rakvere sealiha</description>
               </ingredient>
@@ -88,24 +78,15 @@
                 </comment>
               </comments>
             </rating>
-            <promotion/>
           </dish>
-          <dish id="5" vegan="false" lactosefree="false" glutenfree="true" daily="false" kcal="460" weightg="" price="3.8" dailyprice="">
+          <dish id="5" vegan="false" lactosefree="false" glutenfree="true" daily="false" kcal="460" price="3.8">
             <title><![CDATA[Kartulisalat]]></title>
             <description><![CDATA[Sinki sisaldav traditsiooniline kartulisalat.]]></description>
-            <availablefrom/>
-            <availableto/>
-            <servetime/>
             <ingredients/>
-            <rating/>
-            <promotion/>
           </dish>
-          <dish id="6" vegan="false" lactosefree="false" glutenfree="false" daily="false" kcal="610" weightg="" price="3.9" dailyprice="">
+          <dish id="6" vegan="false" lactosefree="false" glutenfree="false" daily="false" kcal="610" price="3.9">
             <title><![CDATA[Šokolaadikook]]></title>
             <description><![CDATA[Ahvatlev glasuuritud šokolaadikook.]]></description>
-            <availablefrom/>
-            <availableto/>
-            <servetime/>
             <ingredients/>
             <rating ratingvalue="7.8">
               <comments>
@@ -116,10 +97,8 @@
                 </comment>
               </comments>
             </rating>
-            <promotion/>
           </dish>
         </dishes>
-        <promotion/>
       </menu>
     </menus>
     <dishes/>
@@ -149,22 +128,19 @@
     <name><![CDATA[Kolm kokka]]></name>
     <menus/>
     <dishes>
-      <dish id="7" vegan="false" lactosefree="true" glutenfree="false" daily="false" kcal="470" weightg="" price="14" dailyprice="">
+      <dish id="7" vegan="false" lactosefree="true" glutenfree="false" daily="false" kcal="470" price="14">
         <title><![CDATA[Ahjulõhe juurikatega]]></title>
         <description><![CDATA[Ahjulõhe serveeritud püreestatud porgandite ja lillkapsaga.]]></description>
-        <availablefrom/>
-        <availableto/>
-        <servetime/>
         <ingredients>
           <ingredient id="11" amountunit="tk" amount="1">
             <name>Ahjulõhe</name>
             <description><![CDATA[Värske ahjulõhe]]></description>
           </ingredient>
-          <ingredient id="12" amountunit="g" amount="">
+          <ingredient id="12" amountunit="g">
             <name>Püreestatud porgand</name>
             <description><![CDATA[Eesti porgand, mis on kergelt püreestatud]]></description>
           </ingredient>
-          <ingredient id="13" amountunit="g" amount="">
+          <ingredient id="13" amountunit="g">
             <name>Püreestatud lillkapsas</name>
             <description><![CDATA[Eesti lillkapsas, mis on kergelt püreestatud ja maitsestatud]]></description>
           </ingredient>
@@ -183,14 +159,12 @@
             </comment>
           </comments>
         </rating>
-        <promotion/>
       </dish>
-      <dish id="8" vegan="true" lactosefree="true" glutenfree="true" daily="true" kcal="" weightg="" price="" dailyprice="5">
+      <dish id="8" vegan="true" lactosefree="true" glutenfree="true" daily="true" dailyprice="5">
         <title><![CDATA[Ingverisupp]]></title>
         <description><![CDATA[Ingveriga vürtsistatud ingverisupp, mis viib keele alla.]]></description>
-        <availablefrom>5/25/2018 12:00:00 PM</availablefrom>
-        <availableto>6/25/2018 12:00:00 PM</availableto>
-        <servetime/>
+        <availablefrom>2018-05-25T12:00:00</availablefrom>
+        <availableto>2018-06-25T12:00:00</availableto>
         <ingredients>
           <ingredient id="14" amountunit="g" amount="20">
             <name>Ingver</name>
@@ -206,14 +180,10 @@
             </comment>
           </comments>
         </rating>
-        <promotion/>
       </dish>
-      <dish id="9" vegan="false" lactosefree="false" glutenfree="true" daily="false" kcal="340" weightg="" price="4.5" dailyprice="">
+      <dish id="9" vegan="false" lactosefree="false" glutenfree="true" daily="false" kcal="340" price="4.5">
         <title><![CDATA[Apelsinijäätis]]></title>
         <description><![CDATA[Apelsinimaitseline jäätis serveeritud riivitud apelsinikoorega.]]></description>
-        <availablefrom/>
-        <availableto/>
-        <servetime/>
         <ingredients/>
         <rating ratingvalue="8">
           <comments>
@@ -229,7 +199,6 @@
             </comment>
           </comments>
         </rating>
-        <promotion/>
       </dish>
     </dishes>
     <address id="2" country="Eesti">
