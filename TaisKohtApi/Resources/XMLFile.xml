@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="XMLFile.xslt"?>
 <restaurants>
   <restaurant id="1" url="https://kuuspelmeeni.ee" contactnumber="507783342" email="kuuspelmeeni@gmail.com">
     <name><![CDATA[Kuus Pelmeeni]]></name>
@@ -18,6 +19,10 @@
               <ingredient id="1" amountunit="g" amount="">
                 <name>Sealiha</name>
                 <description>Rakvere sealiha</description>
+              </ingredient>
+              <ingredient id="2" amountunit="g" amount="">
+                <name>Hapukoor</name>
+                <description>Alma hapukoor</description>
               </ingredient>
             </ingredients>
             <rating ratingvalue="9">
