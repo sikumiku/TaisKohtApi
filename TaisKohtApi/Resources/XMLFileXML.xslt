@@ -31,7 +31,8 @@
               <xsl:when test="menus/menu/dishes/dish">
                 <xsl:for-each select="menus/menu/dishes/dish">
                   <xsl:if test="rating/@ratingvalue &gt;= 8.0">
-                    <heaToit hinnang="{rating/@ratingvalue}" paevaPakkumiseHind="{@dailyprice}" hind="{@price}" vegan="{@vegan}" laktoosivaba="{@lactosefree}" gluteenivaba="{@glutenfree}">
+                    <heaToit hinnang="{rating/@ratingvalue}" paevaPakkumiseHind="{@dailyprice}" hind="{@price}" 
+                             vegan="{@vegan}" laktoosivaba="{@lactosefree}" gluteenivaba="{@glutenfree}">
                       <nimi>
                         <xsl:value-of select="title"/>
                       </nimi>
@@ -45,7 +46,8 @@
               <xsl:otherwise>
                 <xsl:for-each select="dishes/dish">
                   <xsl:if test="rating/@ratingvalue &gt;= 8.0">
-                    <heaToit hinnang="{rating/@ratingvalue}" paevaPakkumiseHind="{@dailyprice}" hind="{@price}" vegan="{@vegan}" laktoosivaba="{@lactosefree}" gluteenivaba="{@glutenfree}">
+                    <heaToit hinnang="{rating/@ratingvalue}" paevaPakkumiseHind="{@dailyprice}" hind="{@price}" 
+                             vegan="{@vegan}" laktoosivaba="{@lactosefree}" gluteenivaba="{@glutenfree}">
                       <nimi>
                         <xsl:value-of select="title"/>
                       </nimi>
