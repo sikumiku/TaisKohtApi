@@ -19,7 +19,7 @@
                 <name>Sealiha</name>
                 <description>Rakvere sealiha</description>
               </ingredient>
-              <ingredient id="2" amountunit="g" amount="">
+              <ingredient id="2" amountunit="g">
                 <name>Hapukoor</name>
                 <description>Alma hapukoor</description>
               </ingredient>
