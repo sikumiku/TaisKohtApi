@@ -5,24 +5,61 @@
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:template match="/restaurants">
-    <xsl:for-each select="restaurant">
-      <xsl:value-of select="name"/>
-      <xsl:value-of select="@url"/>
-      <!--<xsl:text>Kontakt number: </xsl:text>-->
-      <xsl:value-of select="@contactnumber"/>
-      <!--<xsl:text>email: </xsl:text>-->
-      <xsl:value-of select="@email"/>
-      <!--<xsl:text>Aadress: </xsl:text>-->
-      <xsl:value-of select="address/addressfirstline"/>
-      <!--<xsl:text>, </xsl:text>-->
-      <xsl:value-of select="address/locality"/>
-      <!--<xsl:text>, </xsl:text>-->
-      <xsl:value-of select="address/postcode"/>
-      <!--<xsl:text>, </xsl:text>-->
-      <xsl:value-of select="address/@country"/>
-    </xsl:for-each>
+    <restoranid>
+      <xsl:for-each select="restaurant">
+        <restoran url="{@url}" telefon="{@contactnumber}" email="{@email}">
+          <nimi>
+            <xsl:value-of select="name"/>
+          </nimi>
+          <aadress>
+            <postiaadress>
+              <xsl:value-of select="address/addressfirstline"/>
+            </postiaadress>
+            <linn>
+              <xsl:value-of select="address/locality"/>
+            </linn>
+            <indeks>
+              <xsl:value-of select="address/postcode"/>
+            </indeks>
+            <riik>
+              <xsl:value-of select="address/@country"/>
+            </riik>
+          </aadress>
 
-
-    
+          <parimadToidud>
+            <xsl:choose>
+              <xsl:when test="menus/menu/dishes/dish">
+                <xsl:for-each select="menus/menu/dishes/dish">
+                  <xsl:if test="rating/@ratingvalue &gt;= 8.0">
+                    <heaToit hinnang="{rating/@ratingvalue}" paevaPakkumiseHind="{@dailyprice}" hind="{@price}" vegan="{@vegan}" laktoosivaba="{@lactosefree}" gluteenivaba="{@glutenfree}">
+                      <nimi>
+                        <xsl:value-of select="title"/>
+                      </nimi>
+                      <kirjeldus>
+                        <xsl:value-of select="description"/>
+                      </kirjeldus>
+                    </heaToit>
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:for-each select="dishes/dish">
+                  <xsl:if test="rating/@ratingvalue &gt;= 8.0">
+                    <heaToit hinnang="{rating/@ratingvalue}" paevaPakkumiseHind="{@dailyprice}" hind="{@price}" vegan="{@vegan}" laktoosivaba="{@lactosefree}" gluteenivaba="{@glutenfree}">
+                      <nimi>
+                        <xsl:value-of select="title"/>
+                      </nimi>
+                      <kirjeldus>
+                        <xsl:value-of select="description"/>
+                      </kirjeldus>
+                    </heaToit>
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:otherwise>
+            </xsl:choose>
+          </parimadToidud>
+        </restoran>
+      </xsl:for-each>
+    </restoranid>
   </xsl:template>
 </xsl:stylesheet>
