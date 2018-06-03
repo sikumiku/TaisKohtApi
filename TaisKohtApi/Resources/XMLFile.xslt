@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
   <xsl:output method="html" indent="yes"/>
-
   <xsl:template match="/restaurants">
-
     <html>
       <head>
         <title>Täis Kõht</title>
@@ -45,9 +41,9 @@
 
             <xsl:if test="activefrom != '' and activeto != ''">
               <xsl:text> </xsl:text>
-              <xsl:value-of select="activefrom"/>
+              <xsl:value-of select="substring(activefrom,1,10)"/>
               <xsl:text> - </xsl:text>
-              <xsl:value-of select="activeto"/>
+              <xsl:value-of select="substring(activeto,1,10)"/>
             </xsl:if>
 
             <ul>
@@ -55,9 +51,9 @@
                 <xsl:sort select="title"/>
 
                 <xsl:if test="availablefrom != '' and availableto != ''">
-                  <xsl:value-of select="availablefrom"/>
+                  <xsl:value-of select="substring(availablefrom,1,10)"/>
                   <xsl:text> - </xsl:text>
-                  <xsl:value-of select="availableto"/>
+                  <xsl:value-of select="substring(availableto,1,10)"/>
                 </xsl:if>
                 
                 <li>
