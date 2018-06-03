@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<?xml-stylesheet type="text/xsl" href="XMLFile.xslt"?>
+<?xml-stylesheet type="text/xsl" href="XMLFileXML.xslt"?>
 <restaurants>
   <restaurant id="1" url="https://kuuspelmeeni.ee" contactnumber="507783342" email="kuuspelmeeni@gmail.com">
     <name><![CDATA[Kuus Pelmeeni]]></name>
