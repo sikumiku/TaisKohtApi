@@ -2,6 +2,7 @@
 import './Login.css';
 import { Link } from 'react-router-dom';
 import AuthService from './AuthService';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
 class Login extends Component {
     constructor() {
@@ -9,6 +10,11 @@ class Login extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.Auth = new AuthService();
+        this.state = {
+            //Aa12345678.
+            email: "",
+            password: ""
+        };
     }
     componentWillMount() {
         if (this.Auth.loggedIn())
@@ -18,35 +24,34 @@ class Login extends Component {
         return (
             <div className="center">
                 <div>
-                    Pole accounti? 
+                   Do not have an account?<br/> 
                     <Link to="/register">
-                        Registreeri
+                        Register here<br/>
                     </Link>
                 </div>
-                <div className="card">
                     <h1>Login</h1>
-                    <form onSubmit={this.handleFormSubmit}>
-                        <input
-                            className="form-item"
-                            placeholder="Email goes here..."
-                            name="email"
-                            type="text"
-                            onChange={this.handleChange}
-                        />
-                        <input
-                            className="form-item"
-                            placeholder="Password goes here..."
-                            name="password"
-                            type="password"
-                            onChange={this.handleChange}
-                        />
-                        <input
-                            className="form-submit"
-                            value="SUBMIT"
-                            type="submit"
-                        />
-                    </form>
-                </div>
+                    <div className="Login">
+                        <form onSubmit={this.handleFormSubmit}>
+                            <FormGroup controlId="email" bsSize="large">
+                                <ControlLabel>E-mail</ControlLabel>
+                                <FormControl
+                                    autoFocus
+                                    type="email"
+                                    value={this.state.email}
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+                            <FormGroup controlId="password" bsSize="large">
+                                <ControlLabel>Password</ControlLabel>
+                                <FormControl
+                                    value={this.state.password}
+                                    onChange={this.handleChange}
+                                    type="password"
+                                />
+                            </FormGroup>
+                        <Button block bsSize="large" type="submit">Login</Button>
+                        </form>
+                  </div>
             </div>
         );
     }
@@ -66,7 +71,7 @@ class Login extends Component {
     handleChange(e) {
         this.setState(
             {
-                [e.target.name]: e.target.value
+                [e.target.id]: e.target.value
             }
         )
     }

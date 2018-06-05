@@ -4,7 +4,7 @@ import 'isomorphic-fetch';
 import AuthService from '../Auth/AuthService';
 const Auth = new AuthService();
 
-export default class Profile extends React.Component {
+export default class AdminRestaurants extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -26,7 +26,7 @@ export default class Profile extends React.Component {
     }
     render() {
 
-        let contents =  Profile.renderUserRestaurantList(this.state.restaurants);
+        let contents = AdminRestaurants.renderUserRestaurantList(this.state.restaurants);
 
         return <div>
             <div className="page-header">Profile</div>

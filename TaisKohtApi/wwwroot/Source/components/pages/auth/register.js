@@ -52,7 +52,7 @@ class RegisterForm extends React.Component {
                         />
                     </FormGroup>
                     <FormGroup controlId="password" bsSize="large">
-                        <ControlLabel>Salasõna</ControlLabel>
+                        <ControlLabel>Password</ControlLabel>
                         <FormControl
                             value={this.state.password}
                             onChange={this.handleChange}
@@ -60,7 +60,7 @@ class RegisterForm extends React.Component {
                         />
                     </FormGroup>
                     <FormGroup controlId="confirmPassword" bsSize="large">
-                        <ControlLabel>Korda salasõna</ControlLabel>
+                        <ControlLabel>Password(again)</ControlLabel>
                         <FormControl
                             value={this.state.confirmPassword}
                             onChange={this.handleChange}
@@ -73,7 +73,7 @@ class RegisterForm extends React.Component {
                         disabled={!this.validateForm()}
                         type="submit"
                     >
-                        SISENE
+                        Register
                     </Button>
                 </form>
             </div>
