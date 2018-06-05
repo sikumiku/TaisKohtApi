@@ -8,7 +8,7 @@ export default class AdminDishes extends React.Component {
     constructor() {
         super();
         this.state = {
-            restaurants: [],
+            dishes: [],
             loading: true,
             name: null,
             url: null,
@@ -20,13 +20,13 @@ export default class AdminDishes extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.postRestaurant = this.postRestaurant.bind(this);
+        this.postDish = this.postDish.bind(this);
 
         //this.getUserRestaurants();
     }
     render() {
 
-        let contents = AdminDishes.renderUserRestaurantList(this.state.restaurants);
+        let contents = AdminDishes.renderUserDishesList(this.state.dishes);
 
         return <div>
             <div className="page-header">Profile</div>
@@ -34,8 +34,8 @@ export default class AdminDishes extends React.Component {
             {contents}
 
             <div className="card">
-                <h1>Add new restaurant</h1>
-                <form onSubmit={this.postRestaurant}>
+                <h1>Add new dish</h1>
+                <form onSubmit={this.postDish}>
                     <input
                         className="form-item"
                         placeholder="Restaurant name"
@@ -102,7 +102,7 @@ export default class AdminDishes extends React.Component {
         </div>;
     }
 
-    postRestaurant(e) {
+    postDish(e) {
         e.preventDefault();
         var postData = {
             method: 'POST',
@@ -140,7 +140,7 @@ export default class AdminDishes extends React.Component {
         )
     }
 
-    static renderUserRestaurantList(restaurants) {
+    static renderUserDishList(restaurants) {
         return <div className='restaurantList'>
             your restaurant list here with edit and delete buttons.
             </div>

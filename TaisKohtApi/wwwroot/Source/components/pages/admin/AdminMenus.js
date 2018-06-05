@@ -8,7 +8,7 @@ export default class AdminMenus extends React.Component {
     constructor() {
         super();
         this.state = {
-            restaurants: [],
+            menus: [],
             loading: true,
             name: null,
             url: null,
@@ -20,22 +20,22 @@ export default class AdminMenus extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.postRestaurant = this.postRestaurant.bind(this);
+        this.postRestaurant = this.postMenu.bind(this);
 
-        //this.getUserRestaurants();
+        this.getUserMenus();
     }
     render() {
 
-        let contents = AdminMenus.renderUserRestaurantList(this.state.restaurants);
+        let contents = AdminMenus.renderUserMenuList(this.state.menus);
 
         return <div>
-            <div className="page-header">Profile</div>
-            Your restaurants: 
+            <div className="page-header">Manage menus</div>
+            Your menus: 
             {contents}
 
             <div className="card">
-                <h1>Add new restaurant</h1>
-                <form onSubmit={this.postRestaurant}>
+                <h1>Add new menu</h1>
+                <form onSubmit={this.postMenu}>
                     <input
                         className="form-item"
                         placeholder="Restaurant name"
@@ -102,7 +102,7 @@ export default class AdminMenus extends React.Component {
         </div>;
     }
 
-    postRestaurant(e) {
+    postMenu(e) {
         e.preventDefault();
         var postData = {
             method: 'POST',
@@ -124,11 +124,20 @@ export default class AdminMenus extends React.Component {
             })
         };
 
-        fetch('api/v1/Restaurants', postData)
+        fetch('api/v1/menu', postData)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
         });
+    }
+
+    getUserMenus() {
+        fetch('api/v1/menus')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                this.setState({ menus: data, loading: false });
+            });
     }
 
     handleChange(e) {
@@ -140,7 +149,7 @@ export default class AdminMenus extends React.Component {
         )
     }
 
-    static renderUserRestaurantList(restaurants) {
+    static renderUserMenuList(restaurants) {
         return <div className='restaurantList'>
             your restaurant list here with edit and delete buttons.
             </div>
