@@ -64,8 +64,10 @@ class Login extends Component {
                 this.props.history.replace('/');
             })
             .catch(err => {
-                alert(err);
-            })
+                err.response.json().then(msg => {
+                    alert(msg);
+                });
+            });
     }
 
     handleChange(e) {
