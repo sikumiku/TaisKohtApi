@@ -18,9 +18,9 @@ class Login extends Component {
         return (
             <div className="center">
                 <div>
-                    Pole accounti? 
+                   Do not have an account?<br/> 
                     <Link to="/register">
-                        Registreeri
+                        Register here<br/>
                     </Link>
                 </div>
                 <div className="card">
