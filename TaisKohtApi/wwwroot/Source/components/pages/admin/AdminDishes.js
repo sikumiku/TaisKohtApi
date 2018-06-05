@@ -26,7 +26,7 @@ export default class AdminDishes extends React.Component {
     }
     render() {
 
-        let contents =  Profile.renderUserRestaurantList(this.state.restaurants);
+        let contents = AdminDishes.renderUserRestaurantList(this.state.restaurants);
 
         return <div>
             <div className="page-header">Profile</div>
