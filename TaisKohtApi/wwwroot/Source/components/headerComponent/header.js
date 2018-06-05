@@ -19,17 +19,17 @@ class Header extends Component {
             authContent =
                 <NavDropdown eventKey={3} title="Profile settings" id="basic-nav-dropdown">
                     <MenuItem eventKey={3.1}>
-                        <LinkContainer to="/profile/restaurants">
+                        <LinkContainer to="/admin/restaurants">
                             <NavItem eventKey={1}>Restaurants</NavItem>
                         </LinkContainer>
                     </MenuItem>
                     <MenuItem eventKey={3.1}>
-                        <LinkContainer to="/profile/dishes">
+                        <LinkContainer to="/admin/dishes">
                             <NavItem eventKey={1}>Dishes</NavItem>
                         </LinkContainer>
                     </MenuItem>
                     <MenuItem eventKey={3.1}>
-                        <LinkContainer to="/profile/menus">
+                        <LinkContainer to="/admin/menus">
                             <NavItem eventKey={1}>Menus</NavItem>
                         </LinkContainer>
                     </MenuItem>
