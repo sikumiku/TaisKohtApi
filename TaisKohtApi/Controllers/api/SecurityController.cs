@@ -66,41 +66,44 @@ namespace TaisKohtApi.Controllers.api
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            _requestLogService.SaveRequest(user.Id, "POST", "api/v1/login", "Login");
-            if (user != null)
+            _requestLogService.SaveRequest(user?.Id, "POST", "api/v1/login", "Login");
+            if (ModelState.IsValid)
             {
-                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    _logger.LogInformation(1, "User logged in.");
-                    var claims = createClaims(user);
-                    var userRoles = await _userManager.GetRolesAsync(user);
-                    foreach (var userRole in userRoles)
+                    var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
+                    if (result.Succeeded)
                     {
-                        claims.Add(new Claim(ClaimTypes.Role, userRole));
-                    }
-                    var userClaims = await _userManager.GetClaimsAsync(user); 
-                    claims.AddRange(userClaims);
-                    var token = createToken(claims);
-                    return Ok(
-                        new
+                        _logger.LogInformation(1, "User logged in.");
+                        var claims = createClaims(user);
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                        foreach (var userRole in userRoles)
                         {
-                            token = new JwtSecurityTokenHandler().WriteToken(token)
+                            claims.Add(new Claim(ClaimTypes.Role, userRole));
                         }
-                    );
+                        var userClaims = await _userManager.GetClaimsAsync(user);
+                        claims.AddRange(userClaims);
+                        var token = createToken(claims);
+                        return Ok(
+                            new
+                            {
+                                token = new JwtSecurityTokenHandler().WriteToken(token)
+                            }
+                        );
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning(2, "User account locked out.");
+                        return BadRequest("Too many login attempts, try again later.");
+                    }
+                    if (result.IsNotAllowed)
+                    {
+                        return BadRequest("Invalid login attempt, please check e-mail and password.");
+                    }
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return BadRequest("Too many login attempts, try again later.");
-                }
-                else
-                {
-                    return BadRequest("Invalid login attempt, errors: " + result);
-                }
+                return BadRequest("User with this e-mail does not exist");
             }
-
-            return BadRequest("Could not create token.");
+            return BadRequest("Unable to accept login form, errors: " + GetErrorMessages());
         }
 
         /// <summary>
@@ -129,47 +132,57 @@ namespace TaisKohtApi.Controllers.api
         {
             _requestLogService.SaveRequest(null, "POST", "api/v1/register", "Register");
             var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
-            if (user == null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var newUser = new User {UserName = registerViewModel.Email, Email = registerViewModel.Email};
-                var result = await _userManager.CreateAsync(newUser, registerViewModel.Password);
-                if (result.Succeeded)
+                if (user == null)
                 {
-                    var currentUser = await _userManager.FindByEmailAsync(newUser.Email);
-                    var currentRole = "";
-    
-                    if (currentUser.Email == "admin@gmail.com")
+                    var newUser = new User { UserName = registerViewModel.Email, Email = registerViewModel.Email };
+                    var result = await _userManager.CreateAsync(newUser, registerViewModel.Password);
+                    if (result.Succeeded)
                     {
-                        await AddToRole(currentUser, "admin");
-                        currentRole = "admin";
+                        var currentUser = await _userManager.FindByEmailAsync(newUser.Email);
+                        var currentRole = "";
+
+                        if (currentUser.Email == "admin@gmail.com")
+                        {
+                            await AddToRole(currentUser, "admin");
+                            currentRole = "admin";
+                        }
+                        else
+                        {
+                            await AddToRole(currentUser, "normalUser");
+                            currentRole = "normalUser";
+                        }
+                        await _signInManager.SignInAsync(newUser, isPersistent: false);
+                        _logger.LogInformation(3, "User created a new account with password.");
+                        var claims = createClaims(newUser);
+                        claims.Add(new Claim(ClaimTypes.Role, currentRole));
+                        var userClaims = await _userManager.GetClaimsAsync(newUser);
+                        claims.AddRange(userClaims);
+                        var token = createToken(claims);
+                        return Ok(
+                            new
+                            {
+                                token = new JwtSecurityTokenHandler().WriteToken(token)
+                            }
+                        );
                     }
                     else
                     {
-                        await AddToRole(currentUser, "normalUser");
-                        currentRole = "normalUser";
+                        return BadRequest("Invalid registration, error: " + result.Errors.First().Description);
                     }
-                    await _signInManager.SignInAsync(newUser, isPersistent: false);
-                    _logger.LogInformation(3, "User create a new account with password.");
-                    var claims = createClaims(newUser);
-                    claims.Add(new Claim(ClaimTypes.Role, currentRole));
-                    var userClaims = await _userManager.GetClaimsAsync(newUser);
-                    claims.AddRange(userClaims);
-                    var token = createToken(claims);
-                    return Ok(
-                        new
-                        {
-                            token = new JwtSecurityTokenHandler().WriteToken(token)
-                        }
-                    );
-
                 }
-                else
-                {
-                    return BadRequest("Invalid registration, error: " + result.Errors.First().Description);
-                }
-                //return failure reasons to frontend
+                return BadRequest("This user already exists.");
             }
-            return BadRequest("This user already exists.");
+            return BadRequest("Unable to accept registration form, errors: " + GetErrorMessages());
+        }
+
+        private string GetErrorMessages()
+        {
+            String errorMessages = string.Join("; ", ModelState.Values
+                .SelectMany(x => x.Errors)
+                .Select(x => x.ErrorMessage));
+            return errorMessages;
         }
 
         private async Task AddToRole(User currentUser, string role)
