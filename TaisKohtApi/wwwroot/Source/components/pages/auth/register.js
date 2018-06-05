@@ -34,7 +34,9 @@ class RegisterForm extends React.Component {
                 this.props.history.replace('/');
             })
             .catch(err => {
-                alert(err);
+                err.response.json().then(msg => {
+                    alert(msg);
+                });
             })
     }
 
