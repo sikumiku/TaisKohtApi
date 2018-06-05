@@ -4,7 +4,7 @@ import 'isomorphic-fetch';
 import AuthService from '../Auth/AuthService';
 const Auth = new AuthService();
 
-export default class Profile extends React.Component {
+export default class AdminRestaurants extends React.Component {
     constructor() {
         super();
         this.state = {
