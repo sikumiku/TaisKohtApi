@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { NavItem, Navbar } from 'react-bootstrap';
+import { NavItem, Navbar, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import AuthService from '../pages/auth/AuthService';
 import withAuth from '../pages/auth/withAuth';
@@ -13,29 +13,38 @@ class Header extends Component {
     }
 
     render() {
-        let authButton;
+        let authContent; 
         if (Auth.loggedIn()) {
-            console.log('Is logged in.');
-            authButton = 
-                <LinkContainer to="/logout">
-                    <NavItem eventKey={1}>Logout</NavItem>
-                </LinkContainer>;
+            console.log(Auth.getProfile());
+            authContent =
+                <NavDropdown eventKey={3} title="Profile settings" id="basic-nav-dropdown">
+                    <MenuItem eventKey={3.1}>
+                        <LinkContainer to="/profile/restaurants">
+                            <NavItem eventKey={1}>Restaurants</NavItem>
+                        </LinkContainer>
+                    </MenuItem>
+                    <MenuItem eventKey={3.1}>
+                        <LinkContainer to="/profile/dishes">
+                            <NavItem eventKey={1}>Dishes</NavItem>
+                        </LinkContainer>
+                    </MenuItem>
+                    <MenuItem eventKey={3.1}>
+                        <LinkContainer to="/profile/menus">
+                            <NavItem eventKey={1}>Menus</NavItem>
+                        </LinkContainer>
+                    </MenuItem>
+                    <MenuItem divider />
+                    <MenuItem eventKey={3.3}>
+                        <LinkContainer to="/logout">
+                            <NavItem>Logout {Auth.getProfile().sub}</NavItem>
+                        </LinkContainer>
+                    </MenuItem>
+                </NavDropdown>;
         } else {
-            console.log('Is logged out.');
-            authButton = 
+            authContent =
                 <LinkContainer to="/login">
                     <NavItem eventKey={1}>Login</NavItem>
                 </LinkContainer>;
-        }
-
-        let userName; 
-        if (Auth.loggedIn()) {
-            console.log(Auth.getProfile());
-            userName = <LinkContainer to="/profile">
-                            <NavItem eventKey={1}>Profile : {Auth.getProfile().sub} </NavItem>
-                        </LinkContainer>
-        } else {
-            userName = "";
         }
 
         return (
@@ -55,9 +64,7 @@ class Header extends Component {
                             <LinkContainer to="/restaurants">
                                 <NavItem eventKey={1}>Restaurants</NavItem>
                             </LinkContainer>
-                            {authButton}
-
-                            {userName}
+                             {authContent}
                         </ul>
                     </Navbar.Collapse>
                 </nav>
