@@ -1,8 +1,11 @@
 ﻿import * as React from 'react';
 import 'es6-promise';
 import 'isomorphic-fetch';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import AuthService from '../Auth/AuthService';
+import RestaurantListItem from './RestaurantListItem';
 const Auth = new AuthService();
+import './admin.css';
 
 export default class AdminRestaurants extends React.Component {
     constructor() {
@@ -22,81 +25,94 @@ export default class AdminRestaurants extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.postRestaurant = this.postRestaurant.bind(this);
 
-        //this.getUserRestaurants();
+        this.getUserRestaurants();
     }
     render() {
-
-        let contents = AdminRestaurants.renderUserRestaurantList(this.state.restaurants);
+        let contents = this.state.loading ? <p><em>Loading...</em></p>
+            : AdminRestaurants.renderUserRestaurantList(this.state.restaurants);
 
         return <div>
             <div className="page-header">Profile</div>
             Your restaurants: 
             {contents}
 
-            <div className="card">
-                <h1>Add new restaurant</h1>
+            <div className="EditForm">
+                <div className="page-header">Add new Restaurant</div>
                 <form onSubmit={this.postRestaurant}>
-                    <input
-                        className="form-item"
-                        placeholder="Restaurant name"
-                        name="name"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Url goes here"
-                        name="url"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Email goes here"
-                        name="email"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Address first line goes here"
-                        name="addressFirstLine"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Locality goes here"
-                        name="locality"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Postcode goes here"
-                        name="postcode"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Region goes here"
-                        name="region"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-item"
-                        placeholder="Country goes here"
-                        name="country"
-                        type="text"
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        className="form-submit"
-                        value="SUBMIT"
-                        type="submit"
-                    />
+                    <FormGroup controlId="name" bsSize="small">
+                        <ControlLabel>Restaurant name</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="url" bsSize="small">
+                        <ControlLabel>Website</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.url}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="email" bsSize="small">
+                        <ControlLabel>Company email</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="addressFirstLine" bsSize="small">
+                        <ControlLabel>Address</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.addressFirstLine}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="locality" bsSize="small">
+                        <ControlLabel>Locality</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.locality}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="postcode" bsSize="small">
+                        <ControlLabel>Postcode</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.postcode}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="region" bsSize="small">
+                        <ControlLabel>Region</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.region}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="country" bsSize="small">
+                        <ControlLabel>Country</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.country}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <Button block bsSize="large" type="submit">Add Restaurant</Button>
+                   
                 </form>
             </div>
         </div>;
@@ -124,10 +140,25 @@ export default class AdminRestaurants extends React.Component {
             })
         };
 
-        fetch('api/v1/Restaurants', postData)
+        fetch('/api/v1/Restaurants', postData)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                this.getUserRestaurants();
+        });
+    }
+
+    getUserRestaurants() {
+        fetch('/api/v1/Restaurants', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + Auth.getToken(),
+            }
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                this.setState({ restaurants: data, loading: false });
         });
     }
 
@@ -135,14 +166,16 @@ export default class AdminRestaurants extends React.Component {
         console.log(e);
         this.setState(
             {
-                [e.target.name]: e.target.value
+                [e.target.id]: e.target.value
             }
         )
     }
 
     static renderUserRestaurantList(restaurants) {
         return <div className='restaurantList'>
-            your restaurant list here with edit and delete buttons.
-            </div>
+            {restaurants.map(restaurant =>
+                <RestaurantListItem restaurant={restaurant} />
+            )}
+        </div>;
     }
 }
