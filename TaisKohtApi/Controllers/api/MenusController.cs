@@ -38,7 +38,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/menus
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,normalUser, premiumUser")]
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDTO>), 200)]
         [ProducesResponseType(404)]
