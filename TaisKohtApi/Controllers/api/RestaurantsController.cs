@@ -60,7 +60,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="404">If no restaurants can be found</response>
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
-        // GET: api/v1/restaurants
+        // GET: api/v1/restaurants/owner
         [Authorize(Roles = "normalUser, premiumUser")]
         [HttpGet]
         [Route("owner")]
