@@ -163,7 +163,7 @@ export default class AdminRestaurants extends React.Component {
             }
         };
 
-        axios.get('/api/v1/Restaurants/owner')
+        axios.get('/api/v1/Restaurants/owner', headers)
             .then(response => {
                 console.log(response);
                 this.setState({ restaurants: response.data, loading: false });
