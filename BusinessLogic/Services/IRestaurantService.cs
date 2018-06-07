@@ -8,6 +8,7 @@ namespace BusinessLogic.Services
     public interface IRestaurantService
     {
         IEnumerable<SimpleRestaurantDTO> GetAllRestaurants();
+        IEnumerable<SimpleRestaurantDTO> GetAllRestaurantsByUser(string userId);
         RestaurantDTO GetRestaurantById(int id);
         int GetUserRestaurantCount(string userId);
         void AddUserToRestaurant(int id, string userId);
