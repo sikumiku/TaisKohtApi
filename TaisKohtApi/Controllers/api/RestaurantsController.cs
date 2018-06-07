@@ -53,6 +53,33 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
+        /// Gets all user restaurants as a list.
+        /// </summary>
+        /// <returns>All user restaurants as a list</returns>
+        /// <response code="200">Successful restaurant</response> 
+        /// <response code="404">If no restaurants can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/restaurants
+        [Authorize(Roles = "normalUser, premiumUser")]
+        [HttpGet]
+        [Route("owner")]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult GetAllRestaurantsByUser()
+        {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/restaurants/owner", "GetAllRestaurantsByUser");
+            var result = _restaurantService.GetAllRestaurantsByUser(User.Identity.GetUserId());
+            if (!result.Any())
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Gets searched restaurants as a list.
         /// </summary>
         /// <param name="name">name of restaurant to return</param>
