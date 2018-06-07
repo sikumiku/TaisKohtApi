@@ -120,5 +120,24 @@ namespace BusinessLogic.Services
         {
             return _uow.RestaurantUsers.GetUserRestaurantCount(userId);
         }
+
+        public IEnumerable<SimpleRestaurantDTO> GetAllRestaurantsByUser(string userId)
+        {
+            var restaurantUsers = _uow.RestaurantUsers.FindAllByUserId(userId);
+            if (restaurantUsers == null) return null;
+
+            List<SimpleRestaurantDTO> restaurants = new List<SimpleRestaurantDTO>();
+            
+            foreach (var restaurantUser in restaurantUsers)
+            {
+                var restaurant = _uow.Restaurants.Find(restaurantUser.RestaurantId);
+                if (restaurant != null)
+                {
+                    var restaurantObject = _restaurantFactory.Create(restaurant);
+                    restaurants.Add(restaurantObject);
+                }
+            }
+            return restaurants;
+        }
     }
 }
