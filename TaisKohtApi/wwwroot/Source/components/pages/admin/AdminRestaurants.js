@@ -6,6 +6,7 @@ import AuthService from '../Auth/AuthService';
 import RestaurantListItem from './RestaurantListItem';
 const Auth = new AuthService();
 import './admin.css';
+import axios from 'axios';
 
 export default class AdminRestaurants extends React.Component {
     constructor() {
@@ -120,47 +121,57 @@ export default class AdminRestaurants extends React.Component {
 
     postRestaurant(e) {
         e.preventDefault();
-        var postData = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + Auth.getToken(),
-            },
-            body: JSON.stringify({
-                'name': this.state.name,
-                'url': this.state.url,
-                'address': {
-                    "addressFirstLine": this.state.addressFirstLine,
-                    "locality": this.state.locality,
-                    "postcode": this.state.postcode,
-                    "region": this.state.region,
-                    "country": this.state.country
-                }
-            })
-        };
-
-        fetch('/api/v1/Restaurants', postData)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                this.getUserRestaurants();
+        let postData = JSON.stringify({
+            'name': this.state.name,
+            'url': this.state.url,
+            'address': {
+                "addressFirstLine": this.state.addressFirstLine,
+                "locality": this.state.locality,
+                "postcode": this.state.postcode,
+                "region": this.state.region,
+                "country": this.state.country
+            }
         });
-    }
 
-    getUserRestaurants() {
-        fetch('/api/v1/Restaurants', {
+        let headers = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + Auth.getToken(),
             }
-        }).then(response => response.json())
-            .then(data => {
+        };
+          
+
+        axios.post('/api/v1/Restaurants', postData, headers)
+            .then(response => {
                 console.log(data);
-                this.setState({ restaurants: data, loading: false });
-        });
+                this.getUserRestaurants();
+            })
+            .catch(err => {
+                console.log(err.response.data);
+                alert(err.response.data);
+            });
+              
     }
+
+    getUserRestaurants() {
+        let headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + Auth.getToken(),
+            }
+        };
+
+        axios.get('/api/v1/Restaurants/owner')
+            .then(response => {
+                console.log(response);
+                this.setState({ restaurants: response.data, loading: false });
+            }).catch(err => {
+                console.log(err.response.data);
+                alert(err.response.data);
+            });
+     }
 
     handleChange(e) {
         console.log(e);
