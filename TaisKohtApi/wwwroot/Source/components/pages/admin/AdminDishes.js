@@ -37,7 +37,7 @@ export default class AdminDishes extends React.Component {
             userMenus: [],
             loading: true,
 
-            title: null,
+            Title: null,
             Description: null,
             AvailableFrom: null,
             AvailableTo: null,
@@ -55,7 +55,7 @@ export default class AdminDishes extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.postMenu = this.postDish.bind(this);
+        this.postDish = this.postDish.bind(this);
 
         this.getUserMenus();
         this.getUserRestaurants();
@@ -81,21 +81,21 @@ export default class AdminDishes extends React.Component {
             <div className="EditForm">
                 <div className="page-header">Add new Dish</div>
                 <form onSubmit={this.postDish}>
-                    <FormGroup controlId="title" bsSize="small">
+                    <FormGroup controlId="Title" bsSize="small">
                         <ControlLabel>Dish title</ControlLabel>
                         <FormControl
                             autoFocus
                             type="text"
-                            value={this.state.title}
+                            value={this.state.Title}
                             onChange={this.handleChange}
                         />
                     </FormGroup>
-                    <FormGroup controlId="description" bsSize="small">
+                    <FormGroup controlId="Description" bsSize="small">
                         <ControlLabel>Dish description</ControlLabel>
                         <FormControl
                             autoFocus
                             type="text"
-                            value={this.state.description}
+                            value={this.state.Description}
                             onChange={this.handleChange}
                         />
                     </FormGroup>
@@ -128,15 +128,15 @@ export default class AdminDishes extends React.Component {
                     </FormGroup>
 
                     <FormGroup controlId="Vegan" bsSize="small">
-                        <Checkbox value={this.state.Vegan}>Vegan</Checkbox>
+                        <Checkbox name="Vegan" value={this.state.Vegan} onChange={this.handleChange}>Vegan</Checkbox>
                     </FormGroup>
 
                     <FormGroup controlId="LactoseFree" bsSize="small">
-                        <Checkbox value={this.state.LactoseFree}>Lactose Free</Checkbox>
+                        <Checkbox name="LactoseFree" value={this.state.LactoseFree} onChange={this.handleChange}>Lactose Free</Checkbox>
                     </FormGroup>
 
                     <FormGroup controlId="GlutenFree" bsSize="small">
-                        <Checkbox value={this.state.GlutenFree}>Gluten Free</Checkbox>
+                        <Checkbox name="GlutenFree" value={this.state.GlutenFree} onChange={this.handleChange}>Gluten Free</Checkbox>
                     </FormGroup>
 
                     <FormGroup controlId="Kcal" bsSize="small">
@@ -174,12 +174,12 @@ export default class AdminDishes extends React.Component {
                         <FormControl
                             autoFocus
                             type="number"
-                            value={this.state.Price}
+                            value={this.state.DailyPrice}
                             onChange={this.handleChange}
                         />
                     </FormGroup>
 
-                    <FormGroup controlId="menuId" bsSize="small">
+                    <FormGroup controlId="MenuId" bsSize="small">
                         <ControlLabel>Menu</ControlLabel>
                         <FormControl componentClass="select"
                             placeholder="select"
@@ -189,16 +189,21 @@ export default class AdminDishes extends React.Component {
                         </FormControl>
                     </FormGroup>
 
-                    <FormGroup controlId="restaurantId" bsSize="small">
+                    <FormGroup controlId="RestaurantId" bsSize="small">
                         <ControlLabel>Restaurant</ControlLabel>
                         <FormControl componentClass="select"
                             placeholder="select"
-                            value={this.state.restaurantId}
+                            value={this.state.RestaurantId}
                             onChange={this.handleChange}>
                             {restaurantOptionValues}
                         </FormControl>
                     </FormGroup>
-                    <Button block bsSize="large" type="submit">Add Menu</Button>
+
+                    <FormGroup controlId="Daily" bsSize="small">
+                        <Checkbox name="Daily" value={this.state.Daily} onChange={this.handleChange}>Daily</Checkbox>
+                    </FormGroup>
+
+                    <Button block bsSize="large" type="submit">Add Dish</Button>
                 </form>
             </div>
         </div>;
@@ -206,8 +211,9 @@ export default class AdminDishes extends React.Component {
 
     postDish(e) {
         e.preventDefault();
+        console.log(this.state);
         let postData = JSON.stringify({
-            'title': this.state.title,
+            'Title': this.state.Title,
             'Description': this.state.Description,
             'AvailableFrom': this.state.AvailableFrom,
             'AvailableTo': this.state.AvailableTo,
@@ -234,7 +240,7 @@ export default class AdminDishes extends React.Component {
 
         axios.post('/api/v1/Dishes', postData, headers)
             .then(response => {
-                console.log(data);
+                console.log(response.data);
                 this.getUserDishes();
             })
             .catch(err => {
@@ -274,7 +280,11 @@ export default class AdminDishes extends React.Component {
         axios.get('/api/v1/menus/owner', headers)
             .then(response => {
                 console.log(response);
-                this.setState({ userMenus: response.data, loading: false });
+                this.setState({
+                    userMenus: response.data,
+                    loading: false,
+                    MenuId: response.data[0].menuId
+                });
             }).catch(err => {
                 console.log(err.response.data);
                 alert(err.response.data);
@@ -296,7 +306,7 @@ export default class AdminDishes extends React.Component {
                 this.setState({
                     userRestaurants: response.data,
                     loading: false,
-                    restaurantId: response.data[0].restaurantId
+                    RestaurantId: response.data[0].restaurantId
                 });
 
             }).catch(err => {
@@ -306,12 +316,19 @@ export default class AdminDishes extends React.Component {
     }
 
     handleChange(e) {
-        console.log(e);
-        this.setState(
-            {
-                [e.target.id]: e.target.value
-            }
-        )
+        if (e.target.type === 'checkbox') {
+            this.setState(
+                {
+                    [e.target.name]: e.target.checked
+                }
+            )
+        } else {
+            this.setState(
+                {
+                    [e.target.id]: e.target.value
+                }
+            )
+        }
     }
 
 

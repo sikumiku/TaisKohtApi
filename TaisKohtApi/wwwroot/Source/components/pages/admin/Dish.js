@@ -1,61 +1,58 @@
 ﻿import * as React from 'react';
 import 'es6-promise';
-import 'isomorphic-fetch';
+import { Button } from "react-bootstrap";
+import AuthService from '../Auth/AuthService';
+const Auth = new AuthService();
+import axios from 'axios';
 
 export default class Dish extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dishData: null,
-            spinner: 'EMPTY',
             dish: this.props.dish
         };
+
+        this.deleteDish = this.deleteDish.bind(this);
     }
     render() {
         let contents;
-        if (this.state.spinner === 'EMPTY') {
+        if (this.state.dish !== null) {
+            contents = <div>
+                <b> {this.state.dish.title} {this.state.dish.price} </b> <Button bsStyle="link" onClick={() => { this.deleteDish(this.state.dish.dishId) }}>X</Button>
+            </div>;
+         } else {
             contents = "";
-        } else if (this.state.spinner === 'LOADING') {
-            contents = "spinner";
-        } else if (this.state.spinner === 'LOADED' && this.state.dishData != null) {
-            contents = Dish.renderDishDetails(this.state.dishData);
         }
-
+        
         return (
             <div>
-                <b>
-                    <a href="#" onClick={() => { this.getDishDetails() }}>{this.state.dish.title}</a> {this.state.dish.price} </b>
                 {contents}
             </div>
-
         );
     }
 
-    getDishDetails() {
-        this.state.spinner = 'LOADING';
-        fetch('/api/v1/Dishes/' + this.state.dish.dishId)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ dishData: data, spinner: 'LOADED' });
+    deleteDish(dishId) {
+        console.log('deleteDish : ' + dishId);
+        let headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + Auth.getToken(),
+            }
+        };
+
+        axios.delete('/api/v1/dishes/'+ dishId, headers)
+            .then(response => {
+                console.log(response.date);
+                this.setState({
+                    dish:null
+                });
+
+            }).catch(err => {
+                console.log(err.response.data);
+                alert(err.response.data);
             });
     }
 
-    static renderDishDetails(dishDetails) {
-        console.log('renderDishDetails');
-        console.log(dishDetails);
-        return <div>
-            <b>Dish Info :</b>
-            <div> {dishDetails.description} </div>
-            <div> Gluten free : {dishDetails.glutenFree} </div>
-            
-            <b>Dish Ingredients : </b>
-            {dishDetails.ingredients.map(ingridient =>
-                <div>
-                    <div> {ingredient.name} </div>
-                    <div> {ingredient.amount} </div>
-                    <div> {ingredient.amountUnit} </div>
-                </div>
-            )}
-        </div>;
-    }
+   
 }
