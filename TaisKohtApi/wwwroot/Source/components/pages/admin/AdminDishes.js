@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import 'es6-promise';
 import 'isomorphic-fetch';
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import AuthService from '../Auth/AuthService';
 import Dish from './Dish';
 const Auth = new AuthService();
@@ -243,7 +243,7 @@ export default class AdminDishes extends React.Component {
             });
     }
 
-    getUserMenus() {
+    getUserDishes() {
         let headers = {
             headers: {
                 'Accept': 'application/json',
@@ -315,7 +315,7 @@ export default class AdminDishes extends React.Component {
     }
 
 
-    static renderUserDishist(dishes) {
+    static renderUserDishList(dishes) {
         return <div className='menusList' >
             {dishes.map(dish =>
                 <Dish dish={dish} />
