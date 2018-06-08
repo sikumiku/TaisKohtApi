@@ -88,6 +88,28 @@ namespace BusinessLogic.Services
             }
         }
 
+        public IEnumerable<SimpleMenuDTO> GetAllMenusByUser(string userId)
+        {
+            var restaurantUsers = _uow.RestaurantUsers.FindAllByUserId(userId);
+            if (restaurantUsers == null) return null;
+
+            List<SimpleMenuDTO> menus = new List<SimpleMenuDTO>();
+
+            foreach (var restaurantUser in restaurantUsers)
+            {
+                var restaurant = _uow.Restaurants.Find(restaurantUser.RestaurantId);
+                if (restaurant != null && restaurant.Menus != null)
+                {
+                    foreach (var menu in restaurant.Menus)
+                    {
+                        var menuObject = _menuFactory.CreateSimple(menu);
+                        menus.Add(menuObject);
+                    }
+                }
+            }
+            return menus;
+        }
+
         private static bool IsEqualMenuDish(MenuDish x, MenuDish y)
         {
             return x.DishId == y.DishId && x.MenuId == y.MenuId;

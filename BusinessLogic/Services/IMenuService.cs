@@ -9,6 +9,8 @@ namespace BusinessLogic.Services
     {
         IEnumerable<MenuDTO> GetAllMenus();
 
+        IEnumerable<SimpleMenuDTO> GetAllMenusByUser(string userId);
+
         MenuDTO GetMenuById(int id);
 
         int GetUserMenuCount(string userId);

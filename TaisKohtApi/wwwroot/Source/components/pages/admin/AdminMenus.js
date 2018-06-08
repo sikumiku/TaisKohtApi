@@ -4,6 +4,7 @@ import 'isomorphic-fetch';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import AuthService from '../Auth/AuthService';
 import RestaurantListItem from './RestaurantListItem';
+import MenuListItem from './MenuListItem';
 const Auth = new AuthService();
 import './admin.css';
 import axios from 'axios';
@@ -136,7 +137,7 @@ export default class AdminMenus extends React.Component {
             }
         };
 
-        axios.get('/api/v1/Menus', headers)
+        axios.get('/api/v1/menus/owner', headers)
             .then(response => {
                 console.log(response);
                 this.setState({ menus: response.data, loading: false });
@@ -155,7 +156,7 @@ export default class AdminMenus extends React.Component {
             }
         };
 
-        axios.get('/api/v1/Restaurants/owner', headers)
+        axios.get('/api/v1/restaurants/owner', headers)
             .then(response => {
                 console.log(response);
                 this.setState({ userRestaurants: response.data, loading: false });
@@ -175,9 +176,11 @@ export default class AdminMenus extends React.Component {
     }
 
 
-    static renderUserMenuList(restaurants) {
-        return <div>
-            user menu list
+    static renderUserMenuList(menus) {
+        return <div className='menusList' >
+            {menus.map(menu =>
+                <MenuListItem menu={menu} />
+            )}
         </div>
     }
 }

@@ -142,7 +142,7 @@ export default class AdminRestaurants extends React.Component {
         };
           
 
-        axios.post('/api/v1/Restaurants', postData, headers)
+        axios.post('/api/v1/restaurants', postData, headers)
             .then(response => {
                 console.log(data);
                 this.getUserRestaurants();
@@ -163,7 +163,7 @@ export default class AdminRestaurants extends React.Component {
             }
         };
 
-        axios.get('/api/v1/Restaurants/owner', headers)
+        axios.get('/api/v1/restaurants/owner', headers)
             .then(response => {
                 console.log(response);
                 this.setState({ restaurants: response.data, loading: false });
