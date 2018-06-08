@@ -12,7 +12,7 @@ import axios from 'axios';
 export default class AdminMenus extends React.Component {
     constructor() {
         super();
-
+      
         this.state = {
             menus: [],
             userRestaurants: [],
