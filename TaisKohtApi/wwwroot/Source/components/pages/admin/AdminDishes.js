@@ -240,7 +240,7 @@ export default class AdminDishes extends React.Component {
 
         axios.post('/api/v1/Dishes', postData, headers)
             .then(response => {
-                console.log(data);
+                console.log(response.data);
                 this.getUserDishes();
             })
             .catch(err => {
