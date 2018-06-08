@@ -38,7 +38,7 @@ namespace TaisKohtApi.Controllers.api
         /// <response code="429">Too many requests</response>
         /// <response code="500">Internal error, unable to process request</response>
         // GET: api/v1/menus
-        [Authorize(Roles = "admin,normalUser, premiumUser")]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDTO>), 200)]
         [ProducesResponseType(404)]
@@ -48,6 +48,33 @@ namespace TaisKohtApi.Controllers.api
         {
             _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/menus", "GetAllMenus");
             return Ok(_menuService.GetAllMenus());
+        }
+
+        /// <summary>
+        /// Gets all user menus as a list.
+        /// </summary>
+        /// <returns>All user menus as a list</returns>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no menus can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/menus/owner
+        [Authorize(Roles = "normalUser, premiumUser")]
+        [HttpGet]
+        [Route("owner")]
+        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult GetAllMenusByUser()
+        {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/menus/owner", "GetAllMenusByUser");
+            var result = _menuService.GetAllMenusByUser(User.Identity.GetUserId());
+            if (!result.Any())
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         /// <summary>

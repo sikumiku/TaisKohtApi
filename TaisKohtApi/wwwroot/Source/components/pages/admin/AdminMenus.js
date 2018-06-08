@@ -4,6 +4,7 @@ import 'isomorphic-fetch';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import AuthService from '../Auth/AuthService';
 import RestaurantListItem from './RestaurantListItem';
+import MenuListItem from './MenuListItem';
 const Auth = new AuthService();
 import './admin.css';
 import axios from 'axios';
@@ -33,8 +34,9 @@ export default class AdminMenus extends React.Component {
     render() {
         let contents = this.state.loading ? <p><em>Loading...</em></p>
             : AdminMenus.renderUserMenuList(this.state.menus);
-        let restaurantOptionValues = this.state.userRestaurants.map(restaurant =>
-            <option value={restaurant.id}>{restaurant.name}</option>
+        let restaurantOptionValues =
+            this.state.userRestaurants.map(restaurant =>
+            <option value={restaurant.restaurantId}>{restaurant.name}</option>
         );
 
         return <div>
@@ -136,7 +138,7 @@ export default class AdminMenus extends React.Component {
             }
         };
 
-        axios.get('/api/v1/Menus', headers)
+        axios.get('/api/v1/menus/owner', headers)
             .then(response => {
                 console.log(response);
                 this.setState({ menus: response.data, loading: false });
@@ -155,10 +157,15 @@ export default class AdminMenus extends React.Component {
             }
         };
 
-        axios.get('/api/v1/Restaurants/owner', headers)
+        axios.get('/api/v1/restaurants/owner', headers)
             .then(response => {
                 console.log(response);
-                this.setState({ userRestaurants: response.data, loading: false });
+                this.setState({
+                    userRestaurants: response.data,
+                    loading: false,
+                    restaurantId: response.data[0].restaurantId
+                });
+
             }).catch(err => {
                 console.log(err.response.data);
                 alert(err.response.data);
@@ -175,9 +182,11 @@ export default class AdminMenus extends React.Component {
     }
 
 
-    static renderUserMenuList(restaurants) {
-        return <div>
-            user menu list
+    static renderUserMenuList(menus) {
+        return <div className='menusList' >
+            {menus.map(menu =>
+                <MenuListItem menu={menu} />
+            )}
         </div>
     }
 }

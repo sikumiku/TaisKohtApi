@@ -11,6 +11,7 @@ namespace BusinessLogic.Factories
         MenuDTO Create(Menu menu);
         Menu Create(PostMenuDTO menuDTO);
         MenuDTO CreateComplex(Menu newMenu);
+        SimpleMenuDTO CreateSimple(Menu newMenu);
     }
 
     public class MenuFactory : IMenuFactory
@@ -36,6 +37,11 @@ namespace BusinessLogic.Factories
         public MenuDTO CreateComplex(Menu menu)
         {
             return MenuDTO.CreateFromDomainWithAssociatedTables(menu);
+        }
+
+        public SimpleMenuDTO CreateSimple(Menu menu)
+        {
+            return SimpleMenuDTO.CreateFromDomain(menu);
         }
     }
 }
