@@ -164,22 +164,6 @@ namespace BusinessLogic.Services
                             dishes.Add(dishObject);
                         }
                     }
-
-                    if (restaurant.Menus != null)
-                    {
-                        foreach (var menu in restaurant.Menus)
-                        {
-                            if (_uow.MenuDishes.Exists(menu.MenuId))
-                            {
-                                IEnumerable<MenuDish> menuDishes = _uow.MenuDishes.FindByMenuId(menu.MenuId);
-                                foreach (var menuDish in menuDishes)
-                                {
-                                    var dishObject = _dishFactory.CreateSimple(menuDish.Dish);
-                                    dishes.Add(dishObject);
-                                }
-                            }
-                        }
-                    }
                 }
             }
             return dishes;
