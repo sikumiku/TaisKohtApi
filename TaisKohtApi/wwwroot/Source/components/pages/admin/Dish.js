@@ -18,7 +18,7 @@ export default class Dish extends React.Component {
         let contents;
         if (this.state.dish !== null) {
             contents = <div>
-                <b> {this.state.dish.title} {this.state.dish.price} </b> <Button bsStyle="link" onClick={this.deleteDish(this.state.dish.dishId)}>X</Button>
+                <b> {this.state.dish.title} {this.state.dish.price} </b> <Button bsStyle="link" onClick={() => { this.deleteDish(this.state.dish.dishId) }}>X</Button>
             </div>;
          } else {
             contents = "";
