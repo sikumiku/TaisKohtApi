@@ -82,6 +82,33 @@ namespace TaisKohtApi.Controllers.api
         }
 
         /// <summary>
+        /// Gets all user dishes as a list.
+        /// </summary>
+        /// <returns>All user dishes as a list</returns>
+        /// <response code="200">Successful operation</response> 
+        /// <response code="404">If no dishes can be found</response>
+        /// <response code="429">Too many requests</response>
+        /// <response code="500">Internal error, unable to process request</response>
+        // GET: api/v1/dishes/owner
+        [Authorize(Roles = "normalUser, premiumUser")]
+        [HttpGet]
+        [Route("owner")]
+        [ProducesResponseType(typeof(List<SimpleDishDTO>), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(429)]
+        [ProducesResponseType(500)]
+        public IActionResult GetAllDishesByUser()
+        {
+            _requestLogService.SaveRequest(User.Identity.GetUserId(), "GET", "api/v1/dishes/owner", "GetAllDishesByUser");
+            var result = _dishService.GetAllDishesByUser(User.Identity.GetUserId());
+            if (!result.Any())
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Gets searched dishes as a list by either title or price limit.
         /// </summary>
         /// <param name="title">title of dish to return</param>

@@ -26,5 +26,8 @@ namespace BusinessLogic.Services
         IEnumerable<DishDTO> SearchDishByPriceLimit(decimal? dishPrice);
 
         IEnumerable<DishDTO> GetTopDishes(int amount);
+
+        IEnumerable<SimpleDishDTO> GetAllDishesByUser(string userId);
+
     }
 }
