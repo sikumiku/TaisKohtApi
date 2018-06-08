@@ -34,8 +34,9 @@ export default class AdminMenus extends React.Component {
     render() {
         let contents = this.state.loading ? <p><em>Loading...</em></p>
             : AdminMenus.renderUserMenuList(this.state.menus);
-        let restaurantOptionValues = this.state.userRestaurants.map(restaurant =>
-            <option value={restaurant.id}>{restaurant.name}</option>
+        let restaurantOptionValues =
+            this.state.userRestaurants.map(restaurant =>
+            <option value={restaurant.restaurantId}>{restaurant.name}</option>
         );
 
         return <div>
@@ -159,7 +160,12 @@ export default class AdminMenus extends React.Component {
         axios.get('/api/v1/restaurants/owner', headers)
             .then(response => {
                 console.log(response);
-                this.setState({ userRestaurants: response.data, loading: false });
+                this.setState({
+                    userRestaurants: response.data,
+                    loading: false,
+                    restaurantId: response.data[0].restaurantId
+                });
+
             }).catch(err => {
                 console.log(err.response.data);
                 alert(err.response.data);
