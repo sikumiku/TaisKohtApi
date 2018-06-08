@@ -62,7 +62,7 @@ namespace TaisKohtApi.Controllers.api
         [Authorize(Roles = "normalUser, premiumUser")]
         [HttpGet]
         [Route("owner")]
-        [ProducesResponseType(typeof(List<SimpleRestaurantDTO>), 200)]
+        [ProducesResponseType(typeof(List<SimpleMenuDTO>), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(429)]
         [ProducesResponseType(500)]

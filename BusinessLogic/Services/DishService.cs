@@ -144,6 +144,47 @@ namespace BusinessLogic.Services
             return dishes.Take(amount);
         }
 
+        public IEnumerable<SimpleDishDTO> GetAllDishesByUser(string userId)
+        {
+            var restaurantUsers = _uow.RestaurantUsers.FindAllByUserId(userId);
+            if (restaurantUsers == null) return null;
+
+            List<SimpleDishDTO> dishes = new List<SimpleDishDTO>();
+
+            foreach (var restaurantUser in restaurantUsers)
+            {
+                var restaurant = _uow.Restaurants.Find(restaurantUser.RestaurantId);
+                if (restaurant != null)
+                {
+                    if (restaurant.Dishes != null)
+                    {
+                        foreach (var dish in restaurant.Dishes)
+                        {
+                            var dishObject = _dishFactory.CreateSimple(dish);
+                            dishes.Add(dishObject);
+                        }
+                    }
+
+                    if (restaurant.Menus != null)
+                    {
+                        foreach (var menu in restaurant.Menus)
+                        {
+                            if (_uow.MenuDishes.Exists(menu.MenuId))
+                            {
+                                IEnumerable<MenuDish> menuDishes = _uow.MenuDishes.FindByMenuId(menu.MenuId);
+                                foreach (var menuDish in menuDishes)
+                                {
+                                    var dishObject = _dishFactory.CreateSimple(menuDish.Dish);
+                                    dishes.Add(dishObject);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return dishes;
+        }
+
         public IEnumerable<SimpleDishDTO> GetAllDailyDishes(bool vegan, bool glutenFree, bool lactoseFree)
         {
             var dishes = _uow.Dishes.All().Where(

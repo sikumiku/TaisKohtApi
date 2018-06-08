@@ -20,12 +20,12 @@ namespace DAL.TaisKoht.EF.Repositories
             return RepositoryDbSet.Any(e => e.MenuId == menuId);
         }
 
-        public override MenuDish Find(params object[] id)
+        public IEnumerable<MenuDish> FindByMenuId(params object[] id)
         {
             return RepositoryDbSet
                 .Include(md => md.Dish)
-                .Include(md => md.Menu)
-                .SingleOrDefault(x => (int)id[0] == x.MenuId);
+                .Where(x => (int)id[0] == x.MenuId)
+                .ToList();
         }
     }
 }

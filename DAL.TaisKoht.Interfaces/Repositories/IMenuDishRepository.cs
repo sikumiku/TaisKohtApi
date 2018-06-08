@@ -1,4 +1,5 @@
-﻿using DAL.Interfaces.Repositories;
+﻿using System.Collections.Generic;
+using DAL.Interfaces.Repositories;
 using Domain;
 
 namespace DAL.TaisKoht.Interfaces.Repositories
@@ -11,5 +12,7 @@ namespace DAL.TaisKoht.Interfaces.Repositories
         /// <param name="id">Dish MenuId value</param>
         /// <returns></returns>
         bool Exists(int id);
+
+        IEnumerable<MenuDish> FindByMenuId(params object[] id);
     }
 }
