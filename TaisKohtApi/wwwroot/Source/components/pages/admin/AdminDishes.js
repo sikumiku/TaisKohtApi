@@ -198,6 +198,11 @@ export default class AdminDishes extends React.Component {
                             {restaurantOptionValues}
                         </FormControl>
                     </FormGroup>
+
+                    <FormGroup controlId="Daily" bsSize="small">
+                        <Checkbox name="Daily" value={this.state.Daily} onChange={this.handleChange}>Daily</Checkbox>
+                    </FormGroup>
+
                     <Button block bsSize="large" type="submit">Add Dish</Button>
                 </form>
             </div>
